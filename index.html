@@ -1,345 +1,401 @@
-<!DOCTYPE html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>IPMA Level C – Übungsfragen</title>
-<style>
-:root{--bg:#f6f7f9;--card:#fff;--tx:#1b1f24;--mut:#667;--bd:#d8dce2;--acc:#2f6fed;--ok:#1f9d55;--okb:#e5f6ec;--no:#d64545;--nob:#fbe9e9;--sel:#e8effd}
-@media(prefers-color-scheme:dark){:root{--bg:#121417;--card:#1c1f24;--tx:#e8eaed;--mut:#9aa0a6;--bd:#33373d;--acc:#6b9bff;--ok:#4cc38a;--okb:#16301f;--no:#ff7b7b;--nob:#3a1d1d;--sel:#1f2b45}}
-*{box-sizing:border-box}body{margin:0;font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--tx)}
-.w{max-width:760px;margin:0 auto;padding:14px}h1{font-size:20px;margin:6px 0 2px}.mut{color:var(--mut);font-size:13px}
-.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;margin:12px 0}
-.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}select{flex:1 1 200px;min-width:0;padding:10px;border-radius:10px;border:1px solid var(--bd);background:var(--card);color:var(--tx);font-size:15px}
-button{padding:11px 16px;border-radius:10px;border:1px solid var(--bd);background:var(--card);color:var(--tx);font-size:15px;cursor:pointer}
-button.p{background:var(--acc);border-color:var(--acc);color:#fff}button:disabled{opacity:.45}
-.seg button.on{background:var(--acc);color:#fff;border-color:var(--acc)}
-.bar{height:8px;background:var(--bd);border-radius:4px;overflow:hidden}.bar>div{height:100%;background:var(--acc)}
-.opt{display:flex;gap:10px;padding:12px;border:1px solid var(--bd);border-radius:10px;margin:8px 0;cursor:pointer}
-.opt.s{background:var(--sel);border-color:var(--acc)}.opt.c{background:var(--okb);border-color:var(--ok)}.opt.w{background:var(--nob);border-color:var(--no)}
-.q{font-weight:600;margin:8px 0}ul{padding-left:20px;margin:6px 0}li{margin:4px 0}.ok{color:var(--ok);font-weight:600}.bad{color:var(--no);font-weight:600}
-details summary{cursor:pointer;font-weight:600}table{border-collapse:collapse;width:100%;font-size:14px}td,th{border-bottom:1px solid var(--bd);padding:6px 4px;text-align:left}td.n{text-align:right}
-</style></head><body><div class="w">
-<h1>IPMA Level C – Übungsfragen</h1><div class="mut">205 Übungsfragen mit Musterlösung zu allen 28 Kompetenzelementen (ICB4). Dein Fortschritt wird auf diesem Gerät gespeichert.</div>
-<div class="card">
-<div class="row seg" id="seg"><button data-m="stapel">Lernstapel</button><button data-m="reihe">Der Reihe nach</button><button data-m="zufall">Zufällig</button></div>
-<div class="row" style="margin-top:10px"><select id="f"></select><select id="t"><option value="alle">Alle Fragetypen</option><option value="m">Multiple Choice</option><option value="o">Offene Fragen</option><option value="r">Rechenaufgaben</option></select></div>
-<label class="row" id="oow" style="margin-top:10px"><input type="checkbox" id="oo"> Nur noch nicht gekonnte Fragen</label>
-<div style="margin-top:12px"><b id="pt"></b><div class="bar" style="margin:6px 0"><div id="pb"></div></div><div class="mut" id="ps"></div></div>
-</div>
-<div class="card" id="qc"></div>
-<div class="row"><button id="rs">Fortschritt zurücksetzen</button><button id="ex">Fortschritt sichern (Code)</button><button id="im">Code einfügen</button></div>
-<div class="card"><details><summary>Formelzettel</summary><table id="fz"></table><p class="mut">Netzplan-Aufgaben rechnen mit Zeitpunkten ab 0 (FEZ = FAZ + Dauer). Manche Unterlagen zählen ab 1 (FEZ = FAZ + Dauer − 1); gib in der Prüfung deine Konvention an.</p></details></div>
-<div class="card"><details><summary>Abdeckung nach Kompetenzelement</summary><table id="cov"></table></details></div>
-<div class="card mut">Format laut GPM-Übungsklausur 2023: 34 überwiegend offene Fragen in 120 Minuten. Übungsfragen mit eigenen Musterlösungen, keine offiziellen Prüfungsfragen. Verbindlich: pm-zert.de.</div>
-</div>
-<script>
-// IPMA Level C Fragen-Daten
-const CES = [
-  ["4.3.1", "Strategie", "Perspective"],
-  ["4.3.2", "Governance, Strukturen und Prozesse", "Perspective"],
-  ["4.3.3", "Compliance, Standards und Regularien", "Perspective"],
-  ["4.3.4", "Macht und Interessen", "Perspective"],
-  ["4.3.5", "Kultur und Werte", "Perspective"],
-  ["4.4.1", "Selbstreflexion und Selbstmanagement", "People"],
-  ["4.4.2", "Persönliche Integrität und Verlässlichkeit", "People"],
-  ["4.4.3", "Persönliche Kommunikation", "People"],
-  ["4.4.4", "Beziehungen und Engagement", "People"],
-  ["4.4.5", "Führung", "People"],
-  ["4.4.6", "Teamarbeit", "People"],
-  ["4.4.7", "Konflikte und Krisen", "People"],
-  ["4.4.8", "Vielseitigkeit", "People"],
-  ["4.4.9", "Verhandlungen", "People"],
-  ["4.4.10", "Ergebnisorientierung", "People"],
-  ["4.5.1", "Projektdesign", "Practice"],
-  ["4.5.2", "Anforderungen und Ziele", "Practice"],
-  ["4.5.3", "Leistungsumfang und Lieferobjekte", "Practice"],
-  ["4.5.4", "Ablauf und Termine", "Practice"],
-  ["4.5.5", "Organisation, Information und Dokumentation", "Practice"],
-  ["4.5.6", "Qualität", "Practice"],
-  ["4.5.7", "Kosten und Finanzierung", "Practice"],
-  ["4.5.8", "Ressourcen", "Practice"],
-  ["4.5.9", "Beschaffung", "Practice"],
-  ["4.5.10", "Planung und Steuerung", "Practice"],
-  ["4.5.11", "Chancen und Risiken", "Practice"],
-  ["4.5.12", "Stakeholder", "Practice"],
-  ["4.5.13", "Change und Transformation", "Practice"],
-];
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>IPMA Level C – Lernzentrale</title>
+  <style>
+    :root {
+      --bg: #f6f7f9;
+      --card: #ffffff;
+      --card-hover: #fcfdff;
+      --tx: #1b1f24;
+      --mut: #59636e;
+      --bd: #d8dce2;
+      --acc: #2f6fed;
+      --acc-soft: #e8effd;
+      --acc-tx: #1e4fc2;
+      --ok: #1f9d55;
+      --ok-soft: #e5f6ec;
+      --shadow: 0 2px 10px rgba(15, 23, 42, 0.05);
+      --shadow-h: 0 8px 22px rgba(47, 111, 237, 0.12);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #121417;
+        --card: #1c1f24;
+        --card-hover: #22262d;
+        --tx: #e8eaed;
+        --mut: #9aa0a6;
+        --bd: #33373d;
+        --acc: #6b9bff;
+        --acc-soft: rgba(107, 155, 255, 0.16);
+        --acc-tx: #9fc0ff;
+        --ok: #4cc38a;
+        --ok-soft: rgba(76, 195, 138, 0.14);
+        --shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+        --shadow-h: 0 8px 24px rgba(0, 0, 0, 0.5);
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font: 16px/1.55 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--tx);
+      -webkit-text-size-adjust: 100%;
+    }
 
-// [CE, Typ (m = Multiple Choice, o = offen, r = Rechenaufgabe), Frage, Optionen bzw. Musterlösung (" | " = neue Zeile), richtige Optionen, Begründung]
-const Q = [
-  // 4.3.1 Strategie
-  ["4.3.1", "o", "Erläutern Sie den Zusammenhang zwischen Unternehmensstrategie und Projekten.", "Projekte sind Instrumente zur Umsetzung der Strategie (Vision → Mission → Strategie → Ziele → Portfolio → Programme/Projekte) | Projektziele müssen aus den Organisationszielen abgeleitet sein (strategischer Fit) | Der Business Case belegt den Beitrag des Projekts | Der PL prüft laufend, ob das Projekt noch zur Strategie passt, und meldet Abweichungen an Auftraggeber/Lenkungskreis"],
-  ["4.3.1", "m", "Was beschreibt eine Mission im Unterschied zur Vision?", "Den Zweck und Auftrag der Organisation heute (wofür wir da sind)|Das langfristige, inspirierende Zukunftsbild|Eine messbare Kennzahl für das nächste Geschäftsjahr|Die Projektziele eines strategischen Projekts", "0", "Mission = Daseinszweck und Auftrag in der Gegenwart; Vision = angestrebtes Zukunftsbild. Kennzahlen und Projektziele werden erst daraus abgeleitet."],
-  ["4.3.1", "o", "Nennen Sie vier Inhalte eines Business Case.", "Ausgangslage, Problem bzw. Chance | Lösungsoptionen inkl. Nullvariante | Nutzen (quantitativ/qualitativ) und Kosten | Wirtschaftlichkeit (z. B. ROI, Amortisation, Kapitalwert) | Risiken und Annahmen | Strategischer Beitrag und Empfehlung"],
-  ["4.3.1", "o", "Wie stellen Sie als PL sicher, dass Ihr Projekt während der Laufzeit strategisch relevant bleibt?", "Business Case an Gates/Meilensteinen überprüfen | Nutzen- und Erfolgskriterien (KPIs) definieren und verfolgen | Änderungen von Strategie und Umfeld beobachten (Umfeldanalyse) | Abweichungen offen an Auftraggeber/Lenkungskreis melden, ggf. Neuausrichtung oder Abbruch empfehlen"],
-  ["4.3.1", "m", "Welche Aussagen zu Projekterfolg und Projektmanagementerfolg sind richtig?", "Projektmanagementerfolg bezieht sich v. a. auf die Einhaltung von Leistung, Termin und Kosten|Projekterfolg bezieht sich auf den Nutzen und die Zufriedenheit der relevanten Stakeholder|Ein Projekt kann Termin und Budget einhalten und trotzdem keinen Nutzen stiften|Projekterfolg und Projektmanagementerfolg sind per Definition identisch", "012", "Die ICB4 unterscheidet beides: PM-Erfolg = gutes Management des Projekts, Projekterfolg = Wahrnehmung und Nutzen bei den Stakeholdern. Beide können auseinanderfallen."],
-  ["4.3.1", "o", "Was ist die Balanced Scorecard und wie verbindet sie Projekte mit der Strategie?", "Strategisches Steuerungsinstrument (Kaplan/Norton) mit vier Perspektiven: Finanzen, Kunden, interne Prozesse, Lernen und Entwicklung | Strategische Ziele werden je Perspektive in Kennzahlen, Zielwerte und Maßnahmen übersetzt | Strategische Projekte sind Maßnahmen zur Zielerreichung; ihr Erfolg wird an diesen Kennzahlen gemessen"],
-  // 4.3.2 Governance
-  ["4.3.2", "o", "Nennen Sie die Projektmanagementphasen nach DIN 69901:2009.", "Initialisierung | Definition | Planung | Steuerung | Abschluss | (Die ersten drei: Initialisierung, Definition, Planung)"],
-  ["4.3.2", "o", "Erläutern Sie den prinzipiellen Unterschied zwischen Programm und Portfolio.", "Programm: zeitlich befristet; mehrere inhaltlich zusammenhängende Projekte für ein gemeinsames übergeordnetes Ziel | Portfolio: dauerhafte Bündelung von Projekten/Programmen einer Organisation(seinheit), nicht zwingend inhaltlich verbunden | Portfoliomanagement wählt aus, priorisiert und verteilt Ressourcen nach strategischen Kriterien"],
-  ["4.3.2", "o", "Nennen Sie wichtige Aufgaben eines PMO (Project Management Office).", "Methoden, Standards und Vorlagen bereitstellen | Multiprojektcontrolling und Berichtswesen | PL unterstützen und coachen | Ressourcen- und Portfoliokoordination, Priorisierungsentscheidungen vorbereiten | Schulung, Wissensmanagement, Lessons Learned sammeln"],
-  ["4.3.2", "o", "Wie unterscheiden sich Linienstellen, Stabsstellen und Zentralstellen?", "Linienstelle: Weisungs- und Entscheidungsbefugnis innerhalb der Hierarchie | Stabsstelle: berät und unterstützt eine Leitungsstelle, ohne Weisungsbefugnis | Zentralstelle: übernimmt eine Querschnittsaufgabe zentral für mehrere Bereiche (z. B. Einkauf, IT, Personal) und hat dafür fachliche Weisungsbefugnis"],
-  ["4.3.2", "m", "In welcher Projektorganisation hat der PL die größte Entscheidungs- und Weisungsbefugnis?", "Einfluss-Projektorganisation (Stabs-PO)|Matrix-Projektorganisation|Reine (autonome) Projektorganisation|Projektkoordination ohne eigene Stelle", "2", "Reine PO: Team ist dem PL voll unterstellt, eigene Ressourcen. Einfluss-PO: PL koordiniert als Stab ohne Weisungsrecht. Matrix: geteilte Befugnisse (PL: was und wann; Linie: wer und wie)."],
-  ["4.3.2", "o", "Nennen Sie Vor- und Nachteile der Matrix-Projektorganisation.", "Vorteile: flexibler Ressourceneinsatz, Mitarbeitende bleiben in der Linie (Know-how, Rückkehr gesichert), PL mit klarer Projektverantwortung | Nachteile: Doppelunterstellung, Konflikte um Ressourcen und Prioritäten, hoher Abstimmungsaufwand | Lösung: klare Kompetenzregelung (PL: was/bis wann; Linie: wer/wie), Eskalation über Lenkungskreis"],
-  ["4.3.2", "o", "Welche Aufgaben hat ein Lenkungskreis (Steering Committee)?", "Oberstes Entscheidungsgremium des Projekts | Projektauftrag, Ziele und Budget freigeben | Gate- und Phasenentscheidungen, größere Änderungen genehmigen | Ressourcen bereitstellen, Prioritäten und Konflikte entscheiden (Eskalationsinstanz) | Projekt abnehmen bzw. abbrechen, PL entlasten"],
-  ["4.3.2", "o", "Welche Möglichkeiten bietet eine Kostentrendanalyse? Unterscheiden Sie Rückschau und Vorausschau.", "Darstellung wie MTA: Berichtszeitpunkte auf der x-Achse, prognostizierte Gesamtkosten auf der y-Achse | Rückschau: Entwicklung der bisherigen Prognosen, Trends und Schätzgenauigkeit erkennen | Vorausschau: voraussichtliche Gesamtkosten (EAC) hochrechnen, Frühwarnung, Grundlage für Steuerungsmaßnahmen | Steigende Linie = Kostenüberschreitung droht"],
-  ["4.3.2", "o", "Ihr Projekt ist Teil eines Programms. Welche Konsequenzen ergeben sich für Sie als PL?", "Berichtet an das Programmmanagement | Projektziele sind aus den Programmzielen abgeleitet | Schnittstellen und Abhängigkeiten zu anderen Projekten abstimmen | Programmstandards (Berichte, Methoden, Tools) einhalten | Ressourcen- und Prioritätskonflikte an den Programmmanager eskalieren"],
-  // 4.3.3 Compliance
-  ["4.3.3", "o", "Welche Rechtsvorschriften sind in einem Projekt Ihrer Wahl zu beachten? Begründen Sie.", "Beispiel Lieferantenportal: DSGVO/BDSG (personenbezogene Daten der Ansprechpartner) | BetrVG § 87 Abs. 1 Nr. 6 (Mitbestimmung bei technischen Einrichtungen, die Verhalten oder Leistung überwachen können) | BGB-Vertragsrecht (Werk- vs. Dienstvertrag mit Dienstleistern) | Handels-/Steuerrecht (GoBD, Aufbewahrungsfristen), ggf. Lieferkettengesetz | Begründung: Verstöße führen zu Bußgeldern, Haftung, Projektstopp oder Imageschaden"],
-  ["4.3.3", "o", "Nennen Sie je einen Faktor aus Technik, Organisation und Personal hinsichtlich Umwelt, Sicherheit und Arbeitsschutz.", "Technik: sichere Arbeitsmittel, Schutzeinrichtungen, IT-Sicherheit, emissionsarme Verfahren | Organisation: Gefährdungsbeurteilung, Unterweisungen, Notfallpläne, Arbeitszeitregelungen | Personal: Qualifikation, persönliche Schutzausrüstung, Gesundheitsvorsorge, Überlastung vermeiden"],
-  ["4.3.3", "o", "Nennen Sie Beispiele für Ihre Aufsichts-, Sorgfalts- und Fürsorgepflichten als PL und begründen Sie diese.", "Aufsicht: kontrollieren, dass delegierte Aufgaben ordnungs- und regelgemäß erledigt werden | Sorgfalt: gewissenhaft planen und dokumentieren, Gesetze und Normen einhalten, Risiken erkennen | Fürsorge: Gesundheit und Arbeitsschutz im Team, Überlastung vermeiden, Arbeitszeitgesetz | Begründung: Der PL übt übertragene Führungsfunktionen aus und kann bei Organisationsverschulden haften"],
-  ["4.3.3", "m", "Welche der folgenden sind Normen bzw. verbreitete Standards für Projektmanagement?", "DIN 69901|ISO 21500|PRINCE2|ISO 9001 als Projektmanagementnorm", "012", "DIN 69901 und ISO 21500 sind PM-Normen, PRINCE2 (wie PMBOK) ein verbreiteter Methodenstandard. ISO 9001 ist eine Norm für Qualitätsmanagementsysteme, keine PM-Norm."],
-  ["4.3.3", "o", "Der Auftraggeber sieht Ihr Projekt als einmalig an. Warum ist ein Lessons-Learned-Workshop am Projektende trotzdem sinnvoll?", "Erfahrungen sind auf andere Projekte übertragbar (Methoden, Zusammenarbeit, Lieferanten) | PM-Standards und Prozesse der Organisation werden verbessert | Persönliche Weiterentwicklung der Beteiligten | Würdigung und bewusster Abschluss für das Team | Auch einmalige Projekte enthalten wiederkehrende Elemente (Planung, Kommunikation, Beschaffung)"],
-  ["4.3.3", "o", "Ihr Team hat kaum Projekterfahrung. Wie gehen Sie mit Schulung und Workshop vor, um einen einheitlichen Standard zu erreichen?", "Wissensstand und Bedarf erheben | Ziele und Inhalte festlegen (PM-Prozess, Rollen, Vorlagen, Tools) | Praxisnah am eigenen Projekt schulen (Kick-off/Workshop), Projekthandbuch als Referenz | Coaching, Tandems, feste Ansprechpartner | Wirksamkeit prüfen (Feedback, Reviews) und Standard verbessern"],
-  ["4.3.3", "o", "Inwiefern sind Projekt-Audits sinnvoll?", "Unabhängige Prüfung von Projektstand, Prozessen und Einhaltung von Standards | Risiken und Schwachstellen früh erkennen | Objektive Sicht für Auftraggeber/Lenkungskreis, schafft Vertrauen | Lernchance für die Organisation | Sinnvoll v. a. bei großen oder kritischen Projekten, an Gates oder in Krisen"],
-  // 4.3.4 Macht und Interessen
-  ["4.3.4", "m", "Welche gehören zu den Machtbasen nach French und Raven?", "Expertenmacht|Belohnungsmacht|Referenz- bzw. Identifikationsmacht|Budgetmacht nach DIN 69901", "012", "French/Raven: Legitimationsmacht, Belohnungsmacht, Bestrafungs-/Zwangsmacht, Expertenmacht, Referenzmacht; später ergänzt um Informationsmacht. Eine Budgetmacht nach DIN 69901 gibt es nicht."],
-  ["4.3.4", "o", "Unterscheiden Sie formelle und informelle Macht. Wie nutzt ein PL sie?", "Formell: aus Position und Rolle (Weisungsrecht, Budgetverantwortung) | Informell: aus Persönlichkeit, Expertise, Beziehungen, Netzwerk und Informationen | Der PL hat oft wenig formelle Macht (Matrix, Einfluss-PO) und wirkt über Expertise, Beziehungen, Sponsor und Transparenz"],
-  ["4.3.4", "o", "Was ist eine Hidden Agenda und wie gehen Sie damit um?", "Verdeckte persönliche oder bereichsbezogene Interessen, die nicht offen kommuniziert werden | Erkennen: Widersprüche zwischen Worten und Verhalten, informelle Gespräche, Stakeholderanalyse | Umgang: Vertrauen aufbauen, Interessen erfragen, Win-win-Optionen suchen, ggf. Sponsor einbinden, Entscheidungen transparent dokumentieren"],
-  ["4.3.4", "o", "Was versteht man unter Mikropolitik? Nennen Sie Beispiele.", "Einsatz von Macht und Einfluss zur Durchsetzung eigener Interessen in der Organisation, meist informell | Beispiele: Koalitionen bilden, Informationen zurückhalten, Ressourcen blockieren, Entscheidungen verzögern | PL: wahrnehmen statt ignorieren, eigene Allianzen (Sponsor) aufbauen, dabei integer bleiben"],
-  ["4.3.4", "m", "Ein Bereichsleiter blockiert, weil das Projekt seine Zuständigkeiten verringert. Welche Reaktionen sind angemessen?", "Persönliches Gespräch: Interessen und Befürchtungen erfragen|Ihn bewusst ignorieren, bis er aufgibt|Nutzen für seinen Bereich aufzeigen und ihn in die Lösung einbinden|Bei anhaltender Blockade über Auftraggeber/Lenkungskreis eskalieren", "023", "Erst Interessen klären, einbinden und Nutzen zeigen; eine offene Eskalation ist legitim, wenn das Projektziel gefährdet ist. Ignorieren verstärkt Widerstand."],
-  // 4.3.5 Kultur und Werte
-  ["4.3.5", "o", "Nennen und erläutern Sie die drei Ebenen des Kulturmodells nach Edgar Schein.", "Artefakte: sichtbare Strukturen und Verhaltensweisen (Architektur, Kleidung, Rituale, Sprache) – sichtbar, aber schwer zu deuten | Öffentlich propagierte Werte und Normen: Leitbild, Regeln, Philosophie – teils sichtbar, teils bewusst | Grundlegende Annahmen: unbewusste, selbstverständliche Überzeugungen über Mensch, Wahrheit, Beziehungen – unsichtbar, prägen alles"],
-  ["4.3.5", "o", "Ordnen Sie nach Schein zu: A Hilfsbereitschaft/Machtspiele, B Architektur des Gebäudes, C Compliance-Vorgaben, D Anrede (Sie/Du), E Unternehmensphilosophie, F Fairness/Karrieredenken, G Selbstständigkeit/Hierarchiedenken, H Bürogestaltung, I Kleidung, J Besprechungsrituale.", "Artefakte: B, D, H, I, J | Werte und Normen: C, E | Grundannahmen: A, F, G | (Typische Zuordnung; in der Prüfung kurz begründen)"],
-  ["4.3.5", "o", "Wonach unterscheidet sich die formelle von der informellen Kultur eines Unternehmens?", "Formell: offiziell festgelegt und dokumentiert (Leitbild, Werte, Richtlinien, Compliance, Organigramm) | Informell: tatsächlich gelebte, ungeschriebene Regeln, Gewohnheiten, Beziehungen | Beide können auseinanderfallen; wirksam ist vor allem, was gelebt wird"],
-  ["4.3.5", "m", "Welche sind Kulturdimensionen nach Hofstede?", "Machtdistanz|Unsicherheitsvermeidung|Individualismus vs. Kollektivismus|Objekt- vs. Funktionsorientierung", "012", "Hofstede: Machtdistanz, Individualismus/Kollektivismus, Maskulinität/Femininität, Unsicherheitsvermeidung, Langzeitorientierung, Nachgiebigkeit. Die vierte Option stammt aus der PSP-Welt."],
-  ["4.3.5", "o", "Wie berücksichtigen Sie Kultur in einem standortübergreifenden oder internationalen Projekt?", "Unterschiede analysieren (Kommunikation, Hierarchie, Zeitverständnis, Entscheidungsfindung) | Gemeinsame Teamregeln und Sprache vereinbaren | Kick-off mit persönlichem Kennenlernen | Regionale Ansprechpartner/Key User einbinden, lokale Gepflogenheiten respektieren | Missverständnisse offen ansprechen, Feedback einholen"],
-  ["4.3.5", "o", "Was versteht man unter Projektkultur und wie fördert der PL eine positive Projektkultur?", "Gemeinsame Werte, Normen und Verhaltensweisen im Projektteam | Fördern: Vorbild sein, Teamregeln gemeinsam erarbeiten, offene Fehler- und Feedbackkultur, Transparenz, Wertschätzung, Erfolge feiern, Identität (Projektname, Rituale)"],
-  // 4.4.1 Selbstreflexion
-  ["4.4.1", "o", "Erläutern Sie das Johari-Fenster.", "Öffentlicher Bereich: mir und anderen bekannt | Blinder Fleck: anderen bekannt, mir nicht | Verborgener Bereich: mir bekannt, anderen nicht | Unbekannter Bereich: niemandem bekannt | Ziel: durch Feedback den blinden Fleck, durch Offenheit den verborgenen Bereich verkleinern"],
-  ["4.4.1", "m", "Eisenhower-Matrix: Wie behandeln Sie eine Aufgabe, die wichtig, aber nicht dringend ist?", "Sofort selbst erledigen|Terminieren und selbst erledigen|Delegieren|Verwerfen", "1", "Wichtig + dringend: sofort selbst. Wichtig + nicht dringend: terminieren. Nicht wichtig + dringend: delegieren. Weder noch: Papierkorb."],
-  ["4.4.1", "o", "Erläutern Sie die ALPEN-Methode.", "Aufgaben aufschreiben | Länge (Dauer) schätzen | Pufferzeiten einplanen (ca. 60 % verplanen, 40 % frei) | Entscheidungen treffen (Prioritäten, Delegation, Streichen) | Nachkontrolle"],
-  ["4.4.1", "o", "Woran erkennen Sie Stress bei sich und was tun Sie dagegen?", "Signale: Schlafprobleme, Gereiztheit, Konzentrationsmangel, Rückzug | Maßnahmen: Prioritäten setzen, delegieren, Nein sagen, Pausen und Bewegung, realistische Planung, Unterstützung holen (Coach, Kollegen), Ursachen statt Symptome angehen"],
-  ["4.4.1", "o", "Mit welchen Methoden reflektieren Sie Ihr eigenes Verhalten als PL?", "Projekttagebuch, feste Reflexionszeiten | Feedback einholen (Team, Auftraggeber, 360°) | Coaching, Supervision, kollegiale Beratung | Selbsteinschätzungen (z. B. Teamrollen-Test) | Lessons Learned auf die eigene Rolle beziehen"],
-  ["4.4.1", "m", "Was besagt das Pareto-Prinzip im Selbstmanagement?", "Mit ca. 20 % des Aufwands werden ca. 80 % des Ergebnisses erreicht|80 % der Arbeitszeit sollen verplant werden|Aufgaben werden nach Dringlichkeit und Wichtigkeit sortiert|Man plant 20 % Puffer für Risiken ein", "0", "Pareto: Fokus auf die wenigen wirksamen Tätigkeiten. Die 60/40-Regel gehört zur ALPEN-Methode, Dringlichkeit/Wichtigkeit zur Eisenhower-Matrix."],
-  // 4.4.2 Integrität
-  ["4.4.2", "o", "Was bedeutet persönliche Integrität und Verlässlichkeit für einen PL?", "Übereinstimmung von Werten, Worten und Taten | Ehrlichkeit und Transparenz, auch bei schlechten Nachrichten | Zusagen einhalten | Verantwortung übernehmen, auch für Fehler | Ethische und rechtliche Standards einhalten, fair zu allen Stakeholdern"],
-  ["4.4.2", "m", "Ihr Auftraggeber bittet Sie, eine absehbare Terminverschiebung im Statusbericht noch nicht zu zeigen. Was tun Sie?", "Den Bericht wie gewünscht schönen|Die Abweichung offen berichten und mit dem AG über Ursachen und Maßnahmen sprechen|Die Abweichung anonym an die Geschäftsführung melden|Gegenmaßnahmen und Auswirkungen mitliefern, damit eine Entscheidung möglich ist", "13", "Integrität verlangt wahrheitsgemäße Berichte; konstruktiv ist, Lösungen mitzubringen. Eine anonyme Meldung umgeht den offenen Dialog."],
-  ["4.4.2", "o", "Wie zeigen Sie Verlässlichkeit im Projektalltag?", "Zusagen und Termine einhalten bzw. früh melden, wenn nicht möglich | Konsistente, nachvollziehbar dokumentierte Entscheidungen | Vereinbarte Regeln selbst vorleben | Vertraulichkeit wahren | Erreichbarkeit und klare Zuständigkeiten"],
-  ["4.4.2", "o", "Wozu dient ein Verhaltenskodex (Code of Ethics) für Projektmanager?", "Grundsätze wie Ehrlichkeit, Fairness, Verantwortung, Respekt, Vertraulichkeit | Orientierung in Dilemmasituationen | Vertrauen von Kunden und Öffentlichkeit in den Berufsstand | Selbstverpflichtung der Zertifizierten"],
-  ["4.4.2", "o", "Wie berücksichtigen Sie Nachhaltigkeit in Ihrem Projekt?", "Drei Dimensionen: ökologisch, ökonomisch, sozial | Gesamten Lebenszyklus der Ergebnisse betrachten, nicht nur die Projektlaufzeit | Ressourcenschonende Lösungen (z. B. digitale Prozesse, weniger Reisen) | Faire Arbeitsbedingungen, auch bei Lieferanten | Nachhaltigkeitskriterien in Anforderungen und Lieferantenauswahl"],
-  // 4.4.3 Kommunikation
-  ["4.4.3", "o", "Erläutern Sie das Kommunikationsquadrat nach Schulz von Thun.", "Jede Nachricht hat vier Seiten: Sachinhalt (worüber ich informiere) | Selbstoffenbarung (was ich von mir zeige) | Beziehung (was ich von dir halte, wie wir zueinander stehen) | Appell (wozu ich dich veranlassen möchte) | Der Empfänger hört mit „vier Ohren“; Missverständnisse entstehen, wenn Sender und Empfänger verschiedene Seiten betonen"],
-  ["4.4.3", "o", "Nennen Sie die Axiome von Watzlawick.", "Man kann nicht nicht kommunizieren | Jede Kommunikation hat einen Inhalts- und einen Beziehungsaspekt; der Beziehungsaspekt bestimmt den Inhaltsaspekt | Interpunktion: Ursache und Wirkung werden unterschiedlich gesetzt | Digitale und analoge Kommunikation | Symmetrische oder komplementäre Interaktion"],
-  ["4.4.3", "o", "Beschreiben Sie Techniken des aktiven Zuhörens.", "Zugewandte Haltung, Blickkontakt, ausreden lassen | Paraphrasieren (Inhalt mit eigenen Worten wiedergeben) | Verbalisieren (Gefühle ansprechen) | Nachfragen und Zusammenfassen | Bestätigende Signale"],
-  ["4.4.3", "o", "Nennen Sie Regeln für Feedback (geben und nehmen).", "Geben: Ich-Botschaften, konkret und beschreibend statt wertend, zeitnah, konstruktiv, auch Positives nennen | Nehmen: zuhören, ausreden lassen, nicht rechtfertigen, nachfragen, bedanken, selbst entscheiden, was man annimmt"],
-  ["4.4.3", "m", "Welche Fragen sind offene Fragen?", "Wie schätzen Sie den aktuellen Stand ein?|Ist das Arbeitspaket fertig?|Was brauchen Sie, um den Termin zu halten?|Haben Sie den Bericht gelesen?", "02", "Offene Fragen (W-Fragen) laden zu ausführlichen Antworten ein; geschlossene Fragen lassen nur Ja/Nein zu."],
-  ["4.4.3", "o", "Nennen Sie drei Kommunikationstechniken.", "Aktives Zuhören | Fragetechniken (offen, geschlossen, zirkulär) | Ich-Botschaften | Paraphrasieren/Zusammenfassen | Feedback geben und nehmen | Metakommunikation"],
-  ["4.4.3", "o", "Nach welchen Kriterien wählen Sie das Kommunikationsmedium?", "Dringlichkeit und Vertraulichkeit | Komplexität und Konfliktpotenzial (Heikles persönlich) | Zielgruppe, Anzahl und Ort der Empfänger | Bedarf an Dialog/Rückkopplung | Dokumentationspflicht (schriftlich) | Verfügbare Kanäle (Meeting, Video, E-Mail, Chat, Intranet)"],
-  // 4.4.4 Beziehungen und Engagement
-  ["4.4.4", "o", "Erläutern Sie die Zwei-Faktoren-Theorie nach Herzberg und ihre Bedeutung für den PL.", "Hygienefaktoren verhindern Unzufriedenheit, motivieren aber nicht (Gehalt, Arbeitsbedingungen, Unternehmenspolitik, Sicherheit, Kollegen) | Motivatoren erzeugen Zufriedenheit (Leistung, Anerkennung, Arbeitsinhalt, Verantwortung, Entwicklung) | PL: Hygienefaktoren sichern, Motivatoren gezielt einsetzen"],
-  ["4.4.4", "m", "Welche Reihenfolge entspricht der Bedürfnispyramide nach Maslow (von unten nach oben)?", "Physiologische Bedürfnisse, Sicherheit, soziale Bedürfnisse, Wertschätzung, Selbstverwirklichung|Sicherheit, physiologische Bedürfnisse, Wertschätzung, soziale Bedürfnisse, Selbstverwirklichung|Soziale Bedürfnisse, Sicherheit, Selbstverwirklichung, Wertschätzung, physiologische Bedürfnisse|Wertschätzung, soziale Bedürfnisse, Sicherheit, Selbstverwirklichung, physiologische Bedürfnisse", "0", "Maslow: Grund- bzw. physiologische Bedürfnisse, Sicherheit, soziale Bedürfnisse, Wertschätzung (Ich-Bedürfnisse), Selbstverwirklichung."],
-  ["4.4.4", "o", "Wie bauen Sie Vertrauen zu Teammitgliedern und Stakeholdern auf?", "Persönliches Kennenlernen, echtes Interesse | Transparenz und offene Information | Zusagen einhalten | Zuhören, Empathie, Wertschätzung | Fehler zugeben, fair und konsistent handeln | Beziehungen auch außerhalb von Problemsituationen pflegen"],
-  ["4.4.4", "o", "Wie motivieren Sie Mitarbeitende aus der Linie, über die Sie keine Weisungsbefugnis haben?", "Sinn und Nutzen des Projekts vermitteln | Interessen und Entwicklungsziele erfragen, passende Aufgaben geben | An Entscheidungen beteiligen, Verantwortung übertragen | Anerkennung und Sichtbarkeit, auch gegenüber dem Linienvorgesetzten | Gute Rahmenbedingungen: klare Aufträge, realistische Planung, Abstimmung mit der Linie"],
-  ["4.4.4", "m", "Welche Verhaltensweisen fördern Engagement im Team?", "Gemeinsame Vision und Ziele formulieren|Erfolge sichtbar machen und würdigen|Informationen nur dem Kernteam geben, um Unruhe zu vermeiden|Teammitglieder an Planung und Schätzung beteiligen", "013", "Sinn, Anerkennung und Beteiligung fördern Engagement. Zurückgehaltene Informationen erzeugen Misstrauen und Gerüchte."],
-  // 4.4.5 Führung
-  ["4.4.5", "o", "Beschreiben Sie die klassischen Führungsstile nach Lewin.", "Autoritär: PL entscheidet allein, enge Kontrolle; schnell, aber wenig Motivation | Kooperativ/demokratisch: Team wird beteiligt, Entscheidungen gemeinsam; hohe Akzeptanz, mehr Zeitbedarf | Laissez-faire: Team weitgehend sich selbst überlassen; nur bei sehr reifen Teams sinnvoll"],
-  ["4.4.5", "o", "Erläutern Sie das situative Führungsmodell nach Hersey und Blanchard.", "Der Reifegrad (Kompetenz und Bereitschaft) des Mitarbeitenden bestimmt den Stil | S1 Unterweisen (telling) bei geringer Reife | S2 Überzeugen (selling) | S3 Partizipieren (participating) | S4 Delegieren (delegating) bei hoher Reife | Der PL passt den Stil je Person und Aufgabe an"],
-  ["4.4.5", "m", "Was gehört zu einer guten Delegation?", "Klares Ziel und erwartetes Ergebnis|Befugnisse und Ressourcen passend zur Verantwortung|Laufende Detailkontrolle jedes Arbeitsschritts|Vereinbarte Rückmeldepunkte", "013", "Delegation überträgt Aufgabe, Kompetenz und Verantwortung (Kongruenzprinzip), mit Ziel und Kontrollpunkten. Mikromanagement untergräbt sie."],
-  ["4.4.5", "o", "Was bedeutet Management by Objectives (MbO)?", "Führen durch Zielvereinbarung | Ziele werden gemeinsam vereinbart, der Weg bleibt dem Mitarbeitenden überlassen | Regelmäßige Überprüfung und Feedback | Vorteile: Motivation, Eigenverantwortung, Transparenz | Voraussetzung: SMARTe Ziele und Handlungsspielraum"],
-  ["4.4.5", "o", "Unterscheiden Sie transaktionale und transformationale Führung.", "Transaktional: Austausch Leistung gegen Belohnung, klare Vereinbarungen und Kontrolle | Transformational: inspiriert durch Vision und Vorbild, regt zum Denken an, fördert individuell; verändert Werte und Motivation | Im Projekt meist kombiniert"],
-  ["4.4.5", "o", "Wie führen Sie ein Team ohne disziplinarische Weisungsbefugnis (laterale Führung)?", "Verständigung: gemeinsame Ziele und Sichtweisen herstellen | Vertrauen: tragfähige Beziehungen aufbauen | Einfluss: Expertise, Netzwerk und Sponsor nutzen | Vereinbarungen statt Anweisungen, klare Rollen | Kapazität und Leistung mit Linienvorgesetzten abstimmen"],
-  // 4.4.6 Teamarbeit
-  ["4.4.6", "o", "Nennen Sie die Teamphasen nach Tuckman und je eine Aufgabe des PL.", "Forming: Orientierung geben, Ziele und Rollen klären, Kennenlernen | Storming: Konflikte moderieren, Regeln vereinbaren | Norming: Regeln festigen, Verantwortung übergeben | Performing: delegieren, unterstützen, Hindernisse beseitigen | Adjourning: Ergebnisse würdigen, Abschluss, Lessons Learned"],
-  ["4.4.6", "m", "In welcher Teamphase treten typischerweise Konflikte um Rollen und Vorgehen auf?", "Forming|Storming|Norming|Performing", "1", "Storming ist die Konfliktphase: Positionen, Rollen und Machtfragen werden ausgehandelt."],
-  ["4.4.6", "o", "Nennen Sie die Teamrollen nach Belbin.", "Handlungsorientiert: Macher, Umsetzer, Perfektionist | Kommunikationsorientiert: Koordinator, Teamarbeiter, Wegbereiter (Weichensteller) | Wissensorientiert: Neuerer/Erfinder, Beobachter, Spezialist | Ein ausgewogenes Team deckt alle Rollen ab; eine Person kann mehrere Rollen haben"],
-  ["4.4.6", "o", "Welche Ziele und Inhalte hat ein Kick-off-Meeting?", "Ziele, Nutzen und Hintergrund vermitteln (mit Auftraggeber) | Team und Rollen vorstellen, Kennenlernen | Vorgehen, Meilensteine, Organisation, Kommunikationsregeln | Erwartungen und Bedenken klären | Teamregeln vereinbaren | Commitment schaffen, offizieller Startschuss"],
-  ["4.4.6", "o", "Nennen Sie Beispiele für Teamregeln.", "Pünktlich und vorbereitet zu Meetings | Offen und respektvoll, Kritik an der Sache | Probleme und Verzögerungen früh melden | Entscheidungsregeln | Erreichbarkeit und Antwortzeiten | Umgang mit Konflikten"],
-  ["4.4.6", "m", "Welche Maßnahmen sind für verteilte/virtuelle Teams besonders wichtig?", "Gemeinsame digitale Ablage und klare Kommunikationskanäle|Regelmäßige kurze Abstimmungen (z. B. Video-Daily)|Bewusst auf persönliches Kennenlernen verzichten|Klare Regeln zu Erreichbarkeit und Reaktionszeiten", "013", "Virtuelle Teams brauchen klare Kanäle, Rhythmus und Regeln; persönliches Kennenlernen (mindestens zum Start) stärkt Vertrauen."],
-  // 4.4.7 Konflikte und Krisen
-  ["4.4.7", "o", "Nennen Sie die Eskalationsstufen nach Glasl und ihre drei Ebenen.", "Win-win: 1 Verhärtung, 2 Debatte/Polemik, 3 Taten statt Worte | Win-lose: 4 Images und Koalitionen, 5 Gesichtsverlust, 6 Drohstrategien | Lose-lose: 7 begrenzte Vernichtungsschläge, 8 Zersplitterung, 9 gemeinsam in den Abgrund"],
-  ["4.4.7", "m", "Welche Zuordnungen zu den Glasl-Ebenen sind richtig?", "Stufen 1–3: Lösung meist durch die Beteiligten selbst möglich|Stufen 4–6: meist Unterstützung durch Moderation, Prozessbegleitung oder Mediation nötig|Stufen 7–9: oft Machteingriff oder Schiedsverfahren nötig|Stufen 1–3: nur ein Machteingriff hilft", "012", "Je höher die Stufe, desto stärker muss ein Dritter eingreifen: Selbsthilfe → Moderation/Mediation → Schiedsverfahren/Machteingriff."],
-  ["4.4.7", "o", "Beschreiben Sie die Konfliktstile nach Thomas/Kilmann.", "Achsen: Durchsetzung eigener Interessen und Rücksicht auf Interessen anderer | Konkurrieren (durchsetzen) | Anpassen (nachgeben) | Vermeiden | Kompromiss | Kooperieren (gemeinsame Lösung, win-win) | Kein Stil ist immer richtig; Wahl nach Situation"],
-  ["4.4.7", "o", "Nennen Sie Konfliktarten im Projekt.", "Zielkonflikt | Beurteilungs- bzw. Wegekonflikt | Verteilungskonflikt (Ressourcen, Budget) | Beziehungskonflikt | Rollenkonflikt | Werte- und Interessenkonflikt"],
-  ["4.4.7", "o", "Was unterscheidet eine Projektkrise von einem Problem? Wie gehen Sie in der Krise vor?", "Krise: Projekterfolg bzw. -existenz ist bedroht, normale Steuerung reicht nicht, hoher Zeitdruck | Vorgehen: Krise erkennen und offiziell erklären | Krisenteam bilden, Sofortmaßnahmen zur Schadensbegrenzung | Ursachen analysieren, Alternativen bewerten | Entscheidung durch AG/Lenkungskreis | Klare Kommunikation über eine Stelle | Krise offiziell beenden, Lessons Learned"],
-  ["4.4.7", "o", "Wann und wie eskalieren Sie als PL?", "Wenn eine Entscheidung außerhalb der eigenen Kompetenz liegt oder Toleranzen (Termin, Kosten, Leistung) überschritten werden | Eskalationswege vorher im Projekthandbuch festlegen | Sachlich mit Fakten, Auswirkungen, Optionen und Empfehlung | Betroffene vorab informieren | Entscheidung dokumentieren"],
-  ["4.4.7", "o", "Wie strukturieren Sie ein Konfliktgespräch?", "Vorbereitung (Fakten, Ziel, Rahmen) | Eröffnung und Gesprächsregeln | Sichtweisen beider Seiten, aktiv zuhören | Interessen hinter den Positionen klären | Lösungen gemeinsam entwickeln und bewerten | Vereinbarung treffen, dokumentieren, nachhalten"],
-  // 4.4.8 Vielseitigkeit
-  ["4.4.8", "o", "Nennen Sie fünf Kreativitätstechniken.", "Brainstorming | Brainwriting 6-3-5 | Mind Mapping | Morphologischer Kasten | Kopfstandmethode | Osborn-Checkliste | Walt-Disney-Methode | Sechs Denkhüte"],
-  ["4.4.8", "o", "Erläutern Sie die Methode 6-3-5.", "6 Teilnehmende schreiben je 3 Ideen in 5 Minuten auf ein Formular | Das Blatt wird weitergereicht, Ideen werden aufgegriffen und weiterentwickelt | Nach 6 Runden bis zu 108 Ideen in etwa 30 Minuten | Vorteil: alle kommen zu Wort, wenig Gruppendruck"],
-  ["4.4.8", "o", "Nennen Sie die Regeln für Brainstorming.", "Keine Kritik während der Ideenfindung | Quantität vor Qualität | Freies Assoziieren, auch ungewöhnliche Ideen | Ideen anderer aufgreifen und weiterentwickeln | Ideenfindung und Bewertung trennen; Moderation"],
-  ["4.4.8", "r", "Nutzwertanalyse: Kriterien Kosten (Gewicht 50 %), Funktionalität (30 %), Service (20 %). Anbieter A erhält 8 / 6 / 7 Punkte, Anbieter B 6 / 9 / 8 Punkte (Skala 0–10). Welcher Anbieter gewinnt?", "Nutzwert = Summe (Gewicht × Punkte) | A: 0,5 × 8 + 0,3 × 6 + 0,2 × 7 = 4,0 + 1,8 + 1,4 = 7,2 | B: 0,5 × 6 + 0,3 × 9 + 0,2 × 8 = 3,0 + 2,7 + 1,6 = 7,3 | B gewinnt knapp | Bei so kleinem Abstand Sensitivität der Gewichtung prüfen und K.-o.-Kriterien beachten"],
-  ["4.4.8", "m", "Welche Aussagen zu divergentem und konvergentem Denken sind richtig?", "Divergentes Denken erzeugt viele Alternativen|Konvergentes Denken bewertet und verdichtet auf eine Lösung|Brainstorming dient vor allem dem konvergenten Denken|Die Nutzwertanalyse unterstützt konvergentes Denken", "013", "Brainstorming ist eine divergente Technik (Ideen sammeln). Bewertungsverfahren wie die Nutzwertanalyse sind konvergent."],
-  ["4.4.8", "o", "Beschreiben Sie einen strukturierten Entscheidungsprozess.", "Problem und Ziel definieren | Informationen sammeln | Alternativen entwickeln | Kriterien festlegen und gewichten | Alternativen bewerten (z. B. Nutzwertanalyse) | Entscheiden, umsetzen, Wirkung prüfen"],
-  // 4.4.9 Verhandlungen
-  ["4.4.9", "o", "Nennen Sie die Prinzipien des Harvard-Konzepts.", "Menschen und Probleme getrennt behandeln | Auf Interessen konzentrieren, nicht auf Positionen | Optionen zum beiderseitigen Vorteil entwickeln | Neutrale, objektive Beurteilungskriterien anwenden | Ergänzend: BATNA (beste Alternative) kennen"],
-  ["4.4.9", "o", "Wofür steht ZOPA und was bedeutet das in einer Verhandlung?", "Zone of Possible Agreement | Bereich, in dem sich die Grenzen (Reservationspunkte) beider Parteien überschneiden | Nur innerhalb der ZOPA ist eine Einigung möglich; ohne Überschneidung keine Einigung | Ziel: ein Ergebnis möglichst günstig innerhalb der ZOPA"],
-  ["4.4.9", "o", "Was ist die BATNA und warum ist sie wichtig?", "Best Alternative to a Negotiated Agreement: beste Alternative, falls keine Einigung zustande kommt | Bestimmt die eigene Untergrenze und Verhandlungsmacht | Vorher ermitteln und möglichst verbessern | Auch die BATNA der Gegenseite einschätzen"],
-  ["4.4.9", "o", "Um welche Verhandlungssituationen sollte sich der PL selbst kümmern?", "Projektauftrag, Ziele, Budget und Ressourcen mit AG und Linie | Wesentliche Vertrags- und Nachtragsverhandlungen mit Kunden und Lieferanten (mit Einkauf/Recht) | Ressourcen und Prioritäten mit Linienvorgesetzten | Änderungen mit Auswirkung auf Leistung, Termin, Kosten | Eskalierende Konflikte im Team"],
-  ["4.4.9", "o", "Nennen Sie vier Kriterien für eine faire Übereinkunft.", "Berechtigte Interessen beider Seiten weitgehend erfüllt | Auf objektiven Kriterien beruhend (Marktpreise, Normen, Gutachten) | Dauerhaft und umsetzbar | Interessen Dritter berücksichtigt | Beziehung erhalten oder verbessert | Effizient erzielt"],
-  ["4.4.9", "o", "Nennen Sie zwei Gründe für Claim Management und zwei Voraussetzungen für seinen Erfolg.", "Gründe: eigene Nachforderungen aus Abweichungen und Änderungen sichern; unberechtigte Forderungen der Gegenseite abwehren; Budget und Ergebnis schützen | Voraussetzungen: klarer Vertrag und Leistungsbeschreibung; lückenlose Dokumentation (Protokolle, Änderungen, Behinderungsanzeigen); definierter Prozess mit Verantwortlichen; Fristen beachten"],
-  ["4.4.9", "m", "Was bedeutet „Interessen statt Positionen“ im Harvard-Konzept?", "Die Bedürfnisse und Beweggründe hinter einer Forderung erkunden|Die eigene Anfangsforderung möglichst hoch ansetzen|Lösungen suchen, die die eigentlichen Anliegen beider Seiten erfüllen|Positionen schriftlich fixieren, bevor verhandelt wird", "02", "Positionen sind das, was jemand fordert; Interessen sind, warum. Über Interessen finden sich oft Lösungen, die beiden nützen."],
-  // 4.4.10 Ergebnisorientierung
-  ["4.4.10", "o", "Was bedeutet Ergebnisorientierung im Sinne der ICB4?", "Fokus auf vereinbarte Ergebnisse und Nutzen für Stakeholder | Prioritäten setzen, Ressourcen auf das Wesentliche lenken | Probleme lösen, Hindernisse aktiv beseitigen | Effizienz und Effektivität verbinden | Ergebnisse kommunizieren, Erfolge sichtbar machen | Kontinuierlich verbessern"],
-  ["4.4.10", "m", "Welche Aussagen zu Effektivität und Effizienz sind richtig?", "Effektivität = die richtigen Dinge tun (Zielerreichung)|Effizienz = die Dinge richtig tun (Ergebnis im Verhältnis zum Aufwand)|Effektivität = möglichst geringer Ressourceneinsatz|Effizienz und Effektivität sind Synonyme", "01", "Effektiv ist, was das Ziel erreicht; effizient ist, was das mit wenig Aufwand tut."],
-  ["4.4.10", "o", "Was sind Quick Wins und warum sind sie wichtig?", "Frühe, sichtbare Teilergebnisse mit geringem Aufwand | Schaffen Akzeptanz und Vertrauen | Motivieren das Team | Zeigen den Nutzen früh, besonders in Veränderungsprojekten"],
-  ["4.4.10", "o", "Wie stellen Sie sicher, dass der Projektnutzen nach Projektende realisiert wird?", "Nutzen messbar definieren (Kennzahl, Ausgangs- und Zielwert) | Verantwortliche in der Linie benennen | Übergabe in den Betrieb planen (Schulung, Support, Hypercare) | Nutzenüberprüfung z. B. nach 6–12 Monaten einplanen"],
-  ["4.4.10", "o", "Ein Arbeitspaket stockt, weil eine Fachabteilung nicht zuliefert. Wie handeln Sie ergebnisorientiert?", "Ursache klären (Kapazität, Priorität, Verständnis) | Direkt und lösungsorientiert mit dem Verantwortlichen sprechen | Alternativen prüfen (Umplanung, Teilergebnisse, Unterstützung, extern) | Auswirkung auf den kritischen Pfad bewerten | Bei Bedarf Priorisierung durch AG/Lenkungskreis herbeiführen | Vereinbarung dokumentieren und nachhalten"],
-  // 4.5.1 Projektdesign
-  ["4.5.1", "o", "Wie definiert die DIN 69901-5 ein Projekt?", "Vorhaben, das im Wesentlichen durch Einmaligkeit der Bedingungen in ihrer Gesamtheit gekennzeichnet ist | z. B. Zielvorgabe | zeitliche, finanzielle, personelle oder andere Begrenzungen | Abgrenzung gegenüber anderen Vorhaben | projektspezifische Organisation"],
-  ["4.5.1", "m", "Welche Merkmale sprechen dafür, ein Vorhaben als Projekt zu organisieren?", "Einmaligkeit|Zeitliche Begrenzung mit definiertem Start und Ende|Routinemäßige, sich wiederholende Tätigkeit|Komplexität und interdisziplinäre Zusammenarbeit", "013", "Routineaufgaben gehören in die Linie. Projekte sind einmalig, befristet und meist komplex und bereichsübergreifend."],
-  ["4.5.1", "o", "Beschreiben Sie den Aufbau der ICB4 für Projektmanager.", "Drei Kompetenzbereiche: Perspective (Kontext, 5 CE), People (persönlich/sozial, 10 CE), Practice (Methoden und Techniken, 13 CE für Projekte) | Insgesamt 28 Kompetenzelemente (CE) | Je CE Key Competence Indicators (KCI) mit Messgrößen | Practice 4.5.14 „Auswahl und Ausgewogenheit“ nur für Programm/Portfolio"],
-  ["4.5.1", "o", "Was umfasst Projektdesign nach ICB4?", "Erfolgskriterien definieren und priorisieren | Kontext analysieren (Organisation, Umfeld, Komplexität) | Lessons Learned früherer Projekte nutzen | PM-Ansatz und Vorgehensmodell wählen (klassisch, agil, hybrid) | Governance und Organisation festlegen | Design laufend überprüfen und anpassen"],
-  ["4.5.1", "o", "Nach welchen Kriterien wählen Sie ein klassisches, agiles oder hybrides Vorgehen?", "Klarheit der Anforderungen (Was) und Sicherheit der Lösung/Technik (Wie), z. B. Stacey-Matrix | Klar und bekannt → klassisch, plangetrieben | Unklar/komplex → agil, iterativ | Weitere Kriterien: Kundenverfügbarkeit, Teamerfahrung, Regulierung, Vertragsform, Zerlegbarkeit in Inkremente | Mischsituation → hybrid"],
-  ["4.5.1", "o", "Nach welchen Kriterien lassen sich Projektarten unterscheiden?", "Inhalt: Investitions-, Organisations-, IT-, F&E-, Bauprojekt | Auftraggeber: intern oder extern | Größe/Komplexität: Klein-, Mittel-, Großprojekt | Neuigkeitsgrad: Pionier- oder Routineprojekt | Beteiligung: national oder international"],
-  ["4.5.1", "m", "Welche Aussagen zu Scrum sind richtig?", "Die drei Verantwortlichkeiten sind Product Owner, Scrum Master und Developers|Ein Sprint dauert höchstens einen Monat|Der Product Owner leitet das Daily Scrum und verteilt Aufgaben|Artefakte sind Product Backlog, Sprint Backlog und Increment", "013", "Das Daily Scrum (max. 15 Minuten) gehört den Developers, die sich selbst organisieren. Der PO verantwortet den Product Backlog und maximiert den Wert."],
-  ["4.5.1", "o", "Nennen Sie die Events in Scrum mit ihrem Zweck.", "Sprint: Container, max. ein Monat | Sprint Planning: Sprintziel und Auswahl der Backlog-Einträge | Daily Scrum: 15 Minuten Abstimmung der Developers | Sprint Review: Increment mit Stakeholdern prüfen, Backlog anpassen | Sprint Retrospective: Zusammenarbeit und Prozess verbessern"],
-  ["4.5.1", "o", "Was ist ein hybrides Vorgehen? Vor- und Nachteile?", "Kombination klassischer und agiler Elemente, z. B. klassischer Rahmenplan mit Gates, Meilensteinen und Budget, agile Umsetzung in Sprints | Vorteile: Planbarkeit für Governance, Flexibilität in der Umsetzung | Herausforderungen: Schnittstellen, Rollenklärung, Berichtswesen zwischen beiden Welten"],
-  ["4.5.1", "m", "Was kennzeichnet das V-Modell?", "Jeder Spezifikationsstufe steht eine Test- bzw. Prüfstufe gegenüber|Arbeit in festen Sprints mit Increments|Verifikation und Validierung sind zentrale Elemente|Es verzichtet vollständig auf Phasen", "02", "Das V-Modell ist ein phasenorientiertes Modell: links Spezifikation (vom Groben ins Feine), rechts Integration und Test auf der jeweils gleichen Ebene."],
-  // 4.5.2 Anforderungen und Ziele
-  ["4.5.2", "o", "Wofür steht SMART? Formulieren Sie ein Beispiel.", "Spezifisch, Messbar, Attraktiv/Akzeptiert, Realistisch, Terminiert | Beispiel: „Bis 30.06. sind 90 % der aktiven Lieferanten im neuen Portal registriert.“"],
-  ["4.5.2", "m", "Die Ziele „Kosten senken“ und „Qualität erhöhen“ behindern sich gegenseitig. Wie heißt diese Zielbeziehung?", "Komplementär|Konkurrierend (Zielkonflikt)|Indifferent (neutral)|Identisch", "1", "Komplementär = Ziele fördern sich; konkurrierend = sie behindern sich; indifferent = sie beeinflussen sich nicht."],
-  ["4.5.2", "o", "Erläutern Sie das magische Dreieck.", "Leistung (Umfang/Qualität), Termine, Kosten | Die Größen hängen voneinander ab: Ändert sich eine, wirkt das auf die anderen | Zielkonflikte müssen priorisiert und vom AG entschieden werden | Erweiterungen: Teufelsquadrat (mit Qualität), Nutzen und Stakeholderzufriedenheit"],
-  ["4.5.2", "o", "Unterscheiden Sie Lastenheft und Pflichtenheft.", "Lastenheft: vom Auftraggeber; Gesamtheit der Anforderungen – WAS und WOFÜR | Pflichtenheft: vom Auftragnehmer; Realisierungsvorgaben auf Basis des Lastenhefts – WIE und WOMIT"],
-  ["4.5.2", "o", "Welche Zielarten gibt es?", "Ergebnisziele (Leistung, Termin, Kosten) und Vorgehensziele (wie das Projekt abgewickelt wird) | Muss-, Soll- und Kann-/Wunschziele | Haupt- und Nebenziele | Nicht-Ziele zur Abgrenzung"],
-  ["4.5.2", "m", "Wofür steht das W in MoSCoW?", "Won't have (this time) – bewusst nicht in diesem Release|Wish – Wunschanforderung|Weighted – gewichtete Anforderung|Workaround", "0", "MoSCoW: Must have, Should have, Could have, Won't have (this time)."],
-  ["4.5.2", "o", "Warum sollten Nicht-Ziele formuliert werden?", "Klare Abgrenzung des Projekts | Erwartungen der Stakeholder steuern | Scope Creep vermeiden | Grundlage für Diskussion und Änderungsmanagement"],
-  ["4.5.2", "o", "Beschreiben Sie den Zielfindungsprozess.", "Ziele und Anforderungen sammeln (Stakeholder) | Strukturieren, Zielhierarchie bilden | Zielbeziehungen analysieren, Konflikte lösen | Operationalisieren (SMART) | Priorisieren und mit AG abstimmen | Dokumentieren (Projektauftrag) und Änderungen steuern"],
-  ["4.5.2", "m", "Welche Merkmalskategorien gehören zum Kano-Modell?", "Basismerkmale|Leistungsmerkmale|Begeisterungsmerkmale|Pflichtmerkmale nach DIN 69901", "012", "Kano: Basis- (selbstverständlich erwartet), Leistungs- (je mehr, desto zufriedener) und Begeisterungsmerkmale (unerwartet). Dazu unerhebliche und Rückweisungsmerkmale."],
-  // 4.5.3 Leistungsumfang
-  ["4.5.3", "o", "Welche Gliederungsarten eines Projektstrukturplans (PSP) gibt es?", "Objektorientiert: nach Bestandteilen des Ergebnisses | Funktions- bzw. verrichtungsorientiert: nach Tätigkeiten/Funktionen | Phasen- bzw. ablauforientiert: nach Projektphasen | Gemischtorientiert: Kombination auf verschiedenen Ebenen"],
-  ["4.5.3", "o", "Erläutern Sie die 100-%-Regel im PSP.", "Die Elemente einer Ebene decken zusammen 100 % des übergeordneten Elements ab – nicht mehr, nicht weniger | Nichts fehlt, nichts ist doppelt | Gilt für Inhalt, Aufwand und Kosten"],
-  ["4.5.3", "o", "Was gehört in eine Arbeitspaketbeschreibung?", "PSP-Code und Bezeichnung | Verantwortlicher | Ziel, Ergebnis/Lieferobjekt und Tätigkeiten | Abgrenzung (was nicht dazugehört) | Voraussetzungen und Schnittstellen | Aufwand, Kosten, Dauer, Termine | Abnahmekriterien"],
-  ["4.5.3", "m", "Welche Aussagen zum Arbeitspaket sind richtig?", "Kleinste Einheit im PSP, die nicht weiter zerlegt wird|Hat einen eindeutigen Verantwortlichen|Kann für die Ablaufplanung in Vorgänge aufgeteilt werden|Muss immer genau einen Arbeitstag dauern", "012", "Die Größe eines Arbeitspakets richtet sich nach Steuerbarkeit, nicht nach einer festen Dauer."],
-  ["4.5.3", "o", "Was ist Scope Creep und wie vermeiden Sie ihn?", "Schleichende, unkontrollierte Ausweitung des Leistungsumfangs ohne Anpassung von Zeit und Budget | Vermeiden: klarer Scope mit Nicht-Zielen, PSP, Änderungsmanagement, Abnahmekriterien, Kommunikation mit Stakeholdern"],
-  ["4.5.3", "o", "Welchen Nutzen hat der PSP?", "Vollständige Strukturierung des Leistungsumfangs | Basis für Termin-, Ressourcen-, Kosten- und Risikoplanung | Klare Verantwortlichkeiten | Kommunikations- und Steuerungsgrundlage | Vermeidet Lücken und Doppelarbeit"],
-  ["4.5.3", "m", "Was ist bei der PSP-Codierung sinnvoll?", "Eindeutige, hierarchische Nummerierung (z. B. 1.2.3)|Nutzung als Schlüssel für Kostenkontierung und Berichte|Jede Ebene ohne System nummerieren|Abgleich mit Kostenstellen/Kostenträgern im Rechnungswesen", "013", "Eine systematische Codierung macht jedes Element eindeutig ansprechbar und verbindet den PSP mit Controlling und Rechnungswesen."],
-  // 4.5.4 Ablauf und Termine
-  ["4.5.4", "o", "Nennen Sie die Anordnungsbeziehungen nach DIN 69900.", "Normalfolge NF (Ende–Anfang): Nachfolger beginnt nach Ende des Vorgängers | Anfangsfolge AF (Anfang–Anfang) | Endfolge EF (Ende–Ende) | Sprungfolge SF (Anfang–Ende) | Jeweils mit positivem (Wartezeit) oder negativem (Überlappung) Zeitabstand möglich"],
-  ["4.5.4", "m", "Vorgang B darf erst beginnen, wenn A beendet ist. Welche Anordnungsbeziehung liegt vor?", "Normalfolge (NF)|Anfangsfolge (AF)|Endfolge (EF)|Sprungfolge (SF)", "0", "Die Normalfolge (Ende–Anfang) ist die häufigste Anordnungsbeziehung."],
-  ["4.5.4", "o", "Was ist der kritische Pfad und wie können Sie ein Projekt beschleunigen?", "Kette von Vorgängen ohne Gesamtpuffer; bestimmt die Mindestprojektdauer | Jede Verzögerung darauf verschiebt das Projektende | Beschleunigen: Vorgänge parallelisieren/überlappen (Fast Tracking), zusätzliche Ressourcen (Crashing), Umfang reduzieren, Abläufe vereinfachen"],
-  ["4.5.4", "m", "Welche Aussagen zu Puffern sind richtig?", "Gesamtpuffer: Verschiebung möglich, ohne das Projektende zu gefährden|Freier Puffer: Verschiebung möglich, ohne den frühesten Anfang eines Nachfolgers zu verschieben|Der freie Puffer ist immer größer als der Gesamtpuffer|GP = SAZ − FAZ", "013", "Es gilt FP ≤ GP. GP = SAZ − FAZ = SEZ − FEZ; FP = min FAZ(Nachfolger) − FEZ."],
-  ["4.5.4", "o", "Vergleichen Sie Balkenplan und Netzplan.", "Balkenplan (Gantt): anschaulich auf der Zeitachse, gut für Kommunikation; Abhängigkeiten nur eingeschränkt sichtbar | Netzplan: Abhängigkeiten, Puffer und kritischer Pfad berechenbar; weniger anschaulich | Netzplanarten: Vorgangsknotennetz (MPM, in der Praxis Standard), Vorgangspfeilnetz (CPM), Ereignisknotennetz (PERT)"],
-  ["4.5.4", "o", "Was ist ein Meilenstein und wozu dient er?", "Ereignis besonderer Bedeutung mit Dauer null | z. B. Phasenende, Gate, Abnahme, Lieferung | Steuerungs- und Kommunikationspunkt | Grundlage für die Meilensteintrendanalyse"],
-  ["4.5.4", "r", "Netzplan 1 (alle Normalfolge, Start bei 0): A 3 Tage; B 5 (nach A); C 4 (nach A); D 2 (nach B); E 6 (nach C); F 3 (nach D und E). Berechnen Sie FAZ und FEZ aller Vorgänge sowie die Projektdauer.", "Vorwärtsrechnung: FAZ = größter FEZ der Vorgänger; FEZ = FAZ + Dauer | A: 0 / 3 | B: 3 / 8 | C: 3 / 7 | D: 8 / 10 | E: 7 / 13 | F: FAZ = max(10; 13) = 13, FEZ = 16 | Projektdauer: 16 Tage"],
-  ["4.5.4", "r", "Netzplan 1 (A 3; B 5 nach A; C 4 nach A; D 2 nach B; E 6 nach C; F 3 nach D und E): Rückwärtsrechnung, Gesamtpuffer und kritischer Pfad?", "Rückwärts: SEZ = kleinster SAZ der Nachfolger; SAZ = SEZ − Dauer; Ende = 16 | F: 13 / 16 | E: 7 / 13 | D: 11 / 13 | C: 3 / 7 | B: SEZ = SAZ(D) = 11 → SAZ 6 | A: SEZ = min(6; 3) = 3 → SAZ 0 | GP = SAZ − FAZ: A 0, B 3, C 0, D 3, E 0, F 0 | Kritischer Pfad: A – C – E – F (16 Tage)"],
-  ["4.5.4", "r", "Netzplan 1: Berechnen Sie den freien Puffer von B und D. Warum haben B und D denselben Gesamtpuffer, aber unterschiedliche freie Puffer?", "FP = FAZ(Nachfolger) − FEZ | B: FAZ(D) 8 − FEZ(B) 8 = 0 | D: FAZ(F) 13 − FEZ(D) 10 = 3 | B und D teilen sich den Gesamtpuffer von 3 Tagen auf dem Pfad B–D | Verschiebt sich B, verschiebt sich auch D; D kann dagegen 3 Tage rutschen, ohne irgendeinen Nachfolger zu stören"],
-  ["4.5.4", "r", "Netzplan 2 (Normalfolge, Start 0): A 2; B 4 (nach A); C 3 (nach A); D 5 (nach B); E 2 (nach C); F 4 (nach C); G 3 (nach D und E); H 2 (nach F und G). Projektdauer und kritischer Pfad?", "Vorwärts (FAZ/FEZ): A 0/2, B 2/6, C 2/5, D 6/11, E 5/7, F 5/9, G 11/14, H 14/16 → Dauer 16 | Rückwärts (SAZ/SEZ): H 14/16, G 11/14, F 10/14, E 9/11, D 6/11, C 6/9 (SEZ = min(9; 10)), B 2/6, A 0/2 | Kritischer Pfad: A – B – D – G – H"],
-  ["4.5.4", "r", "Netzplan 2: Gesamtpuffer und freier Puffer von C, E und F?", "C: GP = 6 − 2 = 4; FP = min(FAZ E 5; FAZ F 5) − FEZ C 5 = 0 | E: GP = 9 − 5 = 4; FP = FAZ G 11 − FEZ E 7 = 4 | F: GP = 10 − 5 = 5; FP = FAZ H 14 − FEZ F 9 = 5"],
-  ["4.5.4", "r", "A dauert 5 Tage (FAZ 0). B (4 Tage) folgt A mit Anfangsfolge AF + 2 Tage. C (3 Tage) folgt B mit Endfolge EF + 1 Tag. Berechnen Sie FAZ und FEZ von B und C.", "AF: FAZ(B) = FAZ(A) + 2 = 2; FEZ(B) = 2 + 4 = 6 | EF: FEZ(C) = FEZ(B) + 1 = 7; FAZ(C) = 7 − 3 = 4 | C beginnt also bereits vor dem Ende von B"],
-  ["4.5.4", "r", "A dauert 4 Tage (FAZ 0). B (3 Tage) folgt in Normalfolge mit 2 Tagen Wartezeit (z. B. Trocknung). FAZ und FEZ von B?", "FAZ(B) = FEZ(A) + Zeitabstand = 4 + 2 = 6 | FEZ(B) = 6 + 3 = 9"],
-  ["4.5.4", "r", "Dreipunktschätzung (PERT): optimistisch 4 Tage, wahrscheinlich 6 Tage, pessimistisch 14 Tage. Erwartete Dauer und Standardabweichung?", "Erwartungswert = (O + 4M + P) / 6 = (4 + 24 + 14) / 6 = 7 Tage | Standardabweichung = (P − O) / 6 = 10 / 6 ≈ 1,67 Tage | Die erwartete Dauer liegt über dem wahrscheinlichsten Wert, weil das Risiko nach oben größer ist"],
-  // 4.5.5 Organisation, Information, Dokumentation
-  ["4.5.5", "o", "Nennen Sie vier Spalten einer Kommunikationsmatrix.", "Was (Inhalt/Information) | Wer (Sender/Verantwortlicher) | An wen (Empfänger) | Wann/wie oft (Zeitpunkt, Häufigkeit) | Wie (Medium/Format)"],
-  ["4.5.5", "o", "Was ist ein Projekthandbuch und wie unterscheidet es sich von der Projektakte?", "Projekthandbuch: Regelwerk für die Abwicklung – Auftrag, Organisation und Rollen, Kommunikation und Berichtswesen, Ablage, Prozesse für Änderungen, Risiken, Qualität, Eskalation, Vorlagen | Projektakte: Sammlung aller im Projekt entstehenden Dokumente"],
-  ["4.5.5", "o", "Nennen Sie die Teilprozesse des Konfigurationsmanagements.", "Konfigurationsidentifizierung (was ist die Konfiguration, Baselines) | Konfigurationsüberwachung/Änderungslenkung | Konfigurationsbuchführung (Statusnachweis) | Konfigurationsaudit (Übereinstimmung von Dokumentation und Produkt prüfen)"],
-  ["4.5.5", "m", "Wofür steht RACI?", "Responsible, Accountable, Consulted, Informed|Risk, Action, Control, Issue|Responsible, Approved, Checked, Implemented|Request, Analyse, Change, Inform", "0", "R führt aus, A trägt die Gesamtverantwortung (genau eine Person je Aufgabe), C wird vorher konsultiert, I wird informiert."],
-  ["4.5.5", "o", "Wie gestalten Sie Projektbesprechungen effektiv?", "Ziel und Agenda vorab, richtige Teilnehmende | Moderation und Zeitrahmen | Ergebnisprotokoll mit To-dos (wer, was, bis wann) | Nachverfolgung in der nächsten Sitzung"],
-  ["4.5.5", "o", "Welche Anforderungen stellen Sie an das Dokumentenmanagement im Projekt?", "Einheitliche Ablagestruktur (z. B. nach PSP) und Namenskonventionen | Versionierung und Freigabestatus | Zugriffsrechte und Datenschutz | Aufbewahrungsfristen, Archivierung bei Projektabschluss"],
-  ["4.5.5", "o", "Nennen Sie typische Projektrollen und ihre Aufgaben.", "Auftraggeber/Sponsor: Auftrag, Budget, Entscheidungen | Lenkungskreis: strategische Steuerung, Eskalation | PL: Planung, Steuerung, Führung, Berichte | Teilprojektleiter/AP-Verantwortliche: Umsetzung | Projektteam | PMO/Assistenz: Unterstützung | Key User/Fachexperten"],
-  // 4.5.6 Qualität
-  ["4.5.6", "o", "Wann findet Plan-Do-Check-Act vor allem Anwendung? Wie heißt die Methode? Erklären Sie sie.", "Deming-Kreis, Grundlage des kontinuierlichen Verbesserungsprozesses (KVP) | Plan: Ziele und Maßnahmen planen | Do: umsetzen (oft zunächst im Kleinen) | Check: Ergebnisse prüfen | Act: standardisieren oder anpassen, neuer Zyklus | Anwendung v. a. während der Durchführung/Steuerung und im Qualitätsmanagement"],
-  ["4.5.6", "o", "Welche Schritte hat eine Retrospektive, welche Fragen werden gestellt und wer nimmt teil?", "Schritte: Rahmen setzen – Daten sammeln – Erkenntnisse gewinnen – Maßnahmen beschließen – Abschluss | Fragen: Was lief gut? Was lief nicht gut? Was wollen wir ändern? Was hat uns überrascht? | Teilnehmende: das Team (in Scrum: Developers, PO, Scrum Master als Moderator)"],
-  ["4.5.6", "o", "Erläutern Sie die Fehlerklasse „Blocker“ in Prüfplänen.", "Schwerster Fehler: verhindert die Nutzung oder weitere Tests des Systems/einer Kernfunktion | Kein Workaround möglich | Höchste Priorität, sofortige Behebung | Abnahme bzw. Go-live ist damit nicht möglich"],
-  ["4.5.6", "o", "Woher leiten Sie Abnahmekriterien ab? Was tun Sie bei Unklarheiten?", "Quellen: Vertrag, Lasten- und Pflichtenheft, Projektauftrag und Ziele, Normen und Gesetze, Nutzeranforderungen, Qualitätsplan | Bei Unklarheiten: mit dem AG klären, messbar präzisieren und schriftlich vereinbaren – vor der Realisierung; Änderungen über das Änderungsmanagement"],
-  ["4.5.6", "o", "Wann führen Sie eine Kundenbefragung durch und welche Daten brauchen Sie für die Qualitätssicherung?", "Zeitpunkte: zu Beginn (Anforderungen, Erwartungen), an Meilensteinen bzw. nach Lieferungen, bei Abnahme oder nach Abschluss | Daten: Anforderungen und Qualitätskriterien, Zufriedenheit mit Ergebnis und Zusammenarbeit, Mängel, Verbesserungsvorschläge"],
-  ["4.5.6", "m", "Welche Aussagen zur Qualität im Projekt sind richtig?", "Produktqualität betrifft die Ergebnisse, Prozessqualität die Art der Projektdurchführung|Qualität bedeutet, festgelegte Anforderungen zu erfüllen|Qualitätsprüfungen sind erst bei der Endabnahme sinnvoll|Fehlerkosten steigen, je später ein Fehler entdeckt wird", "013", "Qualität wird geplant und laufend geprüft (Reviews, Tests, Gates). Späte Fehler sind am teuersten."],
-  ["4.5.6", "o", "Nennen Sie Qualitätswerkzeuge.", "Ursache-Wirkungs-Diagramm (Ishikawa, z. B. 6M: Mensch, Maschine, Methode, Material, Mitwelt, Messung) | Pareto-Analyse | Checklisten | Reviews und Tests | FMEA | Qualitätsplan und Prüfpläne"],
-  // 4.5.7 Kosten und Finanzierung
-  ["4.5.7", "o", "Beschreiben Sie die Schritte der Kostenplanung.", "Kosten je Arbeitspaket ermitteln (Personal, Sachkosten, Fremdleistungen) | Kostenarten zuordnen | Zeitlich verteilen (Kostenganglinie, Kostensummenlinie) | Reserven bzw. Risikozuschläge einplanen | Budget freigeben, Baseline festlegen"],
-  ["4.5.7", "m", "Was ist der Earned Value (Fertigstellungswert)?", "Geplante Kosten der bis heute tatsächlich erbrachten Leistung (BAC × Fertigstellungsgrad)|Tatsächlich angefallene Kosten bis heute|Geplante Kosten der bis heute geplanten Leistung|Prognostizierte Gesamtkosten", "0", "EV = Plankosten der Ist-Leistung. AC = Istkosten, PV = Plankosten der Plan-Leistung, EAC = Prognose der Gesamtkosten."],
-  ["4.5.7", "m", "CPI = 0,9 und SPI = 1,1. Was bedeutet das?", "Das Projekt ist teurer als geplant und dem Plan voraus|Das Projekt ist günstiger als geplant und im Verzug|Pro ausgegebenem Euro wurden 0,90 € Leistungswert erbracht|Das Projekt liegt bei Kosten und Termin im Plan", "02", "CPI < 1 = Kostenüberschreitung, SPI > 1 = mehr Leistung als geplant (voraus)."],
-  ["4.5.7", "o", "Nennen Sie Methoden zur Ermittlung des Fertigstellungsgrads.", "0/100: erst bei Abschluss 100 % | 50/50 bzw. 20/80: Anteil bei Beginn, Rest bei Abschluss | Meilensteinmethode: feste Prozentsätze je erreichtem Meilenstein | Mengenproportional (z. B. 40 von 100 Lieferanten angebunden) | Sekundärproportional (an eine Bezugsgröße gekoppelt) | Schätzung (subjektiv, nur für kurze APs)"],
-  ["4.5.7", "o", "Unterscheiden Sie Kostenplanung und Finanzmittelplanung.", "Kostenplanung: Werteverzehr – wann entstehen Kosten | Finanzmittelplanung: Zahlungsströme und Liquidität – wann fließt Geld ab oder zu (Anzahlungen, Zahlungsziele) | Finanzierungsquellen: Budget/Eigenmittel, Fördermittel, Kredite, Kundenanzahlungen"],
-  ["4.5.7", "r", "BAC 200.000 €. Stichtag: PV 100.000 €, EV 80.000 €, AC 90.000 €. Berechnen Sie CV, SV, CPI, SPI und interpretieren Sie.", "CV = EV − AC = 80.000 − 90.000 = −10.000 € (Kostenüberschreitung) | SV = EV − PV = 80.000 − 100.000 = −20.000 € (Leistungsrückstand) | CPI = EV / AC = 0,89 → pro 1 € nur 0,89 € Leistungswert | SPI = EV / PV = 0,80 → nur 80 % der geplanten Leistung erbracht | Fazit: teurer und hinter Plan → Ursachen klären, Steuerungsmaßnahmen"],
-  ["4.5.7", "r", "Gleiche Daten (BAC 200.000 €, EV 80.000 €, AC 90.000 €). Berechnen Sie EAC (CPI-basiert), ETC und VAC. Wie hoch wäre EAC, wenn die Restarbeit wie geplant kostet?", "EAC = BAC / CPI = 200.000 / 0,889 = 225.000 € | ETC = EAC − AC = 135.000 € | VAC = BAC − EAC = −25.000 € | Restarbeit zu Plankosten: EAC = AC + (BAC − EV) = 90.000 + 120.000 = 210.000 €"],
-  ["4.5.7", "r", "BAC 500.000 €, PV 250.000 €, EV 275.000 €, AC 250.000 €. Kennzahlen und Bewertung?", "CV = +25.000 €, SV = +25.000 € | CPI = 1,10, SPI = 1,10 → günstiger und schneller als geplant | EAC = 500.000 / 1,1 ≈ 454.545 €; VAC ≈ +45.455 € | Trotzdem prüfen: Plan zu pessimistisch? Qualität gesichert? Fertigstellungsgrad realistisch gemeldet?"],
-  ["4.5.7", "r", "Ein AP hat Plankosten von 120.000 €. Zum Stichtag sollten 50 % fertig sein, gemeldet sind 40 %. Istkosten: 54.000 €. Berechnen Sie PV, EV, CV, SV, CPI, SPI und EAC.", "PV = 50 % × 120.000 = 60.000 € | EV = 40 % × 120.000 = 48.000 € | CV = 48.000 − 54.000 = −6.000 € | SV = 48.000 − 60.000 = −12.000 € | CPI = 0,89; SPI = 0,80 | EAC = 120.000 / 0,889 = 135.000 €"],
-  ["4.5.7", "r", "Ein AP mit Plankosten 10.000 € ist begonnen, aber nicht fertig. Wie hoch ist der EV nach der 20/80-, der 0/100- und der 50/50-Methode?", "20/80: 20 % bei Beginn → EV = 2.000 € | 0/100: EV = 0 € bis zum Abschluss | 50/50: EV = 5.000 € | Vorteil dieser Methoden: einfach und kaum manipulierbar; geeignet für kurze APs"],
-  ["4.5.7", "r", "Kalkulation: 3 Entwickler × 20 Personentage × 800 €/PT, Sachkosten 12.000 €, Risikozuschlag 10 %. Wie hoch ist das Budget?", "Personalkosten = 3 × 20 × 800 = 48.000 € | + Sachkosten 12.000 € = 60.000 € | + 10 % Risikozuschlag = 6.000 € | Budget = 66.000 €"],
-  ["4.5.7", "r", "Geplante Projektdauer 12 Monate, der SPI liegt stabil bei 0,8. Grobe Prognose der Dauer?", "Prognose ≈ geplante Dauer / SPI = 12 / 0,8 = 15 Monate → etwa 3 Monate Verzug | Hinweis: Der kostenbasierte SPI ist nur eine Näherung und läuft gegen Projektende Richtung 1; Termine zusätzlich über Netzplan und MTA prüfen"],
-  // 4.5.8 Ressourcen
-  ["4.5.8", "o", "Beschreiben Sie die Schritte der Ressourcenplanung.", "Bedarf je AP/Vorgang ermitteln (Art, Menge, Qualifikation) | Verfügbare Kapazität ermitteln | Belastungsdiagramm: Bedarf gegen Kapazität über die Zeit | Engpässe erkennen | Ressourcenabgleich | Zuordnung und Zusage durch die Linie"],
-  ["4.5.8", "m", "Welche Aussagen zum Ressourcenabgleich sind richtig?", "Termintreu: Vorgänge nur innerhalb ihrer Puffer verschieben, das Projektende bleibt|Kapazitätstreu: Kapazitätsgrenze wird eingehalten, das Projektende kann sich verschieben|Ein Ressourcenabgleich verändert nie den kritischen Pfad|Zusätzliche Kapazität (Überstunden, Externe) ist eine Option bei Engpässen", "013", "Ein kapazitätstreuer Abgleich kann Vorgänge über ihren Puffer hinaus verschieben und damit den kritischen Pfad verändern."],
-  ["4.5.8", "r", "Ein AP erfordert 60 Personentage. Zwei Personen stehen zu je 75 % zur Verfügung (5 Arbeitstage/Woche). Wie viele Wochen dauert es?", "Kapazität pro Woche = 2 × 0,75 × 5 = 7,5 PT | Dauer = 60 / 7,5 = 8 Wochen"],
-  ["4.5.8", "r", "Im Mai (20 Arbeitstage) sind drei parallele APs mit 15, 20 und 10 PT für ein Team von 2 Personen mit je 80 % Verfügbarkeit geplant. Reicht die Kapazität?", "Kapazität = 2 × 20 × 0,8 = 32 PT | Bedarf = 15 + 20 + 10 = 45 PT | Überlast = 13 PT (Auslastung ca. 141 %) | Maßnahmen: APs mit Puffer verschieben, Kapazität erhöhen (Externe, Überstunden), Umfang priorisieren"],
-  ["4.5.8", "o", "Welche Ressourcenarten gibt es im Projekt?", "Personal (nach Qualifikation) | Sachmittel/Betriebsmittel (Maschinen, IT, Räume) | Material | Finanzmittel | Informationen und Wissen"],
-  ["4.5.8", "o", "Nennen Sie Verfahren der Aufwandsschätzung.", "Analogieverfahren (Vergleich mit früheren Projekten) | Expertenschätzung, Delphi-Methode | Parametrische Schätzung (z. B. Aufwand pro Einheit) | Dreipunktschätzung (PERT) | Bottom-up über Arbeitspakete | Agil: Planning Poker, Story Points"],
-  ["4.5.8", "m", "Was kennzeichnet die Delphi-Methode?", "Mehrere Experten schätzen zunächst unabhängig und anonym|Ergebnisse werden zurückgespielt und in weiteren Runden angeglichen|Eine einzelne Person legt die Schätzung fest|Ziel ist eine abgesicherte, konsensnahe Schätzung", "013", "Delphi: mehrere anonyme Runden mit Rückmeldung, bis die Schätzungen konvergieren."],
-  // 4.5.9 Beschaffung
-  ["4.5.9", "o", "Wozu dient ein Request for Proposal (RFP)? Was sind mögliche Inhalte?", "Strukturierte Angebotsanfrage an mehrere Anbieter für vergleichbare Angebote | Inhalte: Ausgangslage, Leistungsbeschreibung/Lastenheft, Muss-Kriterien, Termine, Vertragsbedingungen, Bewertungskriterien, Angebotsformat und Frist, Ansprechpartner"],
-  ["4.5.9", "o", "Nennen Sie Kriterien für die Lieferantenauswahl.", "Preis bzw. Gesamtkosten (TCO) | Qualität und Referenzen | Liefertreue und Kapazität | Finanzielle Stabilität | Fachliches Know-how | Service und Support | Vertragsbedingungen | Nachhaltigkeit und Compliance"],
-  ["4.5.9", "o", "Beschreiben Sie ein Marktmachtportfolio und seine Dimensionen.", "Dimensionen: Marktmacht des Einkäufers (Nachfragemacht) und Marktmacht des Lieferanten (Angebotsmacht) | Nachfragemacht überwiegt → Macht nutzen (Preise, Konditionen verhandeln) | Angebotsmacht überwiegt → Abhängigkeit reduzieren (Alternativen, Absicherung) | Beide hoch → Balance, Partnerschaft | Beide gering → effiziente Standardbeschaffung"],
-  ["4.5.9", "o", "Wie unterscheidet sich Änderungsmanagement vom Nachforderungsmanagement?", "Änderungsmanagement: Steuerung von Änderungen an Leistung, Plan oder Dokumenten (Antrag, Bewertung, Entscheidung, Umsetzung) – intern und extern | Nachforderungsmanagement (Claim Management): vertragliche Ansprüche (Geld, Termine) aus Abweichungen zwischen Vertragspartnern durchsetzen oder abwehren | Änderungen können Claims auslösen"],
-  ["4.5.9", "m", "Welche Aussagen zu Vertragsarten nach BGB sind richtig?", "Werkvertrag: ein Erfolg (Werk) ist geschuldet, mit Abnahme|Dienstvertrag: die Tätigkeit ist geschuldet, kein bestimmter Erfolg|Beim Dienstvertrag haftet der Auftragnehmer für das Erreichen des Projektziels|Kaufvertrag: Übergabe und Eigentum an einer Sache gegen Kaufpreis", "013", "Beim Dienstvertrag schuldet der Auftragnehmer sorgfältiges Tätigwerden, nicht den Erfolg."],
-  ["4.5.9", "m", "Welche Aussagen zu Festpreis- und Aufwandsverträgen sind richtig?", "Beim Festpreis trägt der Auftragnehmer das Kostenrisiko|Beim Aufwandsvertrag (Time & Material) trägt der Auftraggeber das Mengenrisiko|Festpreise eignen sich besonders bei unklarem Leistungsumfang|Bei Aufwandsverträgen ist eine gute Aufwandskontrolle durch den AG wichtig", "013", "Ein Festpreis setzt einen klar beschriebenen Leistungsumfang voraus; bei Unklarheit drohen hohe Risikoaufschläge und Nachträge."],
-  ["4.5.9", "o", "Nennen Sie Kriterien für eine Make-or-Buy-Entscheidung.", "Kostenvergleich | Internes Know-how und Kapazität | Strategische Bedeutung/Kernkompetenz | Abhängigkeit und Vertraulichkeit | Zeit und Verfügbarkeit | Qualität und Risiko"],
-  ["4.5.9", "o", "Beschreiben Sie den Beschaffungsprozess im Projekt.", "Bedarf ermitteln | Make or Buy | Markt erkunden (RFI) | Anfrage (RFP) | Angebote vergleichen und bewerten | Verhandeln | Vertrag schließen | Lieferanten steuern | Abnahme | Lieferantenbewertung"],
-  // 4.5.10 Planung und Steuerung
-  ["4.5.10", "o", "Was gehört in einen Projektauftrag?", "Ausgangssituation und Begründung | Ziele und Nicht-Ziele | Leistungsumfang und Ergebnisse | Termine/Meilensteine | Budget und Ressourcen | Organisation: AG, PL, Lenkungskreis, Befugnisse des PL | Wesentliche Risiken und Annahmen | Unterschriften von AG und PL"],
-  ["4.5.10", "o", "Beschreiben Sie den Regelkreis der Projektsteuerung.", "Planen (Soll) | Ist erfassen | Soll-Ist-Vergleich | Abweichungen und Ursachen analysieren | Prognose erstellen | Maßnahmen entscheiden und umsetzen | Plan ggf. anpassen – dann erneut"],
-  ["4.5.10", "o", "Erläutern Sie die Meilensteintrendanalyse (MTA).", "x-Achse: Berichtszeitpunkte; y-Achse: prognostizierte Meilensteintermine; Diagonale = Meilenstein erreicht | Waagrechte Linie: termintreu | Steigende Linie: Verzug | Fallende Linie: früher als geplant | Zickzack: Planungsunsicherheit | Vorteil: Trends früh sichtbar, einfach zu kommunizieren"],
-  ["4.5.10", "m", "In der MTA steigt die Linie eines Meilensteins seit drei Berichten an. Was bedeutet das?", "Der Meilenstein wird immer später prognostiziert (Verzugstrend)|Der Meilenstein wird früher erreicht|Der Meilenstein ist bereits erreicht|Die Steuerungsmaßnahmen wirken offenbar nicht ausreichend", "03", "Eine steigende Linie zeigt wiederholte Verschiebungen nach hinten; das ist ein Signal, Ursachen und Maßnahmen zu überprüfen."],
-  ["4.5.10", "o", "Was gehört in einen Statusbericht?", "Gesamtstatus (Ampel) zu Leistung, Termin, Kosten | Erreichte Ergebnisse und Meilensteine | Abweichungen mit Ursachen und Maßnahmen | Top-Risiken und offene Punkte | Entscheidungsbedarf | Nächste Schritte | ggf. Kennzahlen (EV, MTA)"],
-  ["4.5.10", "o", "Welche Steuerungsmaßnahmen haben Sie bei Terminverzug?", "Parallelisieren/Überlappen (Fast Tracking) | Zusätzliche Ressourcen, Überstunden (Crashing) | Umfang reduzieren oder etappieren (mit AG) | Abläufe vereinfachen, Wartezeiten verkürzen | Puffer nutzen | Termin neu verhandeln (Planänderung als letzte Option)"],
-  ["4.5.10", "o", "Was ist ein Quality Gate und welche Entscheidungen sind dort möglich?", "Prüfpunkt am Phasenende | Prüft, ob Ergebnisse und Kriterien erfüllt sind | Entscheidungen: weiter, weiter mit Auflagen, Phase wiederholen/nacharbeiten, Abbruch | Entscheider: AG bzw. Lenkungskreis"],
-  ["4.5.10", "o", "Welche Aufgaben fallen beim Projektabschluss an?", "Abnahme der Ergebnisse (Protokoll) | Übergabe an Betrieb/Linie | Nachkalkulation, Soll-Ist-Vergleich | Abschlussbericht | Lessons Learned | Abschlussgespräche, Würdigung, Rückführung des Personals | Verträge und Konten schließen, Dokumentation archivieren | Entlastung des PL, offizielles Projektende"],
-  ["4.5.10", "o", "Nennen Sie die Planungsschritte in sinnvoller Reihenfolge.", "Ziele klären | PSP erstellen | Arbeitspakete beschreiben | Ablauf- und Terminplanung (Netzplan) | Ressourcenplanung | Kostenplanung | Risikoplanung | Gesamtplan als Baseline freigeben"],
-  // 4.5.11 Chancen und Risiken
-  ["4.5.11", "o", "Beschreiben Sie den Risikomanagementprozess.", "Risiken und Chancen identifizieren | Analysieren und bewerten (Wahrscheinlichkeit × Auswirkung) | Maßnahmen planen (Strategie, Verantwortliche) | Maßnahmen umsetzen und Risiken überwachen | Dokumentieren und kommunizieren (Risikoregister) – laufend wiederholen"],
-  ["4.5.11", "o", "Nennen Sie Strategien für Risiken und für Chancen.", "Risiken: vermeiden, vermindern (Wahrscheinlichkeit oder Auswirkung), übertragen (Versicherung, Vertrag), akzeptieren (ggf. mit Reserve) | Chancen: ausnutzen, verbessern/fördern, teilen, akzeptieren"],
-  ["4.5.11", "r", "Ein Risiko hat 20 % Eintrittswahrscheinlichkeit und 50.000 € Schaden. Eine Maßnahme für 4.000 € senkt die Wahrscheinlichkeit auf 5 %. Lohnt sie sich?", "Erwartungswert vorher = 0,2 × 50.000 = 10.000 € | nachher = 0,05 × 50.000 = 2.500 € | Reduktion = 7.500 € > Kosten 4.000 € | Netto-Nutzen 3.500 € → Maßnahme lohnt sich"],
-  ["4.5.11", "m", "Ihr Projekt schließt eine Versicherung gegen Transportschäden ab. Welche Risikostrategie ist das?", "Vermeiden|Vermindern|Übertragen (Transfer)|Akzeptieren", "2", "Die finanziellen Folgen werden auf einen Dritten übertragen; das Risiko selbst bleibt bestehen."],
-  ["4.5.11", "o", "Mit welchen Methoden identifizieren Sie Risiken?", "Brainstorming, Workshops | Checklisten, Lessons Learned | Experteninterviews | SWOT-Analyse | Umfeld- und Stakeholderanalyse | PSP und Annahmen durchgehen | FMEA"],
-  ["4.5.11", "o", "Unterscheiden Sie Risiko und Problem. Wie formulieren Sie ein Risiko sauber?", "Risiko: mögliches, unsicheres Ereignis mit negativer Auswirkung (Chance: positiv) | Problem (Issue): bereits eingetreten | Formulierung: „Aufgrund von <Ursache> kann <Ereignis> eintreten, was zu <Auswirkung> führt.“"],
-  ["4.5.11", "o", "Erläutern Sie die Risikomatrix (Risikoportfolio).", "Eintrittswahrscheinlichkeit gegen Auswirkung, z. B. 5×5-Skala | Risikoklassen (grün/gelb/rot) | Priorisierung der Maßnahmen | Vorteil: einfach, visuell | Nachteil: subjektiv, keine Geldwerte"],
-  ["4.5.11", "m", "Welche Aussagen sind richtig?", "Die Summe der Erwartungswerte kann Basis einer Risikoreserve sein|Präventive Maßnahmen wirken vor Eintritt, Notfallmaßnahmen danach|Ein akzeptiertes Risiko muss nicht mehr überwacht werden|Restrisiken nach Maßnahmen sind neu zu bewerten", "013", "Auch akzeptierte Risiken werden weiter beobachtet, da sich Wahrscheinlichkeit und Auswirkung ändern können."],
-  // 4.5.12 Stakeholder
-  ["4.5.12", "o", "Beschreiben Sie den Prozess des Stakeholdermanagements.", "Identifizieren | Analysieren (Einfluss, Einstellung, Interessen, Erwartungen) | Strategie festlegen (partizipativ, diskursiv, restriktiv) | Maßnahmen planen und umsetzen | Überwachen und anpassen – laufend"],
-  ["4.5.12", "o", "Erläutern Sie die Strategien partizipativ, diskursiv und restriktiv.", "Partizipativ: aktiv einbinden, an Entscheidungen beteiligen – v. a. bei hohem Einfluss und positiver/neutraler Haltung | Diskursiv: Dialog, informieren, überzeugen, Argumente austauschen – v. a. bei kritischer Haltung | Restriktiv: Einfluss begrenzen, nur notwendige Information – bei sehr negativer Haltung, vorsichtig einsetzen"],
-  ["4.5.12", "m", "Ein Stakeholder hat hohen Einfluss und eine negative Einstellung. Welche Maßnahmen passen?", "Persönliches Gespräch, Bedenken und Interessen verstehen|Ignorieren, da ohnehin dagegen|Nutzen und Kompromisse aufzeigen, ggf. einbinden|Engmaschig beobachten und Strategie anpassen", "023", "Kritische, einflussreiche Stakeholder brauchen besondere Aufmerksamkeit; Ignorieren erhöht das Risiko."],
-  ["4.5.12", "o", "Führen Sie eine Umfeldanalyse für ein Projekt Ihrer Wahl durch.", "Gliederung: sozial/sachlich, intern/extern | Beispiel Lieferantenportal: intern – Einkauf, regionale Niederlassungen, IT, Betriebsrat, Datenschutz; extern – Lieferanten, Softwareanbieter, Gesetzgeber (DSGVO), Markt | Faktoren nach Einfluss und Einstellung bewerten, Maßnahmen ableiten"],
-  ["4.5.12", "o", "Wie identifizieren Sie Stakeholder?", "Brainstorming im Team | Organigramme, Prozesslandkarten | Checklisten und frühere Projekte | Interviews | Leitfragen: Wer ist betroffen? Wer entscheidet? Wer liefert zu? Wer kann blockieren?"],
-  ["4.5.12", "o", "Wie messen Sie die Zufriedenheit von Stakeholdern?", "Befragungen, Feedbackgespräche | Beteiligung und Engagement beobachten | Beschwerden und Eskalationen | Stimmungsbarometer im Team | Abnahmeverhalten"],
-  ["4.5.12", "m", "Wer zählt typischerweise zu den Stakeholdern eines internen Projekts?", "Betriebsrat|Lieferanten|Projektteam|Nur Personen mit formaler Entscheidungsbefugnis", "012", "Stakeholder sind alle, die am Projekt beteiligt, davon betroffen oder daran interessiert sind oder es beeinflussen können."],
-  // 4.5.13 Change und Transformation
-  ["4.5.13", "o", "Was sind mögliche Ursachen für Widerstände (z. B. in der Mülldeponie-Fallstudie)?", "Angst vor Status-, Kompetenz- oder Arbeitsplatzverlust | Mangelnde Information, Sinn nicht verstanden | Gewohnheit, Mehraufwand | Schlechte Erfahrungen | Fehlende Beteiligung | Überlastung | Fallstudie: Anwohner (Lärm, Geruch, Verkehr, Wertverlust), Umweltverbände, Politik vor Wahlen"],
-  ["4.5.13", "o", "Verdeutlichen Sie die Ebenen eines Veränderungsprozesses.", "Individuum: Wissen, Können, Wollen | Team/Gruppe: Rollen, Zusammenarbeit | Organisation: Strukturen, Prozesse, Kultur | Zusätzlich: rational-sachliche, emotionale und politische Ebene"],
-  ["4.5.13", "o", "Beschreiben Sie das Drei-Phasen-Modell nach Lewin.", "Unfreeze (Auftauen): Notwendigkeit bewusst machen, Bereitschaft schaffen | Change/Move (Verändern): neue Lösungen und Verhaltensweisen einführen | Refreeze (Einfrieren): stabilisieren und verankern"],
-  ["4.5.13", "o", "Nennen Sie die acht Stufen nach Kotter.", "1 Dringlichkeit erzeugen | 2 Führungskoalition aufbauen | 3 Vision und Strategie entwickeln | 4 Vision kommunizieren | 5 Hindernisse beseitigen, Mitarbeitende befähigen | 6 Kurzfristige Erfolge sichtbar machen | 7 Erfolge konsolidieren, weitere Veränderungen | 8 Veränderungen in der Kultur verankern"],
-  ["4.5.13", "o", "Beschreiben Sie die Phasen der Veränderungskurve.", "Schock | Verneinung/Abwehr | Rationale Einsicht | Emotionale Akzeptanz (Tiefpunkt) | Ausprobieren | Erkenntnis | Integration | Leistungsfähigkeit sinkt zunächst und steigt dann über das Ausgangsniveau"],
-  ["4.5.13", "m", "Welche Aussagen zu Widerstand sind richtig?", "Widerstand enthält oft eine verschlüsselte Botschaft und berechtigte Bedenken|Widerstand kann aktiv (Widerspruch) oder passiv (Ausweichen, Schweigen) sein|Widerstand sollte grundsätzlich unterdrückt werden|Die Ursachen sollten im Dialog erkundet werden", "013", "Nach Doppler/Lauterburg: Widerstand ist normal und informativ; mit dem Widerstand gehen, nicht dagegen."],
-  ["4.5.13", "o", "Mit welchen Maßnahmen unterstützen Sie eine Veränderung?", "Frühe, ehrliche Kommunikation (Warum, Was, Wie) | Betroffene beteiligen | Qualifizieren und schulen | Change Agents/Key User einsetzen | Quick Wins zeigen | Führungskräfte als Vorbild | Feedback einholen, Ängste ernst nehmen"],
-];
+    /* Einheitliche Top-Navigationsleiste */
+    .ipma-topnav, .ipma-topnav * { box-sizing: border-box; }
+    .ipma-topnav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: #ffffff;
+      border-bottom: 1px solid #d8dce2;
+      font: 500 14px/1.2 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    }
+    .ipma-topnav-in {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      overflow-x: auto;
+      white-space: nowrap;
+      -webkit-overflow-scrolling: touch;
+    }
+    .ipma-topnav a {
+      color: #1b1f24;
+      text-decoration: none;
+      padding: 7px 12px;
+      border-radius: 8px;
+      transition: background 0.15s, color 0.15s;
+      flex-shrink: 0;
+    }
+    .ipma-topnav a:hover {
+      background: #eef2f7;
+      text-decoration: none;
+    }
+    .ipma-topnav a.active {
+      background: #2f6fed;
+      color: #ffffff;
+      font-weight: 600;
+    }
+    @media (prefers-color-scheme: dark) {
+      .ipma-topnav { background: #161b22; border-bottom-color: #30363d; }
+      .ipma-topnav a { color: #e6edf3; }
+      .ipma-topnav a:hover { background: #21262d; }
+      .ipma-topnav a.active { background: #2f6fed; color: #ffffff; }
+    }
 
+    .wrap {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 24px 16px 40px;
+    }
 
+    .hero {
+      background: var(--card);
+      border: 1px solid var(--bd);
+      border-radius: 16px;
+      padding: 24px 22px;
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+    }
+    .kicker {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--acc-tx);
+      background: var(--acc-soft);
+      padding: 4px 10px;
+      border-radius: 999px;
+      margin-bottom: 10px;
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(24px, 4vw, 32px);
+      line-height: 1.2;
+      letter-spacing: -0.015em;
+    }
+    .lead {
+      margin: 0;
+      color: var(--mut);
+      max-width: 68ch;
+      font-size: 15.5px;
+    }
 
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin: 20px 0;
+    }
+    @media (max-width: 780px) {
+      .grid { grid-template-columns: 1fr; }
+    }
 
-const KEY="ipmaC_lernstand_v1";let LS=null;try{LS=window.localStorage;LS.setItem(KEY+"_t","1")}catch(e){LS=null}
-const lget=k=>{try{return LS?LS.getItem(k):null}catch(e){return null}};const lset=(k,v)=>{try{if(LS)LS.setItem(k,v)}catch(e){}};
-let st={};try{st=JSON.parse(lget(KEY)||"{}")||{}}catch(e){}
-const save=()=>lset(KEY,JSON.stringify(st));
-const AREA={},NAME={};CES.forEach(c=>{AREA[c[0]]=c[2];NAME[c[0]]=c[1]});
-const IT=Q.map((r,i)=>({id:i,ce:r[0],t:r[1],q:r[2],a:r[3]||"",c:r[4]||"",b:r[5]||""}));
-const TL={m:"Multiple Choice",o:"Offene Frage",r:"Rechenaufgabe"};
-let S={mode:lget(KEY+"_m")||"stapel",f:"alle",t:"alle",oo:false,queue:[],pos:0,sel:[],chk:false,shown:false,right:0,tried:0};
-const $=id=>document.getElementById(id);const esc=s=>s.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
-const fo=[["alle","Alle Themen ("+IT.length+")"],["A:Perspective","Perspective (4.3)"],["A:People","People (4.4)"],["A:Practice","Practice (4.5)"],["calc","Nur Rechenaufgaben"]].concat(CES.map(c=>[c[0],c[0]+" "+c[1]+" ("+IT.filter(i=>i.ce==c[0]).length+")"]));
-$("f").innerHTML=fo.map(o=>`<option value="${o[0]}">${esc(o[1])}</option>`).join("");
-const match=i=>(S.f=="alle"||(S.f=="calc"?i.t=="r":S.f.startsWith("A:")?AREA[i.ce]==S.f.slice(2):i.ce==S.f))&&(S.t=="alle"||i.t==S.t);
-const shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
-const pool=()=>IT.filter(match);
-function build(){let ids=pool().map(i=>i.id);if(S.mode=="stapel"){ids=[...shuf(ids.filter(i=>st[i]=="n")),...ids.filter(i=>st[i]===undefined)]}else{if(S.oo)ids=ids.filter(i=>st[i]!="k");if(S.mode=="zufall")ids=shuf(ids)}S.queue=ids;S.pos=0;clr();render()}
-function clr(){S.sel=[];S.chk=false;S.shown=false}
-function mark(v){const cur=IT[S.queue[S.pos]];st[cur.id]=v;save();if(S.mode=="stapel"||(S.oo&&v=="k")){S.queue.splice(S.pos,1);if(v=="n")S.queue.splice(Math.min(S.pos+4,S.queue.length),0,cur.id);if(S.pos>=S.queue.length)S.pos=0}else S.pos=(S.pos+1)%S.queue.length;clr();render()}
-function render(){document.querySelectorAll("#seg button").forEach(b=>b.classList.toggle("on",b.dataset.m==S.mode));$("oow").style.display=S.mode=="stapel"?"none":"flex";
-const p=pool(),kp=p.filter(i=>st[i.id]=="k").length,np=p.filter(i=>st[i.id]=="n").length,ka=IT.filter(i=>st[i.id]=="k").length,pc=p.length?Math.round(kp/p.length*100):0;
-$("pt").textContent=`${kp} von ${p.length} gekonnt (${pc} %)`;$("pb").style.width=pc+"%";$("ps").textContent=`Noch nicht: ${np} · Neu: ${p.length-kp-np} · Gesamt gekonnt: ${ka} von ${IT.length} · MC heute: ${S.right} von ${S.tried} richtig`;
-const qc=$("qc"),id=S.queue[S.pos];
-if(id===undefined){qc.innerHTML=p.length?`<p class="ok">Geschafft!</p><p>${S.mode=="stapel"?"Alle Fragen dieser Auswahl sind als „Kann ich“ markiert. Wechsle zu „Zufällig“ zum Wiederholen.":"Alle gekonnt. Filter ausschalten, um alle zu wiederholen."}</p>`:"<p>Keine Fragen für diese Auswahl.</p>";cov();return}
-const c=IT[id],corr=c.t=="m"?c.c.split("").map(Number):[];let h=`<div class="mut">Frage ${S.pos+1} von ${S.queue.length} · ${c.ce} ${esc(NAME[c.ce]||"")} · ${TL[c.t]}${st[id]=="n"?" · noch nicht gekonnt":st[id]=="k"?" · gekonnt":""}</div><div class="q">${esc(c.q)}</div>`;
-if(c.t=="m"){h+=`<div class="mut">Eine oder mehrere Antworten sind richtig.</div>`;c.a.split("|").forEach((o,i)=>{let cl="";if(!S.chk&&S.sel.includes(i))cl="s";if(S.chk&&corr.includes(i))cl="c";if(S.chk&&S.sel.includes(i)&&!corr.includes(i))cl="w";h+=`<div class="opt ${cl}" data-i="${i}"><b>${"ABCD"[i]}</b><span>${esc(o)}</span></div>`});
-if(S.chk){const ok=S.sel.length==corr.length&&corr.every(x=>S.sel.includes(x));h+=`<p class="${ok?"ok":"bad"}">${ok?"Richtig":"Nicht ganz – richtig: "+corr.map(x=>"ABCD"[x]).join(", ")}</p><p>${esc(c.b)}</p>`}}
-else{h+=S.shown?`<div class="mut">${c.t=="r"?"Lösungsweg":"Musterlösung"}</div><ul>${c.a.split(" | ").map(l=>"<li>"+esc(l)+"</li>").join("")}</ul>`:`<div class="mut">Erst selbst antworten (laut oder auf Papier), dann aufdecken.</div>`}
-h+=`<div class="row" style="margin-top:12px">`;if(c.t=="m"&&!S.chk)h+=`<button class="p" id="ck" ${S.sel.length?"":"disabled"}>Prüfen</button>`;if(c.t!="m"&&!S.shown)h+=`<button class="p" id="sh">${c.t=="r"?"Lösungsweg zeigen":"Musterlösung zeigen"}</button>`;
-if((c.t=="m"&&S.chk)||(c.t!="m"&&S.shown))h+=`<button class="p" id="kk">Kann ich</button><button id="nn">Noch nicht</button>`;
-h+=`</div><div class="row" style="margin-top:8px"><button id="bk" ${S.queue.length<2?"disabled":""}>Zurück</button><button id="fw" ${S.queue.length<2?"disabled":""}>Weiter</button></div>`;qc.innerHTML=h;
-qc.querySelectorAll(".opt").forEach(e=>e.onclick=()=>{if(S.chk)return;const i=+e.dataset.i;S.sel=S.sel.includes(i)?S.sel.filter(x=>x!=i):[...S.sel,i];render()});
-const on=(i,f)=>{const e=$(i);if(e)e.onclick=f};on("ck",()=>{S.chk=true;S.tried++;if(S.sel.length==corr.length&&corr.every(x=>S.sel.includes(x)))S.right++;render()});on("sh",()=>{S.shown=true;render()});on("kk",()=>mark("k"));on("nn",()=>mark("n"));
-on("bk",()=>{S.pos=(S.pos-1+S.queue.length)%S.queue.length;clr();render()});on("fw",()=>{S.pos=(S.pos+1)%S.queue.length;clr();render()});cov()}
-function cov(){let r=`<tr><th>CE</th><th>Thema</th><th>Fragen</th><th>Gekonnt</th></tr>`;CES.forEach(c=>{const a=IT.filter(i=>i.ce==c[0]);r+=`<tr><td>${c[0]}</td><td>${esc(c[1])}</td><td class="n">${a.length}</td><td class="n">${a.filter(i=>st[i.id]=="k").length}</td></tr>`});$("cov").innerHTML=r}
-$("fz").innerHTML=[["PV","Plankosten der geplanten Leistung"],["EV","BAC × Fertigstellungsgrad"],["AC","Istkosten"],["CV","EV − AC (negativ = teurer)"],["SV","EV − PV (negativ = Rückstand)"],["CPI","EV / AC"],["SPI","EV / PV"],["EAC","BAC / CPI oder AC + (BAC − EV)"],["ETC","EAC − AC"],["VAC","BAC − EAC"],["FEZ","FAZ + Dauer"],["SAZ","SEZ − Dauer"],["GP","SAZ − FAZ (0 = kritischer Pfad)"],["FP","min FAZ(Nachfolger) − FEZ"],["PERT","(O + 4M + P) / 6, σ = (P − O) / 6"],["Risiko","Wahrscheinlichkeit × Schaden"]].map(x=>`<tr><td><b>${x[0]}</b></td><td>${x[1]}</td></tr>`).join("");
-document.querySelectorAll("#seg button").forEach(b=>b.onclick=()=>{S.mode=b.dataset.m;lset(KEY+"_m",S.mode);build()});
-$("f").onchange=e=>{S.f=e.target.value;build()};$("t").onchange=e=>{S.t=e.target.value;build()};$("oo").onchange=e=>{S.oo=e.target.checked;build()};
-$("rs").onclick=()=>{if(confirm("Lernstand wirklich komplett zurücksetzen?")){st={};save();S.right=S.tried=0;build()}};
-$("ex").onclick=()=>{const code=btoa(JSON.stringify(st));navigator.clipboard&&navigator.clipboard.writeText(code).catch(()=>{});prompt("Dein Fortschritts-Code (kopiert):",code)};
-$("im").onclick=()=>{const c=prompt("Fortschritts-Code einfügen:");if(!c)return;try{st=JSON.parse(atob(c.trim()));save();build()}catch(e){alert("Code ungültig")}};
-build();if(!LS)$("ps").insertAdjacentHTML("afterend","<div class=mut style=\"color:var(--no)\">Speichern ist in dieser Ansicht nicht möglich. Nutze „Fortschritt sichern (Code)“.</div>");
-</script></body></html>
+    .tile {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: var(--card);
+      border: 1px solid var(--bd);
+      border-radius: 16px;
+      padding: 20px;
+      text-decoration: none;
+      color: var(--tx);
+      box-shadow: var(--shadow);
+      transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    }
+    .tile:hover, .tile:focus-visible {
+      transform: translateY(-2px);
+      border-color: var(--acc);
+      background: var(--card-hover);
+      box-shadow: var(--shadow-h);
+      outline: none;
+    }
+    .tile-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .tile-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: var(--acc-soft);
+      color: var(--acc-tx);
+      font-weight: 700;
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+    .badge {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: var(--acc-soft);
+      color: var(--acc-tx);
+    }
+    .badge.ok {
+      background: var(--ok-soft);
+      color: var(--ok);
+    }
+    .tile h2 {
+      margin: 0 0 8px;
+      font-size: 20px;
+      line-height: 1.25;
+    }
+    .tile p {
+      margin: 0 0 18px;
+      color: var(--mut);
+      font-size: 14.5px;
+      line-height: 1.55;
+    }
+    .tile-foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 12px;
+      border-top: 1px solid var(--bd);
+      font-weight: 600;
+      font-size: 14.5px;
+      color: var(--acc);
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+    @media (max-width: 720px) {
+      .info-grid { grid-template-columns: 1fr; }
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--bd);
+      border-radius: 14px;
+      padding: 16px 18px;
+      font-size: 14px;
+      color: var(--mut);
+    }
+    .card strong {
+      display: block;
+      color: var(--tx);
+      margin-bottom: 4px;
+      font-size: 14.5px;
+    }
+    .card a {
+      color: var(--acc);
+      text-decoration: none;
+    }
+    .card a:hover {
+      text-decoration: underline;
+    }
+
+    .ce-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+    .chip {
+      font-size: 12.5px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--bd);
+      color: var(--mut);
+      background: var(--bg);
+    }
+  </style>
+</head>
+<body>
+  <nav class="ipma-topnav" aria-label="Seitennavigation">
+    <div class="ipma-topnav-in">
+      <a href="index.html" class="active" aria-current="page">Start</a>
+      <a href="schriftlich.html">Schriftlich</a>
+      <a href="workshop.html">Workshop</a>
+      <a href="interview.html">Interview</a>
+    </div>
+  </nav>
+
+  <main class="wrap">
+    <section class="hero">
+      <span class="kicker">ICB4 · GPM / PM-ZERT</span>
+      <h1>IPMA Level C – Lernzentrale</h1>
+      <p class="lead">
+        Zentrale Vorbereitung auf alle drei Prüfungsteile der IPMA-Level-C-Zertifizierung:
+        schriftliche Prüfung, Team-Workshop und Prüfungsinterview zum eigenen Referenzprojekt.
+      </p>
+      <div class="ce-strip" aria-label="ICB4 Kompetenzbereiche">
+        <span class="chip">Perspective: 4.3.1 – 4.3.5 (5 CE)</span>
+        <span class="chip">People: 4.4.1 – 4.4.10 (10 CE)</span>
+        <span class="chip">Practice: 4.5.1 – 4.5.13 (13 CE)</span>
+      </div>
+    </section>
+
+    <section class="grid" aria-label="Prüfungsbereiche">
+      <a class="tile" href="schriftlich.html">
+        <div>
+          <div class="tile-top">
+            <span class="tile-num" aria-hidden="true">01</span>
+            <span class="badge" id="stat-schriftlich">205 Fragen</span>
+          </div>
+          <h2>Schriftliche Prüfung</h2>
+          <p>
+            Trainiere Multiple-Choice-, offene und Rechenfragen mit Musterlösungen und Formelzettel zu allen 28 ICB4-Kompetenzelementen.
+            Inklusive Lernstapel-Modus, Themenfiltern und Fortschrittssicherung per Code.
+          </p>
+        </div>
+        <div class="tile-foot">
+          <span>Übungsfragen starten</span>
+          <span aria-hidden="true">→</span>
+        </div>
+      </a>
+
+      <a class="tile" href="workshop.html">
+        <div>
+          <div class="tile-top">
+            <span class="tile-num" aria-hidden="true">02</span>
+            <span class="badge" id="stat-workshop">Fallstudie</span>
+          </div>
+          <h2>Workshop</h2>
+          <p>
+            Bereite dich strukturiert auf das Team-Assessment vor – mit Ablauf-Fahrplan, zentralen GPM-/ICB4-Methoden und typischen Fallstudien.
+            Enthält Verhaltenshinweise aus Assessorensicht, Checkliste und Selbsttest.
+          </p>
+        </div>
+        <div class="tile-foot">
+          <span>Workshop-Trainer öffnen</span>
+          <span aria-hidden="true">→</span>
+        </div>
+      </a>
+
+      <a class="tile" href="interview.html">
+        <div>
+          <div class="tile-top">
+            <span class="tile-num" aria-hidden="true">03</span>
+            <span class="badge" id="stat-interview">96 Fragen</span>
+          </div>
+          <h2>Interview</h2>
+          <p>
+            Übe typische Assessorenfragen zum eigenen Referenzprojekt entlang aller 28 ICB4-Kompetenzelemente – inklusive STAR-Gerüst, Erwartungshorizont und eigenen Notizen.
+            Mit 2-Minuten-Simulation und Export deiner Antworten.
+          </p>
+        </div>
+        <div class="tile-foot">
+          <span>Interview-Trainer öffnen</span>
+          <span aria-hidden="true">→</span>
+        </div>
+      </a>
+    </section>
+
+    <section class="info-grid" aria-label="Hinweise">
+      <div class="card">
+        <strong>Datenschutz &amp; lokale Speicherung</strong>
+        Alle Lernstände, Markierungen und eigenen Projektnotizen werden ausschließlich lokal im Browser auf diesem Gerät gespeichert (kein Server, kein Tracking). Nutze die Export-Funktionen, um deinen Stand zu sichern oder zwischen Geräten zu übertragen.
+      </div>
+      <div class="card">
+        <strong>Hinweis zu verbindlichen Prüfungsregeln</strong>
+        Diese Lernzentrale dient der eigenständigen Prüfungsvorbereitung. Verbindliche Angaben zu Zulassung, Prüfungsformat, Dauer, Hilfsmitteln und Bewertung findest du ausschließlich bei der Zertifizierungsstelle unter
+        <a href="https://www.pm-zert.de" target="_blank" rel="noopener noreferrer">pm-zert.de</a> bzw.
+        <a href="https://www.gpm-ipma.de" target="_blank" rel="noopener noreferrer">gpm-ipma.de</a>.
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      "use strict";
+      function lget(k) {
+        try { return window.localStorage.getItem(k); } catch (e) { return null; }
+      }
+
+      // Optionalen lokalen Lernstand dezent auf den Karten anzeigen
+      try {
+        const sRaw = lget("ipmaC_lernstand_v1");
+        if (sRaw) {
+          const st = JSON.parse(sRaw);
+          if (st && typeof st === "object") {
+            const k = Object.values(st).filter(v => v === "k").length;
+            if (k > 0) {
+              const el = document.getElementById("stat-schriftlich");
+              el.textContent = k + " / 205 gekonnt";
+              el.classList.add("ok");
+            }
+          }
+        }
+      } catch (e) {}
+
+      try {
+        const iRaw = lget("ipmaC_interview_v1");
+        if (iRaw) {
+          const st = JSON.parse(iRaw);
+          if (st && typeof st === "object") {
+            const vals = Object.values(st);
+            const ok = vals.filter(v => v && v.st === "ok").length;
+            if (ok > 0) {
+              const el = document.getElementById("stat-interview");
+              el.textContent = ok + " / 96 sitzt";
+              el.classList.add("ok");
+            }
+          }
+        }
+      } catch (e) {}
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,2345 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>IPMA Level C – Interview-Trainer</title>
+  <style>
+    :root {
+      --bg: #f6f7f9;
+      --card: #ffffff;
+      --sub: #f1f4f8;
+      --tx: #1b1f24;
+      --mut: #59636e;
+      --bd: #d8dce2;
+      --acc: #2f6fed;
+      --acc-soft: #e8effd;
+      --acc-tx: #1e4fc2;
+      --ok: #1f9d55;
+      --ok-soft: #e5f6ec;
+      --warn: #b45309;
+      --warn-soft: #fef3c7;
+      --bad: #c93b3b;
+      --bad-soft: #fbe9e9;
+      --shadow: 0 2px 10px rgba(15, 23, 42, 0.05);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #121417;
+        --card: #1c1f24;
+        --sub: #232830;
+        --tx: #e8eaed;
+        --mut: #9aa0a6;
+        --bd: #33373d;
+        --acc: #6b9bff;
+        --acc-soft: rgba(107, 155, 255, 0.16);
+        --acc-tx: #9fc0ff;
+        --ok: #4cc38a;
+        --ok-soft: rgba(76, 195, 138, 0.16);
+        --warn: #fbbf24;
+        --warn-soft: rgba(251, 191, 36, 0.15);
+        --bad: #ff7b7b;
+        --bad-soft: rgba(255, 123, 123, 0.15);
+        --shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font: 16px/1.55 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--tx);
+      -webkit-text-size-adjust: 100%;
+    }
+
+    /* Einheitliche Top-Navigationsleiste */
+    .ipma-topnav, .ipma-topnav * { box-sizing: border-box; }
+    .ipma-topnav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: #ffffff;
+      border-bottom: 1px solid #d8dce2;
+      font: 500 14px/1.2 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    }
+    .ipma-topnav-in {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      overflow-x: auto;
+      white-space: nowrap;
+      -webkit-overflow-scrolling: touch;
+    }
+    .ipma-topnav a {
+      color: #1b1f24;
+      text-decoration: none;
+      padding: 7px 12px;
+      border-radius: 8px;
+      transition: background 0.15s, color 0.15s;
+      flex-shrink: 0;
+    }
+    .ipma-topnav a:hover { background: #eef2f7; text-decoration: none; }
+    .ipma-topnav a.active { background: #2f6fed; color: #ffffff; font-weight: 600; }
+    @media (prefers-color-scheme: dark) {
+      .ipma-topnav { background: #161b22; border-bottom-color: #30363d; }
+      .ipma-topnav a { color: #e6edf3; }
+      .ipma-topnav a:hover { background: #21262d; }
+      .ipma-topnav a.active { background: #2f6fed; color: #ffffff; }
+    }
+
+    .wrap {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 18px 14px 48px;
+    }
+    h1 { font-size: clamp(22px, 3.8vw, 28px); margin: 4px 0 4px; line-height: 1.25; }
+    h2 { font-size: 19px; margin: 0 0 10px; line-height: 1.3; }
+    h3 { font-size: 16px; margin: 0 0 6px; line-height: 1.35; }
+    .mut { color: var(--mut); font-size: 13.5px; }
+    a { color: var(--acc); }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--bd);
+      border-radius: 14px;
+      padding: 16px;
+      margin: 12px 0;
+      box-shadow: var(--shadow);
+    }
+
+    .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .between { justify-content: space-between; }
+
+    button, select, input[type="text"], input[type="search"], textarea {
+      font: inherit;
+      color: var(--tx);
+      background: var(--card);
+      border: 1px solid var(--bd);
+      border-radius: 10px;
+    }
+    button {
+      padding: 9px 14px;
+      font-size: 14.5px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      min-height: 40px;
+      transition: background 0.12s, border-color 0.12s, color 0.12s;
+    }
+    button:hover:not(:disabled) { border-color: var(--acc); }
+    button:disabled { opacity: 0.45; cursor: not-allowed; }
+    button.primary { background: var(--acc); border-color: var(--acc); color: #ffffff; font-weight: 600; }
+    button.primary:hover:not(:disabled) { filter: brightness(1.06); }
+    button.ok-btn.on { background: var(--ok); border-color: var(--ok); color: #ffffff; font-weight: 600; }
+    button.warn-btn.on { background: var(--warn); border-color: var(--warn); color: #ffffff; font-weight: 600; }
+    button.danger { color: var(--bad); border-color: var(--bad); }
+    button.sm { padding: 6px 11px; font-size: 13.5px; min-height: 34px; border-radius: 8px; }
+
+    select, input[type="search"] {
+      padding: 9px 12px;
+      font-size: 14.5px;
+      min-height: 40px;
+      flex: 1 1 180px;
+      min-width: 0;
+    }
+    textarea {
+      width: 100%;
+      padding: 10px 12px;
+      font-size: 14.5px;
+      line-height: 1.5;
+      min-height: 88px;
+      resize: vertical;
+      background: var(--bg);
+    }
+    textarea:focus, select:focus, input[type="search"]:focus {
+      outline: none;
+      border-color: var(--acc);
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 12px 0;
+    }
+    .tabs button {
+      flex: 1 1 130px;
+      font-weight: 600;
+    }
+    .tabs button.on {
+      background: var(--acc);
+      border-color: var(--acc);
+      color: #ffffff;
+    }
+
+    .panel { display: none; }
+    .panel.on { display: block; }
+
+    /* Progress bar */
+    .bar {
+      height: 10px;
+      background: var(--sub);
+      border: 1px solid var(--bd);
+      border-radius: 999px;
+      overflow: hidden;
+      display: flex;
+    }
+    .bar-ok { background: var(--ok); height: 100%; transition: width 0.25s; }
+    .bar-warn { background: var(--warn); height: 100%; transition: width 0.25s; }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      background: var(--sub);
+      color: var(--mut);
+      white-space: nowrap;
+    }
+    .pill.acc { background: var(--acc-soft); color: var(--acc-tx); }
+    .pill.ok { background: var(--ok-soft); color: var(--ok); }
+    .pill.warn { background: var(--warn-soft); color: var(--warn); }
+    .pill.bad { background: var(--bad-soft); color: var(--bad); }
+
+    /* Info / Tips grid */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+    @media (max-width: 720px) {
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+    .tip-box {
+      background: var(--sub);
+      border: 1px solid var(--bd);
+      border-radius: 12px;
+      padding: 13px 14px;
+    }
+    .tip-box strong { display: block; margin-bottom: 4px; color: var(--tx); }
+    .tip-box p { margin: 0; font-size: 14px; color: var(--mut); }
+
+    .steps { counter-reset: stp; list-style: none; padding: 0; margin: 10px 0 0; }
+    .steps li {
+      counter-increment: stp;
+      position: relative;
+      padding: 10px 12px 10px 44px;
+      margin-bottom: 8px;
+      background: var(--sub);
+      border: 1px solid var(--bd);
+      border-radius: 12px;
+      font-size: 14.5px;
+    }
+    .steps li::before {
+      content: counter(stp);
+      position: absolute;
+      left: 12px;
+      top: 11px;
+      width: 24px;
+      height: 24px;
+      border-radius: 999px;
+      background: var(--acc);
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 13px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .callout {
+      border-left: 4px solid var(--acc);
+      background: var(--acc-soft);
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-size: 14px;
+      margin: 12px 0;
+    }
+    .callout.warn {
+      border-left-color: var(--warn);
+      background: var(--warn-soft);
+    }
+
+    /* CE Groups & Question cards */
+    .ce-group {
+      background: var(--card);
+      border: 1px solid var(--bd);
+      border-radius: 14px;
+      margin: 12px 0;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .ce-group > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 14px 16px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      background: var(--sub);
+      border-bottom: 1px solid transparent;
+      font-weight: 700;
+    }
+    .ce-group[open] > summary { border-bottom-color: var(--bd); }
+    .ce-group > summary::-webkit-details-marker { display: none; }
+    .ce-title { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .ce-body { padding: 12px; display: flex; flex-direction: column; gap: 12px; }
+
+    .qcard {
+      border: 1px solid var(--bd);
+      border-radius: 12px;
+      padding: 14px;
+      background: var(--card);
+    }
+    .qcard.st-ok { border-left: 4px solid var(--ok); }
+    .qcard.st-pr { border-left: 4px solid var(--warn); }
+
+    .q-text {
+      font-size: 16px;
+      font-weight: 650;
+      margin: 8px 0 8px;
+      line-height: 1.45;
+    }
+
+    .followups {
+      background: var(--sub);
+      border-radius: 10px;
+      padding: 9px 12px;
+      margin: 8px 0 10px;
+      font-size: 13.5px;
+    }
+    .followups strong { display: block; font-size: 12.5px; color: var(--mut); text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 4px; }
+    .followups ul { margin: 0; padding-left: 18px; }
+    .followups li { margin: 3px 0; }
+
+    details.guide {
+      border: 1px solid var(--bd);
+      border-radius: 10px;
+      background: var(--bg);
+      margin: 10px 0;
+    }
+    details.guide summary {
+      cursor: pointer;
+      padding: 10px 12px;
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--acc);
+    }
+    .guide-in {
+      padding: 0 12px 12px;
+      font-size: 14px;
+      border-top: 1px solid var(--bd);
+    }
+    .guide-in h4 {
+      margin: 10px 0 6px;
+      font-size: 13.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--mut);
+    }
+    .guide-in ul { margin: 0; padding-left: 18px; }
+    .guide-in li { margin: 4px 0; }
+
+    .star-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 6px;
+    }
+    @media (max-width: 640px) {
+      .star-grid { grid-template-columns: 1fr; }
+    }
+    .star-item {
+      background: var(--card);
+      border: 1px solid var(--bd);
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 13.5px;
+    }
+    .star-item b { color: var(--acc-tx); display: block; font-size: 12.5px; margin-bottom: 2px; }
+
+    .note-wrap { margin-top: 10px; }
+    .note-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+      gap: 8px;
+    }
+    .note-head label { font-size: 13.5px; font-weight: 600; color: var(--tx); }
+    .save-ind { font-size: 12px; color: var(--ok); opacity: 0; transition: opacity 0.2s; }
+    .save-ind.show { opacity: 1; }
+
+    /* Simulation */
+    .timer-box {
+      background: var(--sub);
+      border: 1px solid var(--bd);
+      border-radius: 14px;
+      padding: 16px;
+      text-align: center;
+      margin: 14px 0;
+    }
+    .timer-val {
+      font-size: clamp(36px, 8vw, 52px);
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.03em;
+      line-height: 1.1;
+    }
+    .timer-val.warn { color: var(--warn); }
+    .timer-val.done { color: var(--bad); }
+    .timer-bar {
+      height: 8px;
+      background: var(--bd);
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 10px 0 12px;
+    }
+    .timer-bar > div {
+      height: 100%;
+      background: var(--acc);
+      transition: width 0.25s linear, background 0.25s;
+    }
+    .timer-bar > div.warn { background: var(--warn); }
+    .timer-bar > div.done { background: var(--bad); }
+
+    table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+    th, td { border-bottom: 1px solid var(--bd); padding: 7px 6px; text-align: left; }
+    td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; }
+
+    .msg { font-size: 13.5px; margin-top: 8px; font-weight: 600; }
+    .msg.ok { color: var(--ok); }
+    .msg.bad { color: var(--bad); }
+    .check-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 14.5px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .check-label input { width: 17px; height: 17px; accent-color: var(--acc); }
+  </style>
+</head>
+<body>
+  <nav class="ipma-topnav" aria-label="Seitennavigation">
+    <div class="ipma-topnav-in">
+      <a href="index.html">Start</a>
+      <a href="schriftlich.html">Schriftlich</a>
+      <a href="workshop.html">Workshop</a>
+      <a href="interview.html" class="active" aria-current="page">Interview</a>
+    </div>
+  </nav>
+
+  <main class="wrap">
+    <header>
+      <h1>IPMA Level C – Interview-Trainer</h1>
+      <p class="mut" style="margin:0;">
+        Prüfungsinterview zum eigenen Referenzprojekt entlang aller 28 ICB4-Kompetenzelemente (Perspective, People, Practice).
+        Eigene Stichpunkte und Lernstatus werden lokal auf diesem Gerät gespeichert.
+      </p>
+    </header>
+
+    <section class="card" aria-label="Gesamtfortschritt">
+      <div class="row between">
+        <strong id="prog-title">0 von 96 sitzt (0 %)</strong>
+        <span class="mut" id="prog-sub">Üben: 0 · Offen: 96 · Mit Notiz: 0</span>
+      </div>
+      <div class="bar" style="margin:8px 0 6px;" aria-hidden="true">
+        <div class="bar-ok" id="prog-ok" style="width:0%"></div>
+        <div class="bar-warn" id="prog-warn" style="width:0%"></div>
+      </div>
+      <div id="ls-warn" class="mut" style="color:var(--bad);display:none;margin-top:6px;">
+        Lokaler Speicher (localStorage) ist in diesem Browsermodus nicht verfügbar. Nutze den Reiter „Export / Import“, um deine Notizen zu sichern.
+      </div>
+      <details style="margin-top:8px;">
+        <summary style="cursor:pointer;font-size:13.5px;font-weight:600;color:var(--acc);">Fortschritt nach Kompetenzbereich &amp; Element anzeigen</summary>
+        <div id="area-stats" class="row" style="margin:10px 0;"></div>
+        <div style="overflow-x:auto;">
+          <table id="ce-table"></table>
+        </div>
+      </details>
+    </section>
+
+    <div class="tabs" role="tablist" aria-label="Bereiche des Interview-Trainers">
+      <button role="tab" data-tab="vorgehen" class="on" aria-selected="true">Vorgehen &amp; Tipps</button>
+      <button role="tab" data-tab="katalog" aria-selected="false">Fragenkatalog (<span id="tab-qcount">96</span>)</button>
+      <button role="tab" data-tab="sim" aria-selected="false">Simulation (2 Min.)</button>
+      <button role="tab" data-tab="backup" aria-selected="false">Export / Import</button>
+    </div>
+
+    <!-- TAB 1: VORGEHEN -->
+    <section id="panel-vorgehen" class="panel on" role="tabpanel">
+      <div class="card">
+        <h2>Typischer Ablauf des Prüfungsinterviews</h2>
+        <p class="mut" style="margin-top:0;">
+          Im Interview für IPMA Level C prüfen die Assessoren anhand deines eigenen Referenzprojekts, ob du Projekte mit moderater Komplexität eigenverantwortlich und kompetent nach ICB4 leiten kannst.
+        </p>
+        <ol class="steps">
+          <li><strong>Begrüßung &amp; Gesprächsrahmen:</strong> Kurze Vorstellung der Assessoren (typischerweise zwei Personen) und Erläuterung von Ablauf und Zeitrahmen.</li>
+          <li><strong>Kurzpräsentation des Referenzprojekts:</strong> Du stellst dein Projekt kompakt vor – Ausgangslage, strategischer Kontext, Ziele, Komplexität/Rahmenbedingungen, deine konkrete Rolle und Befugnisse sowie zentrale Ergebnisse.</li>
+          <li><strong>Vertiefende Befragung entlang der ICB4:</strong> Die Assessoren stellen konkrete, situationsbezogene Fragen aus ausgewählten Kompetenzelementen (<em>Perspective, People, Practice</em>) – häufig anknüpfend an deinen Report und deine Selbsteinschätzung. Rechne gezielt mit kritischen Nachfragen zu deinem persönlichen Beitrag.</li>
+          <li><strong>Reflexion &amp; Abschluss:</strong> Oft folgen übergreifende Reflexionsfragen („Was würden Sie heute anders machen?“, „Was war Ihr größtes Learning?“), danach ein kurzer Abschluss.</li>
+        </ol>
+
+        <div class="callout warn">
+          <strong>Hinweis zu verbindlichen Prüfungsregeln:</strong>
+          Die hier dargestellten Abläufe und Fragen dienen der Orientierung und Übung. Verbindliche und aktuelle Informationen zu Prüfungsdauer, formalen Anforderungen, Bewertungskriterien und Ablauf findest du ausschließlich bei der Zertifizierungsstelle unter
+          <a href="https://www.pm-zert.de" target="_blank" rel="noopener noreferrer">pm-zert.de</a> bzw.
+          <a href="https://www.gpm-ipma.de" target="_blank" rel="noopener noreferrer">gpm-ipma.de</a>.
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Sechs Erfolgsregeln für starke Interview-Antworten</h2>
+        <div class="grid-2">
+          <div class="tip-box">
+            <strong>1. Konsequent in der Ich-Form sprechen</strong>
+            <p>Vermeide ungenaues „Wir haben …“ oder „Man hat …“. Assessoren müssen klar erkennen, was <em>du selbst</em> analysiert, moderiert, entschieden oder eskaliert hast.</p>
+          </div>
+          <div class="tip-box">
+            <strong>2. Klar gliedern nach STAR</strong>
+            <p><strong>S</strong>ituation (Kontext, 1–2 Sätze) → <strong>T</strong>ask (deine Aufgabe/Ziel) → <strong>A</strong>ction (dein konkretes Handeln – Schwerpunkt!) → <strong>R</strong>esult (Ergebnis, Nutzen &amp; Fazit).</p>
+          </div>
+          <div class="tip-box">
+            <strong>3. Bewusste Reflexion zeigen</strong>
+            <p>Bereite zu jedem Thema die Frage vor: <em>„Was würde ich heute anders machen?“</em>. Reife Projektleitung zeigt sich an echtem Lernen, nicht an vermeintlicher Fehlerfreiheit.</p>
+          </div>
+          <div class="tip-box">
+            <strong>4. ICB4-Kompetenzelemente konkret verankern</strong>
+            <p>Nutze die richtige Fachsprache (z. B. Stakeholderstrategie, PSP, kritischer Pfad, Risikoregister, Change-Kommunikation), verknüpfe sie aber immer mit deinem realen Projektbeispiel.</p>
+          </div>
+          <div class="tip-box">
+            <strong>5. Ehrlich bei Fehlern &amp; Grenzen bleiben</strong>
+            <p>Fehleinschätzungen, Konflikte oder Terminverzüge gehören zu realen Projekten. Beschönige nichts – zeige stattdessen, wie du gegengesteuert und Verantwortung übernommen hast.</p>
+          </div>
+          <div class="tip-box">
+            <strong>6. Auf den Punkt antworten (ca. 1,5–2 Min.)</strong>
+            <p>Gib eine strukturierte Kernantwort statt endloser Details. Lass Raum für Nachfragen: Wenn Assessoren nachbohren, prüfen sie gezielt die Tiefe für Level C.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Leitfaden für die Kurzvorstellung deines Referenzprojekts</h2>
+        <p class="mut" style="margin-top:0;">Lege dir für den Einstieg eine prägnante, flüssig sprechbare Struktur zurecht (keine Folien-Schlacht, lieber klarer roter Faden):</p>
+        <ul style="margin:6px 0 14px;padding-left:20px;font-size:14.5px;">
+          <li><strong>Ausgangslage &amp; Auftrag:</strong> Welches Problem oder welche Chance war der Auslöser? Welcher strategische Nutzen wurde angestrebt?</li>
+          <li><strong>Ziele, Umfang &amp; Rahmen:</strong> Was waren die wichtigsten Lieferobjekte, Nicht-Ziele, Laufzeit, Teamgröße und Komplexitätstreiber?</li>
+          <li><strong>Eigene Rolle &amp; Befugnisse:</strong> Welche Projektorganisation lag vor? Wofür warst du direkt verantwortlich und wo lagen Eskalationsgrenzen?</li>
+          <li><strong>Zentrale Herausforderungen:</strong> Welche 2–3 kritischen Situationen (z. B. Stakeholder, Risiko, Termin/Budget, Change) haben das Projekt geprägt?</li>
+          <li><strong>Ergebnis &amp; persönliches Fazit:</strong> Was wurde erreicht, wie wurde abgenommen/übergeben und was nimmst du für künftige Projekte mit?</li>
+        </ul>
+        <div class="row">
+          <button class="primary" id="go-katalog">Zum Fragenkatalog (96 Fragen) →</button>
+          <button id="go-sim">2-Minuten-Simulation starten →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: FRAGENKATALOG -->
+    <section id="panel-katalog" class="panel" role="tabpanel">
+      <div class="card">
+        <div class="row">
+          <select id="f-area" aria-label="Kompetenzbereich filtern">
+            <option value="all">Alle Kompetenzbereiche</option>
+            <option value="Perspective">Perspective (4.3.1 – 4.3.5)</option>
+            <option value="People">People (4.4.1 – 4.4.10)</option>
+            <option value="Practice">Practice (4.5.1 – 4.5.13)</option>
+          </select>
+          <select id="f-ce" aria-label="Kompetenzelement filtern"></select>
+          <select id="f-status" aria-label="Lernstatus filtern">
+            <option value="all">Alle Status</option>
+            <option value="pr">Nur „Üben“</option>
+            <option value="open">Noch nicht bewertet</option>
+            <option value="ok">Nur „Sitzt“</option>
+            <option value="noted">Mit eigener Notiz</option>
+          </select>
+        </div>
+        <div class="row" style="margin-top:8px;">
+          <input type="search" id="f-search" placeholder="Suche in Fragen, Nachfragen und eigenen Notizen …" aria-label="Fragen durchsuchen">
+          <button class="sm" id="btn-expand">Alle auf</button>
+          <button class="sm" id="btn-collapse">Alle zu</button>
+        </div>
+        <div class="mut" id="kat-count" style="margin-top:8px;"></div>
+      </div>
+
+      <div id="kat-list"></div>
+    </section>
+
+    <!-- TAB 3: SIMULATION -->
+    <section id="panel-sim" class="panel" role="tabpanel">
+      <div class="card">
+        <h2>Interview-Simulation (2-Minuten-Timer)</h2>
+        <p class="mut" style="margin:0 0 12px;">
+          Ziehe eine zufällige Assessorenfrage, starte den 2-Minuten-Timer und antworte <strong>laut</strong> in der Ich-Form nach STAR. Decke danach den Erwartungshorizont auf und bewerte dich ehrlich selbst.
+        </p>
+        <div class="row">
+          <select id="sim-area" aria-label="Kompetenzbereich für Simulation">
+            <option value="all">Alle Bereiche (28 CE)</option>
+            <option value="Perspective">Perspective (4.3)</option>
+            <option value="People">People (4.4)</option>
+            <option value="Practice">Practice (4.5)</option>
+          </select>
+          <label class="check-label">
+            <input type="checkbox" id="sim-only-pr"> Nur „Üben“
+          </label>
+          <label class="check-label">
+            <input type="checkbox" id="sim-sound" checked> Signalton
+          </label>
+        </div>
+        <div class="row between" style="margin-top:10px;">
+          <span class="mut" id="sim-pool-info">Pool: 96 Fragen</span>
+          <span class="mut" id="sim-session-info">Runde: 0 geübt · 0 sitzt</span>
+        </div>
+      </div>
+
+      <div class="card" id="sim-stage"></div>
+    </section>
+
+    <!-- TAB 4: EXPORT / IMPORT -->
+    <section id="panel-backup" class="panel" role="tabpanel">
+      <div class="card">
+        <h2>Antworten &amp; Lernstand sichern (Export)</h2>
+        <p class="mut" style="margin-top:0;">
+          Deine Projektnotizen und Bewertungen liegen nur lokal im Browser. Sichere sie regelmäßig als Code oder Datei, damit beim Geräte- oder Browserwechsel nichts verloren geht.
+        </p>
+        <div class="row">
+          <button class="primary" id="ex-code">Backup-Code erzeugen &amp; kopieren</button>
+          <button id="ex-txt">Als Textdatei (.txt) herunterladen</button>
+          <button id="ex-json">Als Backup-Datei (.json) herunterladen</button>
+        </div>
+        <div style="margin-top:10px;">
+          <label for="code-box" class="mut" style="display:block;margin-bottom:4px;">Backup-Code (Base64-JSON – zum Kopieren oder Einfügen):</label>
+          <textarea id="code-box" placeholder="Hier erscheint dein erzeugter Backup-Code – oder füge einen gespeicherten Code zum Importieren ein …" style="font-family:ui-monospace,Consolas,monospace;font-size:12.5px;min-height:96px;"></textarea>
+        </div>
+        <div class="row" style="margin-top:8px;">
+          <button id="im-merge">Code importieren (zusammenführen)</button>
+          <button id="im-replace">Code importieren (komplett ersetzen)</button>
+          <label class="sm" style="display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border:1px solid var(--bd);border-radius:10px;cursor:pointer;font-size:14px;">
+            Backup-Datei (.json) laden
+            <input type="file" id="im-file" accept=".json,.txt,application/json,text/plain" style="display:none;">
+          </label>
+        </div>
+        <div id="backup-msg" class="msg" aria-live="polite"></div>
+      </div>
+
+      <div class="card">
+        <h2>Zurücksetzen</h2>
+        <p class="mut" style="margin-top:0;">Wähle vorsichtig: Gelöschte Daten lassen sich nur mit einem vorherigen Backup wiederherstellen.</p>
+        <div class="row">
+          <button id="reset-status">Nur Status („Sitzt“/„Üben“) zurücksetzen</button>
+          <button class="danger" id="reset-all">Alle Notizen &amp; Status löschen</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      "use strict";
+
+      /* ========================
+         SAFE LOCALSTORAGE HELPERS
+         ======================== */
+      const STORAGE_KEY = "ipmaC_interview_v1";
+      let storageAvailable = true;
+
+      function lget(k) {
+        try {
+          return window.localStorage.getItem(k);
+        } catch (e) {
+          storageAvailable = false;
+          return null;
+        }
+      }
+
+      function lset(k, v) {
+        try {
+          window.localStorage.setItem(k, v);
+          return true;
+        } catch (e) {
+          storageAvailable = false;
+          return false;
+        }
+      }
+
+      // Prüfen, ob Speicher schreibbar ist
+      try {
+        window.localStorage.setItem(STORAGE_KEY + "_probe", "1");
+        window.localStorage.removeItem(STORAGE_KEY + "_probe");
+      } catch (e) {
+        storageAvailable = false;
+      }
+
+      /* ========================
+         ICB4 KOMPETENZELEMENTE (28)
+         ======================== */
+      const CES = [
+        ["4.3.1", "Strategie", "Perspective"],
+        ["4.3.2", "Governance, Strukturen und Prozesse", "Perspective"],
+        ["4.3.3", "Compliance, Standards und Regularien", "Perspective"],
+        ["4.3.4", "Macht und Interessen", "Perspective"],
+        ["4.3.5", "Kultur und Werte", "Perspective"],
+        ["4.4.1", "Selbstreflexion und Selbstmanagement", "People"],
+        ["4.4.2", "Persönliche Integrität und Verlässlichkeit", "People"],
+        ["4.4.3", "Persönliche Kommunikation", "People"],
+        ["4.4.4", "Beziehungen und Engagement", "People"],
+        ["4.4.5", "Führung", "People"],
+        ["4.4.6", "Teamarbeit", "People"],
+        ["4.4.7", "Konflikte und Krisen", "People"],
+        ["4.4.8", "Vielseitigkeit", "People"],
+        ["4.4.9", "Verhandlungen", "People"],
+        ["4.4.10", "Ergebnisorientierung", "People"],
+        ["4.5.1", "Projektdesign", "Practice"],
+        ["4.5.2", "Anforderungen und Ziele", "Practice"],
+        ["4.5.3", "Leistungsumfang und Lieferobjekte", "Practice"],
+        ["4.5.4", "Ablauf und Termine", "Practice"],
+        ["4.5.5", "Organisation, Information und Dokumentation", "Practice"],
+        ["4.5.6", "Qualität", "Practice"],
+        ["4.5.7", "Kosten und Finanzierung", "Practice"],
+        ["4.5.8", "Ressourcen", "Practice"],
+        ["4.5.9", "Beschaffung", "Practice"],
+        ["4.5.10", "Planung und Steuerung", "Practice"],
+        ["4.5.11", "Chancen und Risiken", "Practice"],
+        ["4.5.12", "Stakeholder", "Practice"],
+        ["4.5.13", "Change und Transformation", "Practice"]
+      ];
+
+      const CE_MAP = {};
+      CES.forEach(c => { CE_MAP[c[0]] = { id: c[0], name: c[1], area: c[2] }; });
+
+      /* ========================
+         96 ASSESSORENFRAGEN (ALLE 28 CE, >= 3 PRO CE)
+         Felder:
+           id: stabile ID
+           ce: Kompetenzelement
+           q: Hauptfrage
+           f: kritische Nachfragen (2)
+           e: Worauf Assessoren achten (3-4 Punkte)
+           s: [Situation, Task, Action (Ich-Form), Result + Reflexion]
+         ======================== */
+      const QUESTIONS = [
+        // 4.3.1 Strategie (4)
+        {
+          id: "4.3.1-1", ce: "4.3.1",
+          q: "Welchen konkreten Beitrag hat Ihr Referenzprojekt zur übergeordneten Strategie der Organisation geleistet?",
+          f: ["Woran genau ließ sich dieser strategische Beitrag messen?", "Wie haben Sie im Projektteam vermittelt, warum dieses Projekt wichtig ist?"],
+          e: ["Klare Verbindung von Unternehmensstrategie/Zielen zum Projektauftrag und Business Case", "Messbare Nutzenkriterien bzw. KPIs statt bloßer Lieferobjekte", "Aktive Rolle als Projektleitung bei der Übersetzung von Strategie in Projektziele"],
+          s: ["Ausgangslage und strategisches Ziel der Organisation kurz umreißen.", "Meine Aufgabe war es, den strategischen Nutzen in konkrete Projektziele und Erfolgskriterien zu übersetzen.", "Ich habe den Business Case geprüft, Erfolgskennzahlen mit dem Auftraggeber abgestimmt und den Sinn regelmäßig im Team verankert.", "Projektziel und strategischer Beitrag wurden nachweisbar erfüllt; künftig würde ich die Nutzenmessung noch früher vertraglich/formal festlegen."]
+        },
+        {
+          id: "4.3.1-2", ce: "4.3.1",
+          q: "Wie haben Sie während der Projektlaufzeit überprüft, ob Ihr Projekt noch strategisch relevant ist?",
+          f: ["Gab es Veränderungen im Umfeld oder in den Prioritäten – und wie haben Sie reagiert?", "Was hätten Sie getan, wenn der Business Case gekippt wäre?"],
+          e: ["Laufende Prüfung von Business Case und Umfeld (z. B. an Meilensteinen/Gates)", "Bewusstsein für die eigene Melde- und Empfehlungspflicht gegenüber dem Auftraggeber", "Bereitschaft, bei Wegfall des Nutzens auch eine Neuausrichtung oder einen Abbruch vorzuschlagen"],
+          s: ["Dynamisches Umfeld mit möglichen Prioritäts- oder Marktänderungen während der Laufzeit.", "Sicherstellen, dass Ressourcen nicht in überholte Ziele fließen.", "Ich habe an definierten Meilensteinen die Annahmen des Business Case mit dem Auftraggeber abgeglichen und Abweichungen transparent bewertet.", "Anpassungen erfolgten rechtzeitig und abgestimmt; rückblickend würde ich feste Prüfpunkte für Nutzenannahmen im Statusbericht verankern."]
+        },
+        {
+          id: "4.3.1-3", ce: "4.3.1",
+          q: "Unterscheiden Sie an Ihrem Referenzprojekt zwischen Projektmanagementerfolg und Projekterfolg – wie sah beides konkret aus?",
+          f: ["Wo fielen beide Aspekte bei Ihnen eventuell auseinander?", "Welcher Stakeholder hat den Projekterfolg am kritischsten beurteilt?"],
+          e: ["Saubere begriffliche Trennung (PM-Erfolg: Zeit/Kosten/Qualität vs. Projekterfolg: Nutzen/Zufriedenheit)", "Reflektierte Bewertung anhand realer Daten und Stakeholder-Rückmeldungen", "Verständnis, dass formale Zielerreichung allein nicht reicht"],
+          s: ["Projektverlauf im Spannungsfeld aus magischem Dreieck und langfristiger Akzeptanz.", "Sowohl saubere Steuerung als auch nachhaltigen Nutzen für Anwender und Auftraggeber sicherstellen.", "Ich habe Termin-, Kosten- und Leistungsdaten eng verfolgt und parallel gezielt Feedback zu Nutzen und Zufriedenheit eingeholt.", "Ehrliche Bilanz beider Dimensionen; als Learning nehme ich mit, qualitative Erfolgskriterien noch klarer zu operationalisieren."]
+        },
+        {
+          id: "4.3.1-4", ce: "4.3.1",
+          q: "Hatten Sie im Referenzprojekt Zielkonflikte mit anderen laufenden Projekten oder Initiativen der Organisation?",
+          f: ["Und was haben SIE konkret getan, um den Konflikt zu lösen?", "Wie sind Sie vorgegangen, wenn Ihre Projektpriorität infrage gestellt wurde?"],
+          e: ["Blick über den eigenen Projektrand hinaus (Portfolio-/Programmverständnis)", "Sachliche Priorisierung anhand strategischer Kriterien statt reiner Durchsetzung", "Souveräne Einbindung von Auftraggeber, PMO oder Lenkungskreis"],
+          s: ["Parallele Vorhaben beanspruchten dieselben Schlüsselressourcen oder Schnittstellen.", "Handlungsfähigkeit meines Projekts sichern, ohne Gesamtziele der Organisation zu schädigen.", "Ich habe Abhängigkeiten transparent gemacht, Lösungsoptionen mit den anderen Projektleitungen abgestimmt und eine begründete Entscheidungsvorlage für das Steuerungsgremium erstellt.", "Klare Priorisierung und verbindliche Schnittstellen; künftig würde ich Abhängigkeiten im Portfolio noch früher sichtbar machen."]
+        },
+
+        // 4.3.2 Governance, Strukturen und Prozesse (3)
+        {
+          id: "4.3.2-1", ce: "4.3.2",
+          q: "Wie war Ihr Referenzprojekt in die Governance-Struktur der Organisation eingebunden, und wie haben Sie mit dem Lenkungskreis zusammengearbeitet?",
+          f: ["Welche Entscheidungen durften Sie selbst treffen, welche mussten Sie eskalieren?", "Wie haben Sie sichergestellt, dass der Lenkungskreis wirklich entscheidungsfähig war?"],
+          e: ["Klares Verständnis von Rollen (Auftraggeber, Lenkungskreis, PMO, Projektleitung)", "Strukturierte Entscheidungsvorlagen mit Optionen und Empfehlung", "Klare Abgrenzung von Kompetenzen und Toleranzen"],
+          s: ["Einbettung des Projekts in bestehende Linien- und Gremienstrukturen.", "Zügige, fundierte Entscheidungen auf Gremienebene ermöglichen.", "Ich habe klare Kompetenz- und Eskalationsregeln vereinbart, Gremientermine mit kompakten Entscheidungsvorlagen vorbereitet und Beschlüsse verbindlich protokolliert.", "Keine Entscheidungsstaus und hohe Transparenz; heute würde ich Entscheidungstoleranzen noch expliziter im Projektauftrag festhalten."]
+        },
+        {
+          id: "4.3.2-2", ce: "4.3.2",
+          q: "Welche bestehenden Organisationsprozesse oder PMO-Standards mussten Sie im Projekt berücksichtigen – und wo mussten Sie diese anpassen?",
+          f: ["Was haben Sie getan, als ein Standardprozess Ihr Projekt eher ausgebremst hat?", "Wie haben Sie die Anpassung abgestimmt, ohne Regeln zu brechen?"],
+          e: ["Kenntnis und Respekt vor etablierten Standards (PM-Handbuch, Gate-Prozesse, Reporting)", "Pragmatisches Tailoring auf Projektgröße und -komplexität", "Abgestimmtes statt eigenmächtiges Vorgehen"],
+          s: ["Vorhandene Standards passten nicht in jedem Detail zum konkreten Projektzuschnitt.", "Governance-Konformität wahren und gleichzeitig unnötigen Overhead vermeiden.", "Ich habe die relevanten Vorgaben geprüft, notwendige Anpassungen mit PMO/Auftraggeber abgestimmt und dokumentiert im Projekt umgesetzt.", "Schlanke, regelkonforme Steuerung; als Learning gilt: Tailoring direkt in der Initialisierung klären."]
+        },
+        {
+          id: "4.3.2-3", ce: "4.3.2",
+          q: "Gab es im Referenzprojekt unklare Zuständigkeiten oder Überschneidungen zwischen Projekt- und Linienorganisation?",
+          f: ["Wie sind Sie konkret vorgegangen, um Klarheit zu schaffen?", "Was hätten Sie rückblickend früher klären sollen?"],
+          e: ["Bewusstsein für typische Spannungsfelder in der Matrix- oder Einfluss-Projektorganisation", "Aktive Rollen- und Schnittstellenklärung mit Linienverantwortlichen", "Vermeidung von Doppelunterstellungs-Konflikten auf dem Rücken des Teams"],
+          s: ["Unklare Abgrenzung zwischen Projektaufgaben und laufendem Linienbetrieb führte zu Reibungen.", "Eindeutige Verantwortlichkeiten und Verlässlichkeit für das Team herstellen.", "Ich habe das Gespräch mit den Linienvorgesetzten gesucht, Aufgaben sowie Weisungs- und Abstimmungswege in einer Rollenmatrix festgehalten und vom Auftraggeber bestätigen lassen.", "Deutlich weniger Reibungsverluste; künftig würde ich diese Abgrenzung bereits vor Projektstart schriftlich fixieren."]
+        },
+
+        // 4.3.3 Compliance, Standards und Regularien (3)
+        {
+          id: "4.3.3-1", ce: "4.3.3",
+          q: "Welche gesetzlichen, regulatorischen oder internen Vorgaben waren in Ihrem Referenzprojekt besonders relevant?",
+          f: ["Wie haben Sie herausgefunden, dass Sie keine wesentliche Vorschrift übersehen haben?", "Wen haben Sie dafür konkret eingebunden?"],
+          e: ["Systematische Identifikation relevanter Vorgaben (z. B. Datenschutz, Arbeitsschutz, Mitbestimmung, Normen, Vertragsrecht)", "Frühzeitige Einbindung von Fachstellen (Recht, Datenschutz, Betriebsrat, Qualität/Sicherheit)", "Eigenes Verantwortungsbewusstsein (Sorgfalts- und Fürsorgepflicht)"],
+          s: ["Projekt berührte sensible Daten, Arbeitsprozesse oder regulierte Anforderungen.", "Compliance-Risiken früh erkennen und lückenlos absichern.", "Ich habe zu Beginn eine Compliance-Prüfung mit den zuständigen Fachstellen durchgeführt, Anforderungen in den Plan integriert und verbindliche Freigabepunkte definiert.", "Regelkonforme Umsetzung ohne Beanstandungen; künftig würde ich Prüfzeiten der Fachstellen noch großzügiger im Terminplan puffern."]
+        },
+        {
+          id: "4.3.3-2", ce: "4.3.3",
+          q: "Gab es eine Situation, in der Zeit- oder Kostendruck mit Standards, Sicherheit oder Compliance-Vorgaben kollidierte?",
+          f: ["Wie haben Sie sich verhalten und wie haben Sie Ihre Position vertreten?", "Wo verläuft für Sie persönlich eine rote Linie?"],
+          e: ["Klare Haltung bei verbindlichen Vorgaben (keine Abkürzungen bei Recht, Sicherheit, Ethik)", "Konstruktive Lösungssuche im Rahmen des Zulässigen statt reiner Blockade", "Saubere Dokumentation und ggf. Eskalation an den Auftraggeber"],
+          s: ["Unter Termindruck wurde vorgeschlagen, einen Prüf-, Freigabe- oder Dokumentationsschritt abzukürzen.", "Compliance wahren und gleichzeitig das Terminziel bestmöglich schützen.", "Ich habe die rechtlichen bzw. sicherheitsrelevanten Konsequenzen sachlich dargelegt, alternative Beschleunigungswege gesucht und bei unvermeidbarem Verzug eine formale Entscheidung eingeholt.", "Volle Regelkonformität bei tragfähigem Kompromiss; klare Grenzziehung stärkte langfristig das Vertrauen."]
+        },
+        {
+          id: "4.3.3-3", ce: "4.3.3",
+          q: "Wie haben Sie im Projektalltag sichergestellt, dass vereinbarte Standards, Arbeits- und Gesundheitsschutz sowie Dokumentationspflichten eingehalten wurden?",
+          f: ["Woran haben Sie gemerkt, ob die Regeln tatsächlich gelebt wurden?", "Was haben Sie getan, wenn Abweichungen auftraten?"],
+          e: ["Verbindung von Planung, Kommunikation/Einweisung und aktiver Überprüfung (Audits, Reviews, Checklisten)", "Wahrnehmung der Aufsichts- und Fürsorgepflicht als Projektleitung", "Konstruktiver Umgang mit Abweichungen (Ursache statt Schuldzuweisung)"],
+          s: ["Mehrere Beteiligte aus verschiedenen Bereichen oder externen Teams arbeiteten parallel.", "Durchgängige Einhaltung der Projektstandards und Fürsorgepflichten sicherstellen.", "Ich habe die Regeln im Kick-off vermittelt, einfache Checklisten bereitgestellt, stichprobenartig bzw. an Gates geprüft und auf Arbeitsbelastung im Team geachtet.", "Hohe Nachvollziehbarkeit und keine Compliance-Vorfälle; künftig würde ich kurze Zwischen-Audits fest einplanen."]
+        },
+
+        // 4.3.4 Macht und Interessen (3)
+        {
+          id: "4.3.4-1", ce: "4.3.4",
+          q: "Welche informellen Machtstrukturen oder verdeckten Interessen (Hidden Agendas) haben Sie in Ihrem Referenzprojekt wahrgenommen?",
+          f: ["Woran genau haben Sie diese erkannt?", "Wie sind Sie damit umgegangen, ohne Vertrauen zu beschädigen?"],
+          e: ["Sensibilität für politische Dynamiken und Interessen hinter offiziellen Positionen", "Systematische Beobachtung und Einzelgespräche statt Naivität oder Konfrontation", "Integerer, professioneller Umgang mit Mikropolitik"],
+          s: ["Im Projektverlauf zeigten sich wiederholte Verzögerungen oder unerwartete Einwände trotz formaler Zustimmung.", "Die eigentlichen Beweggründe verstehen und Blockaden konstruktiv auflösen.", "Ich habe bilaterale Gespräche geführt, aktiv nach Befürchtungen und Interessen gefragt und Lösungen gesucht, die berechtigte Anliegen berücksichtigten.", "Verdeckte Vorbehalte wurden besprechbar und das Projekt gewann an Fahrt; künftig würde ich Schlüsselpersonen noch früher persönlich einbinden."]
+        },
+        {
+          id: "4.3.4-2", ce: "4.3.4",
+          q: "Wie sind Sie mit einem einflussreichen Stakeholder umgegangen, der eigene Interessen gegen die Projektziele verfolgt hat?",
+          f: ["Und was haben SIE konkret getan, als Sachargumente allein nicht reichten?", "Wann und wie haben Sie Ihren Sponsor bzw. Auftraggeber eingebunden?"],
+          e: ["Abgestuftes Vorgehen: erst direkter Dialog und Nutzenperspektive, dann ggf. Sponsor/Lenkungskreis", "Kein persönlicher Machtkampf, sondern Fokus auf das gemeinsame Organisationsziel", "Transparente Dokumentation getroffener Entscheidungen"],
+          s: ["Ein einflussreicher Akteur stellte zentrale Projektentscheidungen wiederholt infrage.", "Das Projektziel schützen und gleichzeitig eine arbeitsfähige Beziehung erhalten.", "Ich habe im Vier-Augen-Gespräch Interessen ausgelotet, Auswirkungen auf das Gesamtziel transparent gemacht und – als keine Einigung möglich war – den Auftraggeber mit klaren Optionen eingebunden.", "Verbindliche Grundsatzentscheidung und spürbare Entspannung; rückblickend hätte ich den Auftraggeber etwas früher vorab informiert."]
+        },
+        {
+          id: "4.3.4-3", ce: "4.3.4",
+          q: "Auf welche Machtbasen stützen Sie sich als Projektleitung, wenn Sie nur wenig formelle Weisungsbefugnis haben?",
+          f: ["Geben Sie ein konkretes Beispiel aus Ihrem Referenzprojekt, wo das funktioniert hat – und eines, wo Sie an Grenzen stießen."],
+          e: ["Kenntnis formeller und informeller Machtbasen (Experten-, Referenz-, Informations-, Legitimationsmacht)", "Authentischer Einsatz von Fachkompetenz, Vertrauen, Netzwerk und Transparenz", "Realistische Einschätzung der eigenen Grenzen und Nutzung des Mandats"],
+          s: ["Typische Matrix-Situation ohne disziplinarische Weisungsbefugnis gegenüber Fachabteilungen.", "Trotzdem Verbindlichkeit, Priorität und Umsetzungskraft im Projekt erzeugen.", "Ich habe über nachvollziehbare Planung, persönliche Verlässlichkeit, gute Beziehungen zu Schlüsselpersonen und klare Rückendeckung des Auftraggebers gewirkt.", "Hohe Akzeptanz im Team; dort, wo harte Prioritätskonflikte auftraten, habe ich konsequent das Mandat des Lenkungskreises genutzt."]
+        },
+
+        // 4.3.5 Kultur und Werte (3)
+        {
+          id: "4.3.5-1", ce: "4.3.5",
+          q: "Wie würden Sie die bestehende Organisationskultur im Umfeld Ihres Referenzprojekts beschreiben – und wie haben Sie diese in Ihrer Projektarbeit berücksichtigt?",
+          f: ["Wo gab es Unterschiede zwischen offiziellen Werten und gelebter Praxis?", "Wie haben Sie Ihren Arbeitsstil daran angepasst?"],
+          e: ["Wahrnehmung sichtbarer und ungeschriebener kultureller Regeln (z. B. Entscheidungswege, Fehlerkultur, Hierarchie)", "Bewusste Anpassung von Kommunikation, Beteiligung und Vorgehen", "Respekt vor gewachsenen Strukturen bei gleichzeitiger Klarheit im Projekt"],
+          s: ["Das Projekt bewegte sich in einer gewachsenen Organisationskultur mit spezifischen Entscheidungs- und Kommunikationsgewohnheiten.", "Reibungen vermeiden und Akzeptanz für neue Projektmethoden sichern.", "Ich habe bestehende Gepflogenheiten analysiert, Berichts- und Abstimmungsformate passend gestaltet und neue Arbeitsweisen schrittweise statt abrupt eingeführt.", "Gute Anschlussfähigkeit des Projekts in der Organisation; als Learning gilt: ungeschriebene Regeln aktiv bei erfahrenen Kollegen abfragen."]
+        },
+        {
+          id: "4.3.5-2", ce: "4.3.5",
+          q: "Wie haben Sie aktiv eine positive Projektkultur in Ihrem Team gestaltet?",
+          f: ["Woran konnte man diese Projektkultur im Alltag konkret erkennen?", "Wie haben Sie reagiert, wenn jemand gegen vereinbarte Werte oder Spielregeln verstoßen hat?"],
+          e: ["Bewusstes Vorleben von Werten (Offenheit, Respekt, Verlässlichkeit, Fehlerkultur)", "Gemeinsam erarbeitete Teamregeln und Rituale statt bloßer Vorgaben", "Konsequentes, faires Ansprechen von Regelverstößen"],
+          s: ["Neu zusammengestelltes Team aus unterschiedlichen Bereichen mit verschiedenen Arbeitsstilen.", "Vertrauensvolle, leistungsfähige Zusammenarbeit und offene Fehlerkultur etablieren.", "Ich habe im Kick-off gemeinsame Teamregeln erarbeitet, Transparenz vorgelebt, Erfolge sichtbar gewürdigt und Abweichungen zeitnah im Einzelgespräch angesprochen.", "Spürbar offene Kommunikation und frühe Problemmeldungen; künftig würde ich die Teamregeln zur Projektmitte bewusst reflektieren."]
+        },
+        {
+          id: "4.3.5-3", ce: "4.3.5",
+          q: "Gab es kulturelle Unterschiede zwischen beteiligten Abteilungen, Standorten oder externen Partnern – wie sind Sie damit umgegangen?",
+          f: ["Gab es ein konkretes Missverständnis, das kulturell bedingt war?", "Was haben Sie daraus für zukünftige Projekte gelernt?"],
+          e: ["Wertschätzende Wahrnehmung unterschiedlicher Fach-, Abteilungs- oder Landeskulturen", "Klärung gemeinsamer Begriffe, Erwartungen und Kommunikationsregeln", "Brückenbauer-Rolle der Projektleitung ohne Bewertung von „besser/schlechter“"],
+          s: ["Zusammenarbeit zwischen Bereichen mit sehr unterschiedlichem Zeit-, Detail- oder Kommunikationsverständnis.", "Missverständnisse abbauen und gemeinsame Handlungsfähigkeit sichern.", "Ich habe Erwartungen explizit gemacht, gemeinsame Glossare bzw. Übergabekriterien eingeführt und direkten Austausch zwischen den Gruppen moderiert.", "Besseres gegenseitiges Verständnis und stabilere Schnittstellen; ich nehme mit, Unterschiede von Beginn an offen zu thematisieren."]
+        },
+
+        // 4.4.1 Selbstreflexion und Selbstmanagement (4)
+        {
+          id: "4.4.1-1", ce: "4.4.1",
+          q: "Welche Ihrer persönlichen Stärken haben das Referenzprojekt besonders vorangebracht – und welche Ihrer Schwächen wurden spürbar?",
+          f: ["Woran konkret haben Sie diese Schwäche im Projekt bemerkt?", "Wie haben Sie im Projektalltag gezielt gegengesteuert?"],
+          e: ["Authentische, ausgewogene Selbsteinschätzung (keine Schein-Schwächen)", "Konkreter Bezug zu realen Situationen im Referenzprojekt", "Konstruktiver Umgang mit eigenen Lernfeldern (Methoden, Delegation, Reflexion)"],
+          s: ["Anspruchsvolle Projektphasen forderten fachliche, organisatorische und persönliche Kompetenzen.", "Eigene Stärken wirksam einsetzen und blinde Flecken ausgleichen.", "Ich habe meine Kernstärken gezielt eingebracht und bei meinem Entwicklungsfeld bewusst Gegenmaßnahmen (z. B. Delegation, Vorbereitungsroutinen, Sparring) genutzt.", "Ausgewogene Steuerung und persönliche Weiterentwicklung; das Entwicklungsfeld verfolge ich strukturiert weiter."]
+        },
+        {
+          id: "4.4.1-2", ce: "4.4.1",
+          q: "Wie sind Sie in Hochstressphasen Ihres Referenzprojekts mit Ihrer eigenen Arbeitslast und innerem Druck umgegangen?",
+          f: ["Welche Warnsignale für Überlastung kennen Sie bei sich selbst?", "Welche Aufgaben haben Sie konkret priorisiert, verschoben oder delegiert?"],
+          e: ["Kenntnis persönlicher Stresssignale und bewusster Selbstmanagement-Techniken (z. B. Eisenhower, Timeboxing, Fokuszeiten)", "Fähigkeit, Prioritäten zu setzen, Aufgaben zu delegieren und realistisch Nein zu sagen", "Vorbildfunktion: eigene Belastbarkeit und Ruhe übertragen sich auf das Team"],
+          s: ["Kritische Projektphase mit hohem Termindruck, parallelen Eskalationen und vielen Ad-hoc-Anfragen.", "Handlungsfähig, klar im Kopf und entscheidungsstark bleiben.", "Ich habe tägliche Prioritäten strikt geordnet, operative Detailaufgaben delegiert, feste Fokusblöcke geschützt und bei Bedarf aktiv Unterstützung abgestimmt.", "Ruhige Steuerung durch die kritische Phase; heute würde ich Pufferzeiten für Unvorhergesehenes noch konsequenter einplanen."]
+        },
+        {
+          id: "4.4.1-3", ce: "4.4.1",
+          q: "Wie und von wem haben Sie im Referenzprojekt Feedback zu Ihrer eigenen Rolle als Projektleitung eingeholt?",
+          f: ["Welches kritische Feedback hat Sie besonders überrascht oder weitergebracht?", "Wie haben Sie auf dieses Feedback konkret reagiert?"],
+          e: ["Aktives Einholen von Rückmeldungen (Team, Auftraggeber, Kollegen/Peers)", "Offene, nicht-defensive Annahme von Kritik (Johari-Fenster: blinden Fleck verkleinern)", "Sichtbare Verhaltensänderung statt bloßem Zuhören"],
+          s: ["Während des Projekts wollte ich überprüfen, wie mein Führungs- und Kommunikationsstil wahrgenommen wird.", "Blinde Flecken früh erkennen und meine Wirksamkeit als Projektleitung verbessern.", "Ich habe in Retrospektiven und Einzelgesprächen gezielt um konkretes Feedback gebeten, aktiv zugehört ohne mich zu rechtfertigen und konkrete Anpassungen umgesetzt.", "Verbesserte Zusammenarbeit und gestiegenes Vertrauen; ich plane Feedbackschleifen heute fest in den Projektkalender ein."]
+        },
+        {
+          id: "4.4.1-4", ce: "4.4.1",
+          q: "Wenn Sie Ihr Referenzprojekt heute noch einmal von vorne starten könnten: Was würden Sie als Projektleitung konkret anders machen?",
+          f: ["Warum haben Sie es damals nicht schon so gemacht?", "Woran merken Sie, dass Sie dieses Learning heute tatsächlich umsetzen?"],
+          e: ["Ehrliche, tiefgehende Reflexion statt allgemeiner Floskeln", "Verständnis der damaligen Ursachen (Kontext, Druck, eigene Annahmen)", "Konkreter Transfer auf die heutige Arbeitsweise"],
+          s: ["Rückblick auf den gesamten Projektverlauf nach Abschluss.", "Die wichtigsten persönlichen und methodischen Erkenntnisse ehrlich herausarbeiten.", "Ich habe im Abschluss und in eigener Nachbetrachtung die entscheidenden Wendepunkte analysiert und konkrete Maßnahmen für Folgeprojekte abgeleitet.", "Ein klarer, nachvollziehbarer Lernschritt, den ich heute bereits routinemäßig anwende."]
+        },
+
+        // 4.4.2 Persönliche Integrität und Verlässlichkeit (3)
+        {
+          id: "4.4.2-1", ce: "4.4.2",
+          q: "Gab es in Ihrem Referenzprojekt eine Situation, in der Sie unter Druck standen, unangenehme Fakten zu beschönigen oder zurückzuhalten?",
+          f: ["Wie genau haben Sie entschieden und kommuniziert?", "Wie hat Ihr Gegenüber reagiert?"],
+          e: ["Klare ethische Haltung: Ehrlichkeit und Transparenz auch bei schlechten Nachrichten", "Konstruktive Verbindung von Problembericht und Lösungsoptionen", "Standhaftigkeit bei politischem oder zeitlichem Druck"],
+          s: ["Absehbare Termin- oder Kostenabweichung, bei der der Wunsch aufkam, die Ampel noch nicht auf Gelb/Rot zu stellen.", "Wahrheitsgemäß berichten und gleichzeitig konstruktive Steuerung ermöglichen.", "Ich habe die reale Lage offen dargestellt, Ursachen sachlich benannt und direkt bewertete Handlungsoptionen mit Empfehlung vorgelegt.", "Die Entscheidung erfolgte rechtzeitig und meine Glaubwürdigkeit als Projektleitung wurde gestärkt."]
+        },
+        {
+          id: "4.4.2-2", ce: "4.4.2",
+          q: "Erzählen Sie von einem eigenen Fehler oder einer Fehleinschätzung im Referenzprojekt – wie sind Sie damit umgegangen?",
+          f: ["Wann und wie haben Sie den Fehler offen angesprochen?", "Was haben Sie getan, um die Folgen zu begrenzen?"],
+          e: ["Persönliche Verantwortungsübernahme ohne Schuldverschiebung auf Team oder Umstände", "Schnelle Transparenz und lösungsorientierte Schadensbegrenzung", "Lernorientierung und Vorbildwirkung für eine offene Fehlerkultur"],
+          s: ["Eigene Fehleinschätzung bei Planung, Kommunikation oder Priorisierung führte zu einer Abweichung.", "Verantwortung übernehmen, Schaden minimieren und Vertrauen erhalten.", "Ich habe den Fehler offen benannt, die Auswirkungen analysiert, sofort Gegenmaßnahmen eingeleitet und das Learning im Team geteilt.", "Das Problem wurde sauber behoben und die Offenheit ermutigte auch Teammitglieder, Risiken früh zu melden."]
+        },
+        {
+          id: "4.4.2-3", ce: "4.4.2",
+          q: "Wie zeigen Sie im Projektalltag persönliche Verlässlichkeit – besonders dann, wenn Zusagen ins Wanken geraten?",
+          f: ["Wie stellen Sie sicher, dass vertrauliche Informationen geschützt bleiben?", "Welche Rolle spielte Nachhaltigkeit bzw. ethisches Handeln in Ihrem Projekt?"],
+          e: ["Übereinstimmung von Worten und Taten; frühzeitige Kommunikation bei absehbaren Abweichungen", "Verantwortungsvoller Umgang mit Vertraulichkeit und Fairness gegenüber allen Beteiligten", "Blick auf langfristige, nachhaltige Wirkungen der Projektergebnisse"],
+          s: ["Hohe Taktung vieler paralleler Zusagen, Protokolle und vertraulicher Abstimmungen.", "Als verlässlicher Anker für Team, Auftraggeber und Partner wahrgenommen werden.", "Ich habe Zusagen systematisch nachgehalten, bei Engpässen proaktiv vor Fristablauf informiert und Vertraulichkeitsgrenzen strikt gewahrt.", "Hohes Grundvertrauen über die gesamte Laufzeit; Verlässlichkeit bleibt meine wichtigste Führungsbasis."]
+        },
+
+        // 4.4.3 Persönliche Kommunikation (3)
+        {
+          id: "4.4.3-1", ce: "4.4.3",
+          q: "Wie haben Sie Ihre Kommunikation im Referenzprojekt auf unterschiedliche Zielgruppen (z. B. Management vs. Fachebene) zugeschnitten?",
+          f: ["Nennen Sie ein konkretes Beispiel, bei dem dieselbe Information unterschiedlich aufbereitet werden musste.", "Woran haben Sie erkannt, dass Ihre Botschaft wirklich angekommen ist?"],
+          e: ["Bewusste Wahl von Detailgrad, Sprache, Medium und Rhythmus je Zielgruppe", "Rückkopplung/Verständnissicherung statt Einbahnstraßen-Information", "Klarheit zwischen Sach-, Beziehungs- und Appellebene"],
+          s: ["Ein komplexer Sachverhalt musste sowohl dem Steuerungsgremium als auch den umsetzenden Fachpersonen vermittelt werden.", "Entscheidungsfähigkeit im Management und Handlungsklarheit im Team sicherstellen.", "Ich habe fürs Management kompakt nach Auswirkungen, Optionen und Empfehlung verdichtet und im Team die technischen/fachlichen Details im Dialog geklärt sowie Rückfragen gezielt eingeholt.", "Beide Zielgruppen konnten ohne Reibungsverluste handeln; künftig würde ich komplexe Kernbotschaften noch häufiger visualisieren."]
+        },
+        {
+          id: "4.4.3-2", ce: "4.4.3",
+          q: "Beschreiben Sie ein besonders schwieriges Gespräch (z. B. kritisches Feedback oder schlechte Nachricht) in Ihrem Referenzprojekt.",
+          f: ["Wie haben Sie sich darauf vorbereitet?", "Welche konkreten Kommunikationstechniken haben Sie eingesetzt?"],
+          e: ["Gezielte Vorbereitung (Fakten, Ziel, geeigneter vertraulicher Rahmen)", "Einsatz von Ich-Botschaften, aktivem Zuhören, Paraphrasieren und sachlicher Beschreibung statt Wertung", "Klare Vereinbarung zum weiteren Vorgehen"],
+          s: ["Wiederholte Abweichung oder heikle Rückmeldung an ein Teammitglied bzw. einen Stakeholder.", "Das Problem klar benennen, ohne die Beziehung zu zerstören, und eine verbindliche Lösung erreichen.", "Ich habe das Gespräch im Vier-Augen-Rahmen geführt, konkrete Beobachtungen in Ich-Form geschildert, aktiv die Sichtweise des Gegenübers erfragt und gemeinsam nächste Schritte vereinbart.", "Konstruktive Einigung und spürbare Verbesserung; als Learning nehme ich mit, heikle Themen noch früher anzusprechen."]
+        },
+        {
+          id: "4.4.3-3", ce: "4.4.3",
+          q: "Gab es in Ihrem Referenzprojekt ein gravierendes Missverständnis in der Kommunikation – wie ist es entstanden und wie haben Sie es aufgelöst?",
+          f: ["Welchen Anteil hatten Sie selbst an diesem Missverständnis?", "Was haben Sie danach an Ihren Kommunikationsregeln geändert?"],
+          e: ["Selbstkritische Analyse der Ursache (z. B. falsches Medium, unklare Begriffe, fehlende Rückversicherung)", "Schnelle, lösungsorientierte Klärung im direkten Austausch statt E-Mail-Pingpong", "Nachhaltige Anpassung der Kommunikationspraxis"],
+          s: ["Unterschiedliche Interpretation einer Anforderung, Frist oder Zuständigkeit zwischen Beteiligten.", "Missverständnis rasch ausräumen und Folgefehler verhindern.", "Ich habe statt weiterer E-Mails sofort ein kurzes Klärungsgespräch angesetzt, Ergebnisse zusammengefasst und schriftlich für alle verbindlich bestätigt.", "Saubere gemeinsame Sichtweise; seitdem fasse ich kritische Vereinbarungen konsequent kurz schriftlich zusammen."]
+        },
+
+        // 4.4.4 Beziehungen und Engagement (3)
+        {
+          id: "4.4.4-1", ce: "4.4.4",
+          q: "Wie haben Sie zu Beginn Ihres Referenzprojekts tragfähige Beziehungen und Vertrauen zu Team und Schlüssel-Stakeholdern aufgebaut?",
+          f: ["Was haben Sie konkret getan, um auch zurückhaltende oder skeptische Personen einzubinden?", "Wie haben Sie Beziehungen über die Projektlaufzeit gepflegt?"],
+          e: ["Bewusste Investition in persönlichen Kontakt, Zuhören und Verständnis für Erwartungen", "Kontinuierliche Beziehungspflege nicht erst im Problemfall", "Authentisches Interesse und Wertschätzung"],
+          s: ["Projektstart mit Personen aus verschiedenen Bereichen, die teils noch nicht zusammengearbeitet hatten.", "Eine belastbare Vertrauensbasis als Fundament für schwierige Phasen schaffen.", "Ich habe gezielte Auftaktgespräche mit Schlüsselpersonen geführt, Erwartungen abgeholt, regelmäßig persönlich nachgefragt und Erfolge sichtbar gemacht.", "Stabile Zusammenarbeit auch unter Druck; künftig würde ich persönliche Check-ins noch bewusster in hybriden Phasen einplanen."]
+        },
+        {
+          id: "4.4.4-2", ce: "4.4.4",
+          q: "Wie haben Sie Mitarbeitende motiviert, die parallel im Tagesgeschäft eingebunden waren und für die Sie keine disziplinarische Führungskraft waren?",
+          f: ["Welche konkreten Motivationsfaktoren haben bei Ihren Teammitgliedern am besten gewirkt?", "Wie haben Sie Überlastung durch Doppelbelastung abgefangen?"],
+          e: ["Verständnis von Motivatoren und Hygienefaktoren (Sinn, Verantwortung, Anerkennung, gute Rahmenbedingungen)", "Einbindung in Planung und Entscheidungen statt bloßer Aufgabenzuweisung", "Sichtbarkeit der Leistung auch gegenüber den Linienvorgesetzten"],
+          s: ["Teammitglieder arbeiteten nur anteilig im Projekt und standen unter Druck aus der Linie.", "Engagement und Identifikation mit den Projektzielen dauerhaft hochhalten.", "Ich habe den Projektnutzen greifbar gemacht, Arbeitspakete gemeinsam geplant, Gestaltungsspielraum gelassen, Erfolge anerkannt und Kapazitäten eng mit der Linie abgestimmt.", "Hohe Verlässlichkeit und Eigeninitiative im Team; klare Kapazitätsabsprachen mit der Linie waren dafür entscheidend."]
+        },
+        {
+          id: "4.4.4-3", ce: "4.4.4",
+          q: "Hatten Sie im Referenzprojekt ein Teammitglied, dessen Engagement spürbar nachließ – wie haben Sie reagiert?",
+          f: ["Was stellte sich als eigentliche Ursache heraus?", "Was haben Sie konkret verändert?"],
+          e: ["Frühes Wahrnehmen von Rückzug oder Leistungsabfall", "Empathisches, ursachenorientiertes Einzelgespräch statt Druck oder Vorwürfen", "Pragmatische Anpassung von Rahmenbedingungen, Unterstützung oder Aufgaben"],
+          s: ["Ein ansonsten zuverlässiges Teammitglied zog sich zurück und lieferte verspätet.", "Ursache klären, die Person wieder ins Boot holen und das Lieferobjekt absichern.", "Ich habe im vertraulichen Einzelgespräch meine Beobachtung geteilt, nach Hindernissen gefragt und gemeinsam eine Lösung (z. B. Entlastung, klarere Abgrenzung oder fachliche Unterstützung) umgesetzt.", "Das Engagement kehrte zurück und das Arbeitspaket wurde sauber abgeschlossen; frühes Nachfragen zahlte sich aus."]
+        },
+
+        // 4.4.5 Führung (4)
+        {
+          id: "4.4.5-1", ce: "4.4.5",
+          q: "Wie würden Sie Ihren persönlichen Führungsstil im Referenzprojekt beschreiben – und in welcher Situation haben Sie ihn bewusst angepasst?",
+          f: ["Wann mussten Sie eher direktiv vorgehen, wann stark delegieren?", "Woran haben Sie erkannt, dass ein Wechsel des Führungsstils nötig war?"],
+          e: ["Situatives Führungsverständnis (Anpassung an Reifegrad, Erfahrung, Dringlichkeit und Risiko)", "Klarheit über den eigenen Grundstil und bewusste Flexibilität", "Konkretes Beispiel statt theoretischer Aufzählung von Modellen"],
+          s: ["Unterschiedlich erfahrene Teammitglieder und wechselnde Drucksituationen im Projektverlauf.", "Jede Person passend unterstützen, ohne zu unter- oder überfordern.", "Ich habe erfahrenen Fachleuten große Eigenverantwortung übertragen, bei neuen Aufgaben bzw. in kritischen Zeitsituationen aber enger strukturiert, klare Vorgaben gegeben und kurze Abstimmungen etabliert.", "Hohe Handlungsfähigkeit in allen Phasen; heute kommuniziere ich meinen Führungs- und Abstimmungsbedarf noch expliziter vorab."]
+        },
+        {
+          id: "4.4.5-2", ce: "4.4.5",
+          q: "Wie delegieren Sie Aufgaben im Projekt – und wo fällt Ihnen das Loslassen manchmal schwer?",
+          f: ["Wie kontrollieren Sie delegierte Arbeitspakete ohne Mikromanagement?", "Nennen Sie ein Beispiel, bei dem Delegation nicht wie geplant funktioniert hat."],
+          e: ["Saubere Delegation (klares Ziel, Befugnisse, Rahmenbedingungen, vereinbarte Rückmeldepunkte)", "Ehrliche Reflexion über eigene Kontrollbedürfnisse", "Konstruktiver Umgang, wenn ein delegiertes Paket in Schieflage gerät"],
+          s: ["Komplexes Arbeitspaket musste eigenständig durch ein Teammitglied oder eine Teilgruppe bearbeitet werden.", "Verantwortung wirksam übertragen und trotzdem Steuerungsfähigkeit behalten.", "Ich habe Zielbild, Abnahmekriterien, Schnittstellen und feste Zwischen-Checkpoints vereinbart, die Detailumsetzung aber der Fachperson überlassen.", "Eigenverantwortliche Umsetzung; wo ich einmal zu spät nachgesteuert habe, habe ich gelernt, Checkpoints am Risiko auszurichten."]
+        },
+        {
+          id: "4.4.5-3", ce: "4.4.5",
+          q: "Schildern Sie eine Situation aus Ihrem Referenzprojekt, in der Sie unter Unsicherheit eine klare Führungsentscheidung treffen mussten.",
+          f: ["Und was haben SIE konkret getan, als es im Team unterschiedliche Meinungen gab?", "Wie haben Sie die Entscheidung nach außen und innen vertreten?"],
+          e: ["Entscheidungsfähigkeit trotz unvollständiger Informationen", "Strukturierte Abwägung (Fakten, Risiken, Optionen) mit Einbindung des Teams, dann klare Entscheidung", "Verantwortungsübernahme für die Konsequenzen"],
+          s: ["Unklare Informationslage unter Zeitdruck bei zwei kontrovers diskutierten Lösungswegen.", "Handlungsblockade auflösen und eine tragfähige Richtung vorgeben.", "Ich habe die verfügbaren Fakten und Risiken kurz gebündelt, die Argumente gehört, eine begründete Entscheidung getroffen bzw. beim Auftraggeber herbeigeführt und die Umsetzung geschlossen ausgerichtet.", "Das Team gewann sofort wieder Klarheit und Tempo; offene Begründung sicherte auch die Akzeptanz der unterlegenen Sichtweise."]
+        },
+        {
+          id: "4.4.5-4", ce: "4.4.5",
+          q: "Wie haben Sie im Projekt Führung übernommen, ohne formale Vorgesetzte bzw. formaler Vorgesetzter zu sein (laterale Führung)?",
+          f: ["Wo waren die Grenzen Ihrer lateralen Führung?", "Wie haben Sie in solchen Fällen gehandelt?"],
+          e: ["Wirken über Orientierung, Sinn, Vertrauen, klare Vereinbarungen und Moderation", "Keine Flucht in Ohnmacht („Ich habe ja keine Weisungsbefugnis“)", "Professionelle Zusammenarbeit mit Linienvorgesetzten und Auftraggeber"],
+          s: ["Interdisziplinäres Team aus mehreren Abteilungen ohne disziplinarische Unterstellung.", "Gemeinsame Ausrichtung und verbindliche Ergebnisse erreichen.", "Ich habe gemeinsame Ziele und Spielregeln etabliert, auf verbindliche Zusagen statt Anordnungen gesetzt, Hindernisse beseitigt und bei strukturellen Konflikten frühzeitig die Linie eingebunden.", "Starke Verbindlichkeit im Team; klare Rollenabsprachen mit den Fachbereichsleitungen erwiesen sich als Schlüssel."]
+        },
+
+        // 4.4.6 Teamarbeit (3)
+        {
+          id: "4.4.6-1", ce: "4.4.6",
+          q: "Wie haben Sie Ihr Projektteam zu Beginn zusammengestellt bzw. arbeitsfähig gemacht (Kick-off, Rollen, Spielregeln)?",
+          f: ["Wie sind Sie damit umgegangen, wenn Sie sich das Team nicht selbst aussuchen konnten?", "Welche Teamregeln haben sich in der Praxis am meisten bewährt?"],
+          e: ["Aktive Gestaltung der Startphase (Forming): Kennenlernen, Ziele, Rollen, Kommunikations- und Entscheidungsregeln", "Umgang mit gegebener Teamzusammensetzung und unterschiedlichen Stärken/Rollen", "Schaffen eines gemeinsamen Wir-Gefühls"],
+          s: ["Projektstart mit neu zusammengesetztem, teils vorgegebenem Team.", "Schnell Orientierung, Rollenklarheit und ein produktives Arbeitsklima herstellen.", "Ich habe ein strukturiertes Kick-off moderiert, Ziele und Nutzen gemeinsam geschärft, Rollen und Schnittstellen geklärt sowie pragmatische Spielregeln vereinbart.", "Zügiger Start und geringe Reibungsverluste; künftig würde ich noch stärker auf den Ausgleich fehlender Teamrollen achten."]
+        },
+        {
+          id: "4.4.6-2", ce: "4.4.6",
+          q: "Welche typischen Teamentwicklungsphasen haben Sie in Ihrem Referenzprojekt beobachtet – besonders in der Storming-Phase?",
+          f: ["Woran haben Sie Spannungen im Team frühzeitig erkannt?", "Was haben Sie konkret getan, um das Team in die Arbeitsfähigkeit zu führen?"],
+          e: ["Bewusste Wahrnehmung von Teamdynamiken (z. B. nach Tuckman)", "Aktive Moderation von Rollen- und Arbeitsweisen-Konflikten statt Wegsehen", "Schrittweise Übergabe von Verantwortung in stabileren Phasen"],
+          s: ["Nach der ersten Orientierung traten Reibungen über Arbeitsweisen, Zuständigkeiten und Prioritäten auf.", "Spannungen konstruktiv klären und verbindliche Zusammenarbeit etablieren.", "Ich habe die Reibungspunkte offen im Team angesprochen, Schnittstellen präzisiert, klare Absprachen getroffen und Raum für konstruktives Feedback geschaffen.", "Das Team fand zu stabilen Routinen und hoher Eigenständigkeit; die aktive Begleitung der Reibungsphase war entscheidend."]
+        },
+        {
+          id: "4.4.6-3", ce: "4.4.6",
+          q: "Wie haben Sie die Zusammenarbeit in einem bereichsübergreifenden oder teilweise virtuell arbeitenden Team gestaltet?",
+          f: ["Welche konkreten Formate haben funktioniert – und welche haben Sie wieder abgeschafft?", "Wie haben Sie dafür gesorgt, dass auch leise Stimmen gehört wurden?"],
+          e: ["Passende Meeting-Struktur (kurze Syncs, klare Agenda, gemeinsame Ablage)", "Aktive Moderation zur Einbindung aller Teammitglieder", "Reflexion und Anpassung der Zusammenarbeit über Retrospektiven"],
+          s: ["Teammitglieder arbeiteten an unterschiedlichen Orten, im Homeoffice oder in verschiedenen Fachbereichen.", "Transparenz, kurzen Informationsfluss und echten Zusammenhalt sichern.", "Ich habe ein gemeinsames digitales Board, feste kurze Abstimmungsroutinen und aktive Moderationsregeln eingeführt und regelmäßig überprüft, welche Formate echten Mehrwert liefern.", "Hohe Transparenz bei überschaubarem Meeting-Aufwand; überflüssige Runden wurden konsequent gestrichen."]
+        },
+
+        // 4.4.7 Konflikte und Krisen (4)
+        {
+          id: "4.4.7-1", ce: "4.4.7",
+          q: "Schildern Sie einen konkreten Konflikt aus Ihrem Referenzprojekt – was war Ihre Rolle bei der Lösung?",
+          f: ["Welche Interessen lagen hinter den Positionen der Beteiligten?", "Haben Sie den Konflikt eher moderiert, vermittelt oder entschieden?"],
+          e: ["Klare Analyse von Konfliktart und Eskalationsgrad", "Aktives, neutrales und lösungsorientiertes Handeln statt Vermeiden", "Nachhaltige, dokumentierte Vereinbarung und Nachhalten"],
+          s: ["Konkreter Ziel-, Rollen- oder Ressourcenkonflikt zwischen zwei Beteiligten bzw. Fachbereichen.", "Eskalation verhindern und eine tragfähige Lösung im Sinne des Projekts erreichen.", "Ich habe zunächst Einzelgespräche geführt, danach ein strukturiertes Klärungsgespräch moderiert, gemeinsame Interessen herausgearbeitet und konkrete Vereinbarungen festgehalten.", "Tragfähige Einigung und spürbare Entspannung der Zusammenarbeit; konsequentes Nachhalten sicherte die Umsetzung."]
+        },
+        {
+          id: "4.4.7-2", ce: "4.4.7",
+          q: "Nach welchen Kriterien haben Sie entschieden, ob Sie einen Konflikt selbst lösen oder eskalieren?",
+          f: ["Wie genau bereiten Sie eine Eskalation vor?", "Wie gehen Sie vor, damit eine Eskalation nicht als Vertrauensbruch wirkt?"],
+          e: ["Klare Eskalationskriterien (Kompetenzgrenze, Toleranzüberschreitung, anhaltende Blockade, Eskalationsstufe)", "Faire Ankündigung („keine Überraschung“) gegenüber den Betroffenen", "Sachliche Vorlage mit Fakten, Auswirkungen, Optionen und eigener Empfehlung"],
+          s: ["Ein ungelöster Konflikt überschritt meine Entscheidungsbefugnis bzw. gefährdete Meilensteine.", "Eine zeitnahe Entscheidung auf der richtigen Ebene herbeiführen, ohne verbrannte Erde zu hinterlassen.", "Ich habe den Betroffenen transparent angekündigt, dass eine Klärung über den Lenkungskreis nötig ist, und eine faktenbasierte Entscheidungsvorlage mit Optionen erstellt.", "Schnelle, verbindliche Entscheidung und erhaltene Arbeitsbeziehung; klare Eskalationspfade von Anfang an helfen enorm."]
+        },
+        {
+          id: "4.4.7-3", ce: "4.4.7",
+          q: "Gab es in Ihrem Referenzprojekt eine kritische Situation oder echte Projektkrise – wie haben Sie gesteuert?",
+          f: ["Was war Ihre allererste Maßnahme?", "Wie haben Sie in dieser Phase die Kommunikation nach innen und außen organisiert?"],
+          e: ["Unterscheidung zwischen normalem Problem und echter Krise (Existenz-/Zielbedrohung, Zeitdruck)", "Strukturiertes Krisenvorgehen: Lagebild, Sofortmaßnahmen, Krisenrunde, klare Kommunikation aus einer Hand", "Ruhe bewahren, priorisieren, Entscheidung einholen und Krise sauber beenden"],
+          s: ["Unerwartetes Ereignis bedrohte zentrale Projektziele oder einen kritischen Meilenstein massiv.", "Schaden begrenzen, Handlungsfähigkeit sichern und das Projekt wieder stabilisieren.", "Ich habe sofort ein klares Lagebild erstellt, ein fokussiertes Kernteam zusammengezogen, kurzfristige Sofortmaßnahmen gestartet, abgestimmt kommuniziert und einen aktualisierten Plan mit dem Auftraggeber freigegeben.", "Die kritische Phase wurde überwunden und zentrale Ergebnisse gesichert; anschließend wurden Ursachen systematisch aufgearbeitet."]
+        },
+        {
+          id: "4.4.7-4", ce: "4.4.7",
+          q: "Blicken Sie auf einen Konflikt zurück, der nicht optimal verlaufen ist: Was hätten Sie heute anders gemacht?",
+          f: ["Woran haben Sie damals zu spät erkannt, dass der Konflikt schwelt?", "Welches Verhalten ändern Sie heute konkret?"],
+          e: ["Hohe Selbstreflexion und Offenheit ohne Rechtfertigung", "Erkennen früher Warnsignale (z. B. Schweigen, Ausweichen, Formalismus)", "Konkrete Handlungsänderung für künftige Projekte"],
+          s: ["Ein schwelender Konflikt wurde zunächst unterschätzt oder zu lange auf der Sachebene behandelt.", "Ursachen ehrlich auswerten und Konfliktkompetenz weiterentwickeln.", "Ich habe im Rückblick erkannt, dass ich zu spät das direkte Gespräch gesucht und die emotionale/politische Ebene unterschätzt habe.", "Heute spreche ich Störungen deutlich früher direkt an und kläre Interessen, bevor sich Fronten verhärten."]
+        },
+
+        // 4.4.8 Vielseitigkeit (3)
+        {
+          id: "4.4.8-1", ce: "4.4.8",
+          q: "Beschreiben Sie eine festgefahrene fachliche oder organisatorische Problemstellung in Ihrem Referenzprojekt, für die Sie neue Lösungswege entwickeln mussten.",
+          f: ["Welche Methode haben Sie zur Ideenfindung eingesetzt?", "Wie haben Sie verhindert, dass vorschnell die erstbeste Lösung gewählt wurde?"],
+          e: ["Trennung von Ideenfindung (divergent) und Bewertung (konvergent)", "Gezielter Einsatz kreativer Techniken (z. B. Brainstorming, 6-3-5, Kopfstand, Perspektivwechsel)", "Aktive Moderationsrolle der Projektleitung"],
+          s: ["Standardlösungen reichten aufgrund technischer, zeitlicher oder budgetärer Restriktionen nicht aus.", "Tragfähige Alternativen entwickeln, die alle Kernanforderungen erfüllen.", "Ich habe einen kurzen Lösungsworkshop moderiert, zunächst wertfrei verschiedene Optionen sammeln lassen und anschließend anhand klarer Kriterien verdichtet.", "Eine pragmatische, unerwartete Lösung führte zum Durchbruch; strukturierte Moderation spart dabei enorm viel Zeit."]
+        },
+        {
+          id: "4.4.8-2", ce: "4.4.8",
+          q: "Wie haben Sie im Projekt Entscheidungen zwischen mehreren komplexen Alternativen methodisch abgesichert?",
+          f: ["Wer hat die Bewertungskriterien festgelegt und gewichtet?", "Wie sind Sie damit umgegangen, wenn das Ergebnis knapp war?"],
+          e: ["Systematischer Entscheidungsprozess (Kriterien, Gewichtung, Bewertung, z. B. Nutzwertanalyse)", "Einbindung der relevanten Stakeholder für Akzeptanz und Objektivität", "Prüfung von K.-o.-Kriterien, Risiken und Sensitivität"],
+          s: ["Wahl zwischen mehreren Lösungsansätzen, Systemen oder Anbietern mit unterschiedlichen Stärken.", "Eine nachvollziehbare, objektive und tragfähige Entscheidungsgrundlage schaffen.", "Ich habe vorab mit den Fachbereichen Kriterien und Gewichtungen festgelegt, die Optionen transparent bewertet und das Ergebnis inkl. Risiken dem Entscheidungsgremium vorgelegt.", "Hohe Akzeptanz der Entscheidung ohne nachträgliche Grundsatzdebatten."]
+        },
+        {
+          id: "4.4.8-3", ce: "4.4.8",
+          q: "Wie stellen Sie sicher, dass im Projekt unterschiedliche Sichtweisen und Erfahrungen genutzt werden statt Gruppendenken zu fördern?",
+          f: ["Wie reagieren Sie auf skeptische oder unbequeme Einwände im Team?", "Nennen Sie ein Beispiel, wo eine andere Perspektive Ihren eigenen Plan verbessert hat."],
+          e: ["Wertschätzung von Vielfalt (Fachrichtungen, Erfahrungsstufen, kritische Stimmen)", "Offene Fehler- und Diskussionskultur ohne Hierarchie-Dominanz", "Bereitschaft, eigene Annahmen korrigieren zu lassen"],
+          s: ["Bei einer wichtigen Planungs- oder Architekturfrage dominierte zunächst eine eingespielte Sichtweise.", "Blinde Flecken vermeiden und die Qualität der Lösung erhöhen.", "Ich habe bewusst auch kritische Perspektiven und spätere Anwender bzw. den Betrieb aktiv nach Bedenken gefragt und deren Hinweise systematisch geprüft.", "Ein wesentliches Umsetzungsrisiko wurde vorab entdeckt und entschärft."]
+        },
+
+        // 4.4.9 Verhandlungen (3)
+        {
+          id: "4.4.9-1", ce: "4.4.9",
+          q: "Schildern Sie eine wichtige Verhandlung, die Sie im Referenzprojekt geführt haben (z. B. zu Ressourcen, Terminen, Budget oder mit einem Lieferanten).",
+          f: ["Was war Ihre konkrete Vorbereitung vor dem Gespräch?", "Welches Ergebnis haben Sie erzielt – und was mussten Sie dafür geben?"],
+          e: ["Systematische Vorbereitung (Ziele, Interessen beider Seiten, Spielräume/ZOPA, Alternative/BATNA)", "Sachliche, interessenorientierte Verhandlungsführung (z. B. Harvard-Prinzipien)", "Tragfähiges, dokumentiertes Ergebnis unter Erhalt der Beziehung"],
+          s: ["Verhandlung über knappe Ressourcen, Terminverschiebung, Leistungsumfang oder Vertragskonditionen.", "Eine für das Projekt tragfähige und gleichzeitig für die Gegenseite akzeptable Einigung erzielen.", "Ich habe vorab Zielkorridor, objektive Kriterien und Alternativen geklärt, im Gespräch gezielt nach den Interessen der Gegenseite gefragt und gemeinsam Paketlösungen entwickelt.", "Verbindliche Win-win-Vereinbarung mit klarer Dokumentation; die gründliche Vorbereitung war der entscheidende Hebel."]
+        },
+        {
+          id: "4.4.9-2", ce: "4.4.9",
+          q: "Wie sind Sie vorgegangen, als ein Verhandlungspartner auf einer harten Position beharrte?",
+          f: ["Wie haben Sie herausgefunden, welche eigentlichen Interessen dahintersteckten?", "Wo lag Ihre eigene Schmerzgrenze (BATNA)?"],
+          e: ["Trennung von Mensch und Sachproblem; ruhiges Nachfragen statt Gegenblockade", "Suche nach objektiven Kriterien und kreativen Tausch-/Optionsmöglichkeiten", "Klares Bewusstsein für eigene Alternativen und Abbruch-/Eskalationspunkte"],
+          s: ["Gegenseite lehnte eine erforderliche Anpassung oder Ressourcenbereitstellung kategorisch ab.", "Die Blockade lösen, ohne die Geschäftsbeziehung zu beschädigen.", "Ich habe die Position hinterfragt („Was genau ist Ihnen wichtig?“), zugrundeliegende Risiken der Gegenseite erkannt und über objektive Kriterien sowie gestufte Optionen eine Lösung eröffnet.", "Die Fronten lösten sich auf und eine tragfähige Einigung gelang."]
+        },
+        {
+          id: "4.4.9-3", ce: "4.4.9",
+          q: "Wie sind Sie bei Nachforderungen (Claims) oder veränderten Leistungsanforderungen in Verhandlungen vorgegangen?",
+          f: ["Auf welche Dokumentation konnten Sie sich dabei stützen?", "Wen haben Sie aus der Organisation hinzugezogen (z. B. Einkauf, Recht)?"],
+          e: ["Saubere Fakten- und Dokumentationsbasis (Vertrag, Protokolle, Änderungsanträge)", "Professionelle Zusammenarbeit mit Einkauf, Recht und Auftraggeber", "Unterscheidung zwischen berechtigten Änderungen und unberechtigten Forderungen"],
+          s: ["Ein interner oder externer Partner meldete Zusatzaufwand bzw. Mehrkosten an.", "Berechtigte Ansprüche fair klären und unberechtigte Forderungen sachlich abwehren.", "Ich habe die Leistungsbeschreibung, Protokolle und Abweichungen geprüft, mich mit Einkauf/Auftraggeber abgestimmt und faktenbasiert eine faire Nachregelung verhandelt.", "Nachvollziehbare Einigung im Budgetrahmen; saubere laufende Dokumentation erwies sich als unverzichtbar."]
+        },
+
+        // 4.4.10 Ergebnisorientierung (4)
+        {
+          id: "4.4.10-1", ce: "4.4.10",
+          q: "Wie haben Sie im Referenzprojekt bei konkurrierenden Anforderungen oder Zeitdruck konsequent priorisiert?",
+          f: ["Was haben Sie bewusst weggelassen oder verschoben – und wie haben Sie das begründet?", "Wie haben Sie den Auftraggeber von dieser Priorisierung überzeugt?"],
+          e: ["Fokus auf Wertbeitrag, Nutzen und zentrale Projekterfolgskriterien (Effektivität vor Aktionismus)", "Transparente Bewertung von Auswirkungen auf Termin, Kosten, Qualität und Nutzen", "Entscheidungsstarke Empfehlung gegenüber dem Auftraggeber"],
+          s: ["Unter Zeit- oder Budgetdruck konnten nicht alle gewünschten Zusatzfunktionen gleichzeitig umgesetzt werden.", "Den Kernnutzen und den Zieltermin sichern.", "Ich habe alle offenen Anforderungen nach Nutzen und Aufwand priorisiert (z. B. Muss/Soll/Kann), den kritischen Pfad berücksichtigt und ein gestuftes Lieferkonzept mit dem Auftraggeber abgestimmt.", "Kernziele wurden termingerecht erreicht; nachgelagerte Wünsche wurden sauber in eine Folgephase überführt."]
+        },
+        {
+          id: "4.4.10-2", ce: "4.4.10",
+          q: "Nennen Sie ein Beispiel für ein hartnäckiges Hindernis, das den Projektfortschritt blockiert hat – wie haben Sie es aus dem Weg geräumt?",
+          f: ["Und was haben SIE konkret getan, als erste Versuche nicht wirkten?", "Wie schnell haben Sie reagiert?"],
+          e: ["Proaktives Handeln statt Abwarten oder bloßem Weiterleiten", "Ursachenklärung, kreative Alternativen und Hartnäckigkeit", "Schutz des Teams vor unnötigen Blockaden"],
+          s: ["Eine wichtige Zulieferung, Freigabe oder technische Abhängigkeit stockte über längere Zeit.", "Blockade beseitigen, bevor der kritische Pfad gerissen wird.", "Ich habe die Engpassstelle direkt kontaktiert, die eigentliche Ursache geklärt, Übergangslösungen geprüft und durch gezielte Unterstützung bzw. Priorisierung über das Management die Freigabe erreicht.", "Das Arbeitspaket lief weiter und der Meilenstein blieb haltbar."]
+        },
+        {
+          id: "4.4.10-3", ce: "4.4.10",
+          q: "Wo mussten Sie im Projekt bewusst zwischen Perfektionismus und Pragmatismus („Good enough“) abwägen?",
+          f: ["Wie haben Sie verhindert, dass Pragmatismus zulasten wesentlicher Qualität geht?", "Wie haben Sie diese Abwägung dem Team vermittelt?"],
+          e: ["Verbindung von Effizienz und Effektivität (Pareto-Denken)", "Klare Unterscheidung zwischen unverzichtbaren Qualitätskriterien und Gold-Plating", "Abstimmung mit Auftraggeber und Abnahmeberechtigten"],
+          s: ["Im Team gab es die Tendenz, eine Teillösung über das vereinbarte Ziel hinaus zu verfeinern.", "Ressourcen gezielt auf erfolgskritische Lieferobjekte lenken.", "Ich habe die vereinbarten Abnahmekriterien als Maßstab herangezogen, den Grenznutzen weiterer Verfeinerungen besprochen und gemeinsam mit dem Auftraggeber eine pragmatische Lösung festgelegt.", "Aufwand und Termin blieben im Rahmen bei voller Erfüllung der Qualitätsanforderungen."]
+        },
+        {
+          id: "4.4.10-4", ce: "4.4.10",
+          q: "Wie haben Sie sichergestellt, dass Ihr Projekt nicht nur formal abgeschlossen wurde, sondern den erwarteten Nutzen im Betrieb tatsächlich erzielt?",
+          f: ["Wer war nach Projektende für die Nutzenrealisierung verantwortlich?", "Welche konkreten Übergabe- oder Nachbetreuungsmaßnahmen gab es?"],
+          e: ["Denken über den Projektabschluss hinaus (Betriebsübergabe, Schulung, Hypercare, Nutzenkontrolle)", "Klare Verantwortungsübergabe an die Linie/Betriebsorganisation", "Nutzung von Quick Wins und messbaren Zielgrößen"],
+          s: ["Übergang von der Projektphase in den laufenden Betrieb.", "Nachhaltige Nutzung der Ergebnisse und tatsächliche Nutzenrealisierung sichern.", "Ich habe frühzeitig Betriebsverantwortliche eingebunden, Schulungen, Dokumentation und eine Stabilisierungsphase organisiert sowie eine spätere Nutzenüberprüfung angestoßen.", "Reibungsloser Übergang in den Betrieb und hohe Akzeptanz bei den Nutzenden."]
+        },
+
+        // 4.5.1 Projektdesign (4)
+        {
+          id: "4.5.1-1", ce: "4.5.1",
+          q: "Wie haben Sie das Vorgehensmodell (klassisch, agil oder hybrid) für Ihr Referenzprojekt ausgewählt und begründet?",
+          f: ["Welche konkreten Projektmerkmale sprachen gegen die jeweils anderen Modelle?", "Hätte rückblickend ein anderes Vorgehen besser gepasst?"],
+          e: ["Bewusste Wahl anhand von Kontextfaktoren (Anforderungsklarheit, Komplexität, Regulierung, Teamreife, Governance)", "Kein Dogmatismus, sondern passgenaues Design", "Kritische Reflexion der Stärken und Schwächen des gewählten Ansatzes"],
+          s: ["Start eines Projekts mit spezifischer Mischung aus festen Rahmenvorgaben und inhaltlicher Unsicherheit.", "Ein passendes Vorgehensmodell definieren, das sowohl Governance als auch Umsetzung trägt.", "Ich habe Kontext, Risiken, Anforderungen und Organisation analysiert und darauf aufbauend ein klassisches, agiles oder hybrides Design mit klaren Rollen und Artefakten entworfen.", "Das Vorgehen passte gut zu Team und Organisation; einzelne Elemente würde ich heute noch schlanker aufsetzen."]
+        },
+        {
+          id: "4.5.1-2", ce: "4.5.1",
+          q: "Wie haben Sie die Komplexität Ihres Referenzprojekts eingeschätzt – und welche Konsequenzen hatte das für Ihr Projektdesign?",
+          f: ["Was waren die 2–3 größten Komplexitätstreiber in Ihrem Projekt?", "Wie haben Sie Ihr Design konkret darauf abgestimmt?"],
+          e: ["Differenzierte Betrachtung von Komplexität (Technik, Stakeholder, Schnittstellen, Organisation, Unsicherheit)", "Direkte Ableitung von Maßnahmen (z. B. Phasen/Gates, Risiko-Puffer, engere Kommunikation, Pilotierung)", "Level-C-angemessene Einordnung der eigenen Projektkomplexität"],
+          s: ["Projekt mit mehreren Schnittstellen, verschiedenen Fachbereichen und spürbaren Abhängigkeiten.", "Steuerungsstruktur und Methoden gezielt an der Komplexität ausrichten.", "Ich habe die Hauptkomplexitätstreiber identifiziert und gezielt mit passenden Strukturen (z. B. Teilprojekte/Workstreams, Quality Gates, engem Stakeholder-Management) adressiert.", "Die Komplexität blieb über die gesamte Laufzeit beherrschbar."]
+        },
+        {
+          id: "4.5.1-3", ce: "4.5.1",
+          q: "Wie haben Sie zu Projektbeginn Erfahrungen und Lessons Learned aus früheren Projekten in Ihr Projektdesign einbezogen?",
+          f: ["Welche konkrete Erkenntnis aus einem früheren Projekt hat Ihre Planung direkt verändert?", "Wie haben Sie vorgegangen, falls es kaum dokumentierte Lessons Learned gab?"],
+          e: ["Aktives Lernen aus der Organisation statt jedes Rad neu zu erfinden", "Pragmatische Nutzung von Gesprächen mit erfahrenen Projektleitungen, falls Datenbanken fehlen", "Sichtbarer Niederschlag im eigenen Projektplan"],
+          s: ["Aufsetzen eines neuen Projekts in einem Umfeld mit früheren ähnlichen Vorhaben.", "Bekannte Fehlerquellen von Anfang an vermeiden.", "Ich habe vorhandene Abschlussberichte ausgewertet und gezielt Interviews mit früheren Projektleitungen bzw. Fachverantwortlichen geführt, um bewährte Maßnahmen direkt in mein Design aufzunehmen.", "Typische Stolpersteine wurden frühzeitig umgangen."]
+        },
+        {
+          id: "4.5.1-4", ce: "4.5.1",
+          q: "Mussten Sie Ihr Projektdesign oder Ihre PM-Methoden während der Projektlaufzeit anpassen?",
+          f: ["Was war der konkrete Auslöser für die Anpassung?", "Wie haben Sie das Team und den Auftraggeber dabei mitgenommen?"],
+          e: ["Projektdesign als lebendes System, nicht als einmaliges Dokument", "Daten- bzw. erfahrungsbasierte Anpassung (z. B. nach Retrospektive oder Phasenreview)", "Transparente Kommunikation der Änderungen"],
+          s: ["Im Projektverlauf zeigte sich, dass ein ursprünglich geplanter Prozess oder Rhythmus nicht mehr optimal griff.", "Die Arbeitsfähigkeit und Steuerungsqualität erhalten.", "Ich habe die Schwachstelle im Team ausgewertet, das Vorgehen gezielt angepasst (z. B. kürzere Abstimmungszyklen oder geänderte Schnittstellen) und die Änderung mit dem Auftraggeber abgestimmt.", "Spürbar höheres Tempo und weniger Abstimmungsaufwand in den Folgephasen."]
+        },
+
+        // 4.5.2 Anforderungen und Ziele (4)
+        {
+          id: "4.5.2-1", ce: "4.5.2",
+          q: "Wie haben Sie die Projektziele und Nicht-Ziele in Ihrem Referenzprojekt erarbeitet und verbindlich abgestimmt?",
+          f: ["Waren alle Ziele wirklich SMART formuliert – nennen Sie ein konkretes Beispiel.", "Welche Nicht-Ziele waren für Sie besonders wichtig?"],
+          e: ["Klare, messbare Zieldefinition (SMART) inkl. expliziter Nicht-Ziele zur Abgrenzung", "Strukturierte Erhebung mit Auftraggeber und Schlüssel-Stakeholdern", "Schriftliche Fixierung und Freigabe im Projektauftrag"],
+          s: ["Zu Projektbeginn lagen zunächst grobe, teils interpretationsbedürftige Zielvorstellungen vor.", "Ein eindeutiges, gemeinsames Zielverständnis als verlässliche Vertragsbasis schaffen.", "Ich habe Zielworkshops mit Auftraggeber und Fachbereichen moderiert, Ziele messbar formuliert, klare Nicht-Ziele ergänzt und den Projektauftrag formal freigeben lassen.", "Eindeutige Orientierung für Team und spätere Abnahme; Nicht-Ziele verhinderten viele Grundsatzdiskussionen."]
+        },
+        {
+          id: "4.5.2-2", ce: "4.5.2",
+          q: "Wie sind Sie mit widersprüchlichen Anforderungen verschiedener Fachbereiche oder Stakeholder umgegangen?",
+          f: ["Wer hatte am Ende das Entscheidungsrecht – und wie haben Sie die Entscheidung vorbereitet?", "Wie haben Sie die „unterlegene“ Seite eingebunden?"],
+          e: ["Strukturierte Konfliktanalyse statt stiller Kompromisse, die niemandem helfen", "Neutraler Vergleich anhand der Projektziele und Nutzenkriterien", "Herbeiführen einer klaren Entscheidung durch Auftraggeber/Product Owner/Lenkungskreis"],
+          s: ["Zwei Bereiche stellten sich gegenseitig ausschließende Anforderungen an das Projektergebnis.", "Widerspruch auflösen, ohne das Projekt auszubremsen.", "Ich habe beide Anforderungen mit Nutzen, Kosten und Auswirkungen gegenübergestellt, in einer gemeinsamen Runde nach Lösungen gesucht und eine klare Entscheidungsvorlage für den Auftraggeber erstellt.", "Verbindliche Entscheidung und nachvollziehbare Kommunikation an alle Beteiligten."]
+        },
+        {
+          id: "4.5.2-3", ce: "4.5.2",
+          q: "Wie haben Sie die Anforderungen im Referenzprojekt erhoben, strukturiert und priorisiert?",
+          f: ["Welche Priorisierungsmethode haben Sie konkret genutzt (z. B. MoSCoW)?", "Wie haben Sie sichergestellt, dass Anforderungen testbar bzw. abnahmefähig waren?"],
+          e: ["Systematische Anforderungserhebung (Workshops, Interviews, Dokumentenanalyse, Prototypen)", "Klare Priorisierung (z. B. Muss/Soll/Kann) und Nachverfolgbarkeit bis zur Abnahme", "Trennung von funktionalen und nicht-funktionalen Anforderungen"],
+          s: ["Umfangreiche, teils unstrukturierte Wunschliste zu Beginn der Definitionsphase.", "Vollständige, widerspruchsfreie und priorisierte Anforderungsbasis herstellen.", "Ich habe Anforderungen strukturiert erfasst, nach Muss-/Soll-/Kann-Kriterien priorisiert, mit Akzeptanzkriterien versehen und formal gegenzeichnen lassen.", "Belastbare Grundlage für Umsetzung, Test und spätere Abnahme."]
+        },
+        {
+          id: "4.5.2-4", ce: "4.5.2",
+          q: "Wie haben Sie in Ihrem Referenzprojekt schleichende Umfangsausweitung (Scope Creep) verhindert bzw. gesteuert?",
+          f: ["Nennen Sie eine konkrete Zusatzanforderung, die Sie abgelehnt oder in einen Change Request überführt haben.", "Wie haben Sie das Gegenüber überzeugt?"],
+          e: ["Konsequente Anwendung eines schlanken Änderungsprozesses", "Transparente Bewertung von Auswirkungen auf Termin, Kosten und Qualität", "Standhafte, aber konstruktive Kommunikation („Ja, wenn …“ statt blindem „Nein“)"],
+          s: ["Während der Umsetzung wurden informell zusätzliche Wünsche direkt ans Team herangetragen.", "Termin- und Budgettreue schützen, ohne berechtigte Verbesserungen pauschal abzublocken.", "Ich habe klare Regeln für Änderungswünsche etabliert, Auswirkungen auf Zeit und Kosten bewertet und die Entscheidung konsequent über den Auftraggeber/Change-Prozess geführt.", "Kein unkontrollierter Scope Creep; wichtige Änderungen wurden transparent und mit angepasstem Budget/Termin umgesetzt."]
+        },
+
+        // 4.5.3 Leistungsumfang und Lieferobjekte (3)
+        {
+          id: "4.5.3-1", ce: "4.5.3",
+          q: "Wie haben Sie den Projektstrukturplan (PSP) bzw. die Struktur der Lieferobjekte aufgebaut und im Projektalltag genutzt?",
+          f: ["Nach welcher Logik war Ihr PSP gegliedert (objekt-, phasen- oder funktionsorientiert)?", "Wie tief haben Sie Arbeitspakete geschnitten – und warum?"],
+          e: ["Verständnis des PSP als zentrales Rückgrat (100-%-Regel, klare Arbeitspakete mit Verantwortlichen)", "Sinnvolle Granularität (steuerbar, schätzbar, nicht zu kleinteilig)", "Aktive Nutzung für Termin-, Kosten-, Ressourcen- und Risikosteuerung"],
+          s: ["Komplexer Leistungsumfang musste für alle Beteiligten überschaubar und steuerbar zerlegt werden.", "Vollständige, überschneidungsfreie Arbeitsstruktur mit klaren Zuständigkeiten schaffen.", "Ich habe den PSP gemeinsam mit dem Kernteam erstellt, Arbeitspakete mit Ergebnissen, Schnittstellen und Verantwortlichen beschrieben und als Basis für die weitere Planung genutzt.", "Hohe Klarheit im Team und lückenlose Abdeckung des Leistungsumfangs."]
+        },
+        {
+          id: "4.5.3-2", ce: "4.5.3",
+          q: "Wie lief Ihr Änderungsmanagement (Change Request Prozess) konkret ab, wenn sich Lieferobjekte änderten?",
+          f: ["Nennen Sie ein konkretes Beispiel für einen Change Request und dessen Auswirkungen.", "Wie haben Sie die aktualisierte Baseline dokumentiert und kommuniziert?"],
+          e: ["Definierter Ablauf: Erfassung, Wirkungsanalyse, Bewertung, Entscheidung, Umsetzung und Planaktualisierung", "Saubere Anpassung von PSP, Terminplan, Kosten und Risiken nach Genehmigung", "Transparente Kommunikation an alle betroffenen Beteiligten"],
+          s: ["Eine wesentliche Änderung an einem Lieferobjekt wurde während der Umsetzungsphase erforderlich.", "Die Änderung geordnet bewerten und ohne Chaos in den Projektplan integrieren.", "Ich habe einen Change Request erstellt, Auswirkungen auf Leistung, Termin und Kosten berechnet, die Freigabe im Gremium eingeholt und alle betroffenen Pläne aktualisiert.", "Geordnete Umsetzung bei jederzeit nachvollziehbarer Baseline."]
+        },
+        {
+          id: "4.5.3-3", ce: "4.5.3",
+          q: "Wie haben Sie die Abnahme von Zwischenergebnissen und dem Endergebnis organisiert?",
+          f: ["Gab es Beanstandungen oder Vorbehalte bei der Abnahme – wie sind Sie damit umgegangen?", "Wann genau galt ein Lieferobjekt in Ihrem Projekt als „fertig“?"],
+          e: ["Vorab definierte, objektive Abnahmekriterien (Definition of Done / Prüfkriterien)", "Formale Teil- und Endabnahmen mit Protokoll und Mängelliste/Fristen", "Frühzeitige Einbindung der Abnehmenden zur Vermeidung von Überraschungen"],
+          s: ["Abschluss zentraler Teilpakete bzw. des Gesamtprojekts mit Übergabe an den Auftraggeber.", "Eindeutige, rechtssichere und konfliktfreie Abnahme erreichen.", "Ich habe Abnahmekriterien früh abgestimmt, Vorab-Reviews durchgeführt, formale Abnahmeprotokolle erstellt und offene Restpunkte mit klaren Fristen und Verantwortlichen nachgehalten.", "Verbindliche Abnahme ohne langwierige Nachdiskussionen."]
+        },
+
+        // 4.5.4 Ablauf und Termine (4)
+        {
+          id: "4.5.4-1", ce: "4.5.4",
+          q: "Wie haben Sie den Ablauf- und Terminplan für Ihr Referenzprojekt erstellt und den kritischen Pfad ermittelt?",
+          f: ["Welche konkreten Abhängigkeiten waren in Ihrem Projekt besonders kritisch?", "Wie haben Sie realistische Puffer eingeplant?"],
+          e: ["Methodische Ableitung aus PSP/Arbeitspaketen, Aufwandsschätzungen, Vorgangsfolgen und Meilensteinen", "Kenntnis des kritischen Pfads und bewusster Umgang mit Pufferzeiten", "Einbindung der umsetzenden Fachpersonen in die Schätzung"],
+          s: ["Mehrere parallele und voneinander abhängige Arbeitspakete mussten auf einen verbindlichen Zieltermin abgestimmt werden.", "Einen realistischen, belastbaren Terminplan als Steuerungsgrundlage erstellen.", "Ich habe gemeinsam mit den Arbeitspaketverantwortlichen Dauern und Abhängigkeiten ermittelt, Meilensteine gesetzt, den kritischen Pfad identifiziert und gezielt Puffer an Engpässen berücksichtigt.", "Transparenter, realistischer Plan mit klarem Fokus auf terminkritische Vorgänge."]
+        },
+        {
+          id: "4.5.4-2", ce: "4.5.4",
+          q: "Schildern Sie eine konkrete Terminverzögerung in Ihrem Referenzprojekt – wie haben Sie diese erkannt und gegengesteuert?",
+          f: ["Welche Steuerungsmaßnahmen haben Sie geprüft (z. B. Parallelisierung, Crashing, Scope-Anpassung) – und warum genau Ihre gewählt?", "Welche Nebenwirkungen hatte Ihre Maßnahme?"],
+          e: ["Früherkennung über Soll-Ist-Vergleich oder Trendanalyse (z. B. MTA)", "Bewusste Abwägung verschiedener Gegenmaßnahmen inkl. Kosten- und Qualitätsfolgen", "Schnelle Umsetzung und Wirkungskontrolle"],
+          s: ["Ein Vorgang auf dem kritischen Pfad drohte den Zieltermin um mehrere Wochen zu verschieben.", "Terminverzug aufholen bzw. Auswirkungen auf den Gesamttermin minimieren.", "Ich habe die Ursache analysiert, Optionen (Parallelisierung, zusätzliche Kapazität, Teil-Lieferung) bewertet, mit dem Auftraggeber die beste Maßnahme entschieden und eng nachgesteuert.", "Der Kernmeilenstein wurde gehalten bzw. der Verzug deutlich begrenzt; die Nebenwirkungen blieben kontrolliert."]
+        },
+        {
+          id: "4.5.4-3", ce: "4.5.4",
+          q: "Wo lagen Ihre ursprünglichen Zeit- oder Aufwandsschätzungen im Projekt deutlich daneben – und was haben Sie daraus gelernt?",
+          f: ["Was war der Hauptgrund für die Fehlschätzung?", "Welche Schätzmethode würden Sie beim nächsten Mal anders einsetzen?"],
+          e: ["Ehrliche Reflexion von Planungsunsicherheiten und Schätzfehlern", "Kenntnis geeigneter Schätzverfahren (z. B. Dreipunktschätzung, Analogie, Expertenrunden, Bottom-up)", "Konkrete Verbesserung für künftige Schätzprozesse"],
+          s: ["Bei einem bestimmten Arbeitspaket wich der tatsächliche Zeitbedarf deutlich von der ersten Schätzung ab.", "Ursache verstehen und künftige Schätzgenauigkeit erhöhen.", "Ich habe analysiert, welche Annahmen (z. B. Wartezeiten, Freigaben, Einarbeitung) gefehlt hatten, und die Restplanung unmittelbar nachjustiert.", "Heute nutze ich bei unsicheren Paketen konsequent Dreipunktschätzungen und plane explizit Abstimmungs- und Prüfzeiten ein."]
+        },
+        {
+          id: "4.5.4-4", ce: "4.5.4",
+          q: "Mit welchen Instrumenten haben Sie die Terminentwicklung laufend überwacht und an den Auftraggeber berichtet?",
+          f: ["Wie haben Sie verhindert, dass Ihnen kurz vor einem Meilenstein plötzlich eine Verspätung gemeldet wird?", "Woran erkennen Sie einen schleichenden Verzugstrend?"],
+          e: ["Einsatz geeigneter Controlling-Instrumente (Meilensteintrendanalyse, Balkenplan mit Stichtagslinie, Restaufwandsschätzung)", "Fokus auf Restdauer statt nur „Prozent fertig“ (90-%-Syndrom vermeiden)", "Frühzeitige, transparente Kommunikation von Trends"],
+          s: ["Laufende Steuerung eines Projekts mit mehreren parallelen Arbeitssträngen.", "Terminrisiken Wochen vor dem eigentlichen Meilenstein sichtbar machen.", "Ich habe in regelmäßigen Statusrunden explizit die verbleibende Restdauer und konkrete Blocker abgefragt und die Entwicklung über Meilensteinprognosen verfolgt.", "Abweichungen fielen frühzeitig auf und konnten rechtzeitig korrigiert werden."]
+        },
+
+        // 4.5.5 Organisation, Information und Dokumentation (3)
+        {
+          id: "4.5.5-1", ce: "4.5.5",
+          q: "Wie haben Sie die Projektorganisation, Rollen und Verantwortlichkeiten in Ihrem Referenzprojekt festgelegt?",
+          f: ["Welche konkreten Schnittstellen waren am anspruchsvollsten?", "Wie haben Sie Rollenklärungen dokumentiert (z. B. Projektorganigramm, RACI)?"],
+          e: ["Klare Struktur (Auftraggeber, Lenkungskreis, Projektleitung, Kernteam, erweitertes Team, Teilprojekte)", "Eindeutige Zuordnung von Verantwortung (z. B. RACI-Matrix, Rollenbeschreibungen)", "Aktive Anpassung der Organisation bei personellen oder Phasenwechseln"],
+          s: ["Projektstart mit Beteiligten aus unterschiedlichen Fachbereichen und ggf. externen Partnern.", "Doppelarbeit, Zuständigkeitslücken und Abstimmungschaos vermeiden.", "Ich habe ein Projektorganigramm und eine RACI-Übersicht für Schlüsselaufgaben erstellt, mit allen Beteiligten abgestimmt und im Projekthandbuch festgehalten.", "Klare Zuständigkeiten über die gesamte Laufzeit und schnelle Einarbeitung neuer Beteiligter."]
+        },
+        {
+          id: "4.5.5-2", ce: "4.5.5",
+          q: "Wie waren Informationsfluss, Berichtswesen und Dokumentationsstruktur in Ihrem Referenzprojekt aufgebaut?",
+          f: ["Wie haben Sie sichergestellt, dass Dokumente aktuell und auffindbar blieben?", "Wo haben Sie bewusst auf Dokumentation verzichtet, um schlank zu bleiben?"],
+          e: ["Klare Kommunikations- und Berichtsmatrix (Wer erhält was, wann, in welchem Format?)", "Geordnete Ablage-, Versionierungs- und Freigaberegeln", "Verhältnismäßigkeit zwischen Nachvollziehbarkeit und Aufwand"],
+          s: ["Viele Projektbeteiligte erzeugten Protokolle, Konzepte, Pläne und Statusberichte.", "Verlässliche „Single Source of Truth“ ohne Dokumenten-Wildwuchs schaffen.", "Ich habe eine klare Ordner- und Namenskonvention eingeführt, Vorlagen für Statusberichte und Protokolle bereitgestellt und feste Berichtszyklen etabliert.", "Jeder fand aktuelle Stände sofort; Entscheidungswege blieben jederzeit revisionssicher nachvollziehbar."]
+        },
+        {
+          id: "4.5.5-3", ce: "4.5.5",
+          q: "Wie haben Sie sichergestellt, dass Projektwissen bei Personenwechseln oder am Projektende nicht verloren geht?",
+          f: ["Gab es in Ihrem Projekt einen Ausfall oder Wechsel einer Schlüsselperson – wie haben Sie das abgefedert?", "Wie wurde die Projektdokumentation archiviert und übergeben?"],
+          e: ["Bewusstes Wissensmanagement während des Projekts (nicht erst in der letzten Woche)", "Strukturierte Übergaben, Stellvertreterregelungen und geordnete Abschlussdokumentation", "Nutzbarkeit der Dokumentation für Betrieb und Folgeprojekte"],
+          s: ["Übergabe an den Betrieb bzw. personeller Wechsel während der Laufzeit.", "Wissensverlust und Einarbeitungsbrüche verhindern.", "Ich habe kritische Ergebnisse laufend dokumentieren lassen, geordnete Übergabetermine mit Checklisten durchgeführt und am Ende ein strukturiertes Abschluss- und Übergabepaket archiviert.", "Reibungslose Weiterarbeit ohne Wissenslücken."]
+        },
+
+        // 4.5.6 Qualität (3)
+        {
+          id: "4.5.6-1", ce: "4.5.6",
+          q: "Wie haben Sie in Ihrem Referenzprojekt Qualität messbar definiert und über die Laufzeit abgesichert?",
+          f: ["Unterscheiden Sie dabei zwischen Produktqualität (Ergebnis) und Prozessqualität (Projektvorgehen).", "Welche konkreten Prüf- und Review-Verfahren haben Sie eingesetzt?"],
+          e: ["Klare Trennung von Ergebnisqualität und Prozessqualität", "Konkrete Qualitätskriterien, Reviews, Tests, Checklisten und Quality Gates", "Vorbeugende Qualitätssicherung statt bloßer Endkontrolle"],
+          s: ["Hohe Anforderungen an Zuverlässigkeit, Fehlerfreiheit oder Regelkonformität der Projektergebnisse.", "Qualität von Beginn an einplanen statt Fehler teuer am Ende zu beheben.", "Ich habe messbare Qualitäts- und Abnahmekriterien definiert, begleitende Reviews, Testphasen und Quality Gates eingeplant und die Einhaltung verfolgt.", "Stabile Ergebnisqualität und reibungslose Endabnahme."]
+        },
+        {
+          id: "4.5.6-2", ce: "4.5.6",
+          q: "Schildern Sie einen konkreten Qualitätsmangel oder ein fehlgeschlagenes Review/Testing in Ihrem Referenzprojekt – wie haben Sie reagiert?",
+          f: ["Wie haben Sie die eigentliche Ursache statt nur das Symptom behoben?", "Welche Auswirkungen hatte das auf Termin und Kosten?"],
+          e: ["Konstruktiver, faktenbasierter Umgang mit Mängeln", "Systematische Ursachenanalyse (z. B. 5-Why, Ishikawa) und strukturierte Nacharbeit", "Transparente Kommunikation der Folgen und Verifikation der Behebung"],
+          s: ["In einer Prüfung bzw. Testphase traten wesentliche Mängel an einem Lieferobjekt auf.", "Mängel nachhaltig beheben und Folgefehler verhindern.", "Ich habe die Mängel priorisiert erfasst, mit den Fachleuten die Grundursache analysiert, Nacharbeiten eingeplant, erneut abnehmen lassen und die Terminauswirkungen transparent berichtet.", "Der Mangel wurde dauerhaft behoben und die Qualitätssicherung für die Folgepakete geschärft."]
+        },
+        {
+          id: "4.5.6-3", ce: "4.5.6",
+          q: "Gab es im Projekt eine Situation, in der Sie Qualität gegen Termin oder Budget abwägen mussten?",
+          f: ["Welche Qualitätsabstriche waren vertretbar, welche absolut nicht?", "Wer hat diese Entscheidung getragen?"],
+          e: ["Sicheres Verständnis des magischen Dreiecks und unverhandelbarer Mindestqualität", "Transparente Entscheidungsvorlage statt heimlicher Qualitätsabsenkung", "Klare Trennung zwischen kritischen Mängeln und später nachrüstbaren Punkten"],
+          s: ["Vor einem fixen Einführungstermin standen noch offene Restmängel und Optimierungswünsche im Raum.", "Verantwortungsvolle Entscheidung über Go-Live oder Verschiebung herbeiführen.", "Ich habe die offenen Punkte nach Kritikalität klassifiziert, Risiken bewertet und dem Auftraggeber eine klare Empfehlung (z. B. Go-Live mit Workaround und Nachbesserungsplan vs. Verschiebung) vorgelegt.", "Fundierte Entscheidung auf Basis transparenter Risiken und verbindlicher Nachbesserung."]
+        },
+
+        // 4.5.7 Kosten und Finanzierung (4)
+        {
+          id: "4.5.7-1", ce: "4.5.7",
+          q: "Wie haben Sie die Projektkosten in Ihrem Referenzprojekt geschätzt und das Budget strukturiert aufgebaut?",
+          f: ["Welche Kostenarten waren enthalten (interne Personal-, Sach-, externe Kosten, Reserven)?", "Wie genau war Ihre initiale Schätzung im Vergleich zum späteren Ist?"],
+          e: ["Nachvollziehbare Ableitung aus PSP/Arbeitspaketen und Ressourcen (Bottom-up/Top-down)", "Berücksichtigung aller relevanten Kostenarten sowie einer begründeten Risikoreserve", "Saubere Trennung von Basisbudget und Reserve/Management-Reserve"],
+          s: ["Aufstellung eines belastbaren Budgets für die Projektfreigabe.", "Realistische, vollständige Kostenbasis ohne versteckte Lücken schaffen.", "Ich habe die Kosten je Arbeitspaket mit den Fachbereichen geschätzt, externe Angebote eingeholt, eine risikobasierte Reserve ausgewiesen und das Gesamtbudget mit Controlling und Auftraggeber abgestimmt.", "Tragfähige Budgetfreigabe und gute Vergleichbarkeit für das laufende Controlling."]
+        },
+        {
+          id: "4.5.7-2", ce: "4.5.7",
+          q: "Wie lief Ihr laufendes Kostencontrolling im Projekt ab – und wie haben Sie auf drohende Budgetabweichungen reagiert?",
+          f: ["Haben Sie neben Ist-Kosten auch den Leistungsfortschritt (z. B. Earned Value / Restkostenprognose EAC) betrachtet?", "Wie früh hätten Sie eine 10-%-Überschreitung bemerkt?"],
+          e: ["Regelmäßiger Soll-Ist-Vergleich inkl. Obligo (bestellte, noch nicht gebuchte Kosten) und Restkostenprognose (ETC/EAC)", "Verbindung von Kosten mit tatsächlichem Leistungsfortschritt (nicht nur Geldabfluss)", "Rechtzeitige Gegenmaßnahmen und transparente Berichterstattung"],
+          s: ["Laufende Steuerung eines Budgets mit internen Aufwänden und externen Rechnungen.", "Budgetabweichungen früh erkennen und aktiv gegensteuern.", "Ich habe monatlich Ist-Kosten, Obligo und Restaufwand je Arbeitspaket mit dem Plan abgeglichen, Abweichungsursachen analysiert und frühzeitig Gegenmaßnahmen bzw. Prognosen berichtet.", "Hohe Kostentransparenz und keine bösen Überraschungen am Projektende."]
+        },
+        {
+          id: "4.5.7-3", ce: "4.5.7",
+          q: "Welche Finanzierungs- und Freigabeprozesse mussten Sie im Projekt einhalten – besonders bei ungeplanten Mehrkosten?",
+          f: ["Was war Ihre eigene Zeichnungs- bzw. Freigabegrenze?", "Wie haben Sie einen konkreten Nachtrag oder Budgetantrag begründet?"],
+          e: ["Kenntnis von Budgetfreigaben, Kostenstellen/PSP-Elementen und Mittelabfluss (Cashflow/Jahresscheiben)", "Klare Einhaltung von Vollmachten und Eskalationsgrenzen", "Wirtschaftlich begründete Anträge bei Mehrbedarf"],
+          s: ["Zusätzliche Anforderungen oder unvorhergesehene Aufwände erforderten eine Budgetanpassung bzw. Reservefreigabe.", "Finanzierung regelkonform und rechtzeitig absichern.", "Ich habe Ursachen, Alternativen und Auswirkungen auf die Wirtschaftlichkeit aufbereitet und vor Beauftragung die formale Freigabe durch Auftraggeber/Lenkungskreis eingeholt.", "Saubere kaufmännische Steuerung ohne ungenehmigte Überschreitungen."]
+        },
+        {
+          id: "4.5.7-4", ce: "4.5.7",
+          q: "Wie haben Sie am Projektende die Nachkalkulation durchgeführt – und welche wirtschaftlichen Erkenntnisse ergaben sich daraus?",
+          f: ["Wo lagen die größten positiven oder negativen Kostenabweichungen?", "Welche Konsequenzen ziehen Sie daraus für die Budgetierung künftiger Projekte?"],
+          e: ["Vollständige Endabrechnung, Schließung von Konten/Bestellungen und Soll-Ist-Auswertung", "Ursachenanalyse der Abweichungen statt bloßer Zahlendarstellung", "Transfer in Kalkulationsgrundlagen für Folgeprojekte"],
+          s: ["Projektabschluss mit finaler Abrechnung aller internen und externen Leistungen.", "Gesamtwirtschaftlichkeit transparent bilanzieren und für künftige Schätzungen nutzbar machen.", "Ich habe gemeinsam mit dem Controlling alle Restbuchungen abgeschlossen, die Soll-Ist-Abweichungen je Arbeitspaket ausgewertet und im Abschlussbericht dokumentiert.", "Klare finanzielle Entlastung und belastbare Erfahrungswerte für Folgeprojekte."]
+        },
+
+        // 4.5.8 Ressourcen (3)
+        {
+          id: "4.5.8-1", ce: "4.5.8",
+          q: "Wie haben Sie den Ressourcenbedarf (Personal, Qualifikationen, Sachmittel) ermittelt und mit der Linie verbindlich abgesichert?",
+          f: ["Wie sind Sie damit umgegangen, wenn zugesagte Kapazitäten im Alltag vom Tagesgeschäft aufgefressen wurden?", "Haben Sie neben der Menge auch benötigte Qualifikationen geplant?"],
+          e: ["Ableitung des Bedarfs aus PSP und Terminplan (Kapazität + Qualifikation + Zeitraum)", "Verbindliche Absprachen mit Linienvorgesetzten statt bloßer Wunschlisten", "Aktives Monitoring der tatsächlichen Verfügbarkeit"],
+          s: ["Projekt benötigte knappe Fachspezialisten, die parallel im Linienbetrieb gebunden waren.", "Realistische Verfügbarkeit planen und langfristig absichern.", "Ich habe den Bedarf zeitlich und fachlich aufgeschlüsselt, frühzeitig mit den Linienverantwortlichen abgestimmt, realistische Verfügbarkeitsgrade (z. B. nicht 100 %) angesetzt und Engpässe sofort zurückgemeldet.", "Verlässliche Kapazitätsbasis; bei Konflikten schufen dokumentierte Zusagen eine klare Eskalationsgrundlage."]
+        },
+        {
+          id: "4.5.8-2", ce: "4.5.8",
+          q: "Schildern Sie einen konkreten Ressourcenengpass oder Ausfall einer Schlüsselperson in Ihrem Referenzprojekt – wie haben Sie ihn gelöst?",
+          f: ["Welche Optionen haben Sie abgewogen (Umplanung, Puffer, Entlastung, Externe, Scope)?", "Welche Auswirkung hatte Ihre Lösung auf das restliche Team?"],
+          e: ["Schnelle Bewertung der Auswirkung auf den kritischen Pfad", "Systematische Ressourcenoptimierung (termintreu vs. kapazitätstreu, Qualifizierung, externe Unterstützung)", "Blick auf Belastungsgrenzen und Fairness im Team"],
+          s: ["Kurzfristiger Ausfall oder Doppelbelegung einer zentralen Fachkraft in einer wichtigen Projektphase.", "Projektfortschritt sichern, ohne das übrige Team zu überlasten.", "Ich habe den kritischen Pfad geprüft, unkritische Pakete verschoben, Aufgaben neu verteilt bzw. temporäre Unterstützung organisiert und die Auswirkungen transparent mit dem Auftraggeber abgestimmt.", "Der Engpass wurde ohne Qualitätsverlust oder Burnout im Team überbrückt."]
+        },
+        {
+          id: "4.5.8-3", ce: "4.5.8",
+          q: "Wie haben Sie Qualifikationslücken im Projektteam erkannt und geschlossen?",
+          f: ["Wie haben Sie die gezielte Entwicklung einzelner Teammitglieder unterstützt?", "Wie haben Sie am Projektende die Rückführung der Mitarbeitenden begleitet?"],
+          e: ["Abgleich zwischen benötigten und vorhandenen Kompetenzen", "Pragmatische Maßnahmen (Schulung, Coaching, Tandems, externe Expertise)", "Wertschätzendes Feedback und geordnete Rückführung am Projektende"],
+          s: ["Für einzelne neue Methoden oder Werkzeuge fehlte im Team zunächst Routine.", "Arbeitsfähigkeit sicherstellen und gleichzeitig Kompetenzen intern aufbauen.", "Ich habe den Schulungsbedarf erhoben, praxisnahe Einweisungen und Tandem-Arbeit organisiert und am Projektende gezieltes Entwicklungsfeedback gegeben.", "Nachhaltiger Know-how-Aufbau im Team und hohe Motivation."]
+        },
+
+        // 4.5.9 Beschaffung (3)
+        {
+          id: "4.5.9-1", ce: "4.5.9",
+          q: "Welche Beschaffungen oder Make-or-Buy-Entscheidungen gab es in Ihrem Referenzprojekt – und wie waren Sie als Projektleitung eingebunden?",
+          f: ["Nach welchen Kriterien wurden externe Partner oder Lieferanten ausgewählt?", "Wie war Ihre Zusammenarbeit mit dem Einkauf bzw. der Rechtsabteilung?"],
+          e: ["Klare Kriterien für Make-or-Buy (Kosten, Know-how, Kapazität, Zeit, Kernkompetenz, Risiko)", "Strukturierter Auswahlprozess (Leistungsbeschreibung, vergleichbare Angebote, Bewertungsmatrix)", "Saubere Rollenverteilung zwischen Projektleitung (fachlich) und Einkauf/Recht (kaufmännisch/vertraglich)"],
+          s: ["Teilleistungen, Software oder Spezialwissen mussten extern beschafft werden (bzw. es wurde bewusst Eigenleistung gewählt).", "Den fachlich und wirtschaftlich besten Partner bzw. die richtige Entscheidung absichern.", "Ich habe gemeinsam mit den Fachbereichen die Leistungsbeschreibung und Bewertungskriterien erstellt, Angebote fachlich verglichen und gemeinsam mit dem Einkauf die Auswahl getroffen.", "Transparente, fundierte Vergabeentscheidung mit klarem Leistungsumfang."]
+        },
+        {
+          id: "4.5.9-2", ce: "4.5.9",
+          q: "Welche Vertragsart (z. B. Werk- vs. Dienstvertrag, Festpreis vs. Aufwand) kam zum Einsatz – und wie haben Sie externe Dienstleister gesteuert?",
+          f: ["Warum passte diese Vertragsart (oder wo erwies sie sich als schwierig)?", "Wie haben Sie Leistung und Fortschritt des Lieferanten konkret überprüft?"],
+          e: ["Sicheres Verständnis der Risikoverteilung je Vertragsart", "Aktive Lieferantensteuerung (Meilensteine, Abnahmen, Leistungskontrolle, regelmäßige Syncs)", "Vermeidung von „Blindflug“ bei Aufwandsverträgen bzw. Nachtragsfallen bei unklaren Festpreisen"],
+          s: ["Einbindung externer Partner für wesentliche Lieferobjekte des Projekts.", "Qualität, Termine und Kosten externer Leistungen sicher im Griff behalten.", "Ich habe klare Lieferobjekte, Abnahmekriterien und regelmäßige Fortschrittsreviews vereinbart, Stunden- bzw. Leistungsnachweise gegen Ergebnisse geprüft und Schnittstellen eng gesteuert.", "Planmäßige Lieferung ohne unkontrollierten Kostenanstieg."]
+        },
+        {
+          id: "4.5.9-3", ce: "4.5.9",
+          q: "Wie sind Sie vorgegangen, als ein Lieferant oder externer Partner eine Leistung verzögert oder nicht wie vereinbart erbracht hat?",
+          f: ["Welche vertraglichen und kommunikativen Mittel haben Sie genutzt?", "Was würden Sie beim nächsten Lieferantenvertrag von Beginn an anders regeln?"],
+          e: ["Frühes, faktenbasiertes Ansprechen statt Abwarten", "Saubere Dokumentation (Mängelrüge, Fristsetzung, Protokolle) unter Einbindung von Einkauf/Recht", "Lösungsorientierte Eskalation bis hin zu Ersatzmaßnahmen/Notfallplan"],
+          s: ["Externer Partner geriet in Verzug oder lieferte unvollständige Qualität.", "Lieferfähigkeit wiederherstellen und Schaden vom Projekt abwenden.", "Ich habe Abweichungen sachlich dokumentiert, verbindliche Maßnahmen- und Aufholpläne mit Fristen vereinbart, ggf. auf Managementebene eskaliert und parallel einen Plan B geprüft.", "Die Leistung wurde nachgebessert bzw. abgesichert; klare SLAs und Zwischenabnahmen sind mein wichtigstes Learning."]
+        },
+
+        // 4.5.10 Planung und Steuerung (4)
+        {
+          id: "4.5.10-1", ce: "4.5.10",
+          q: "Beschreiben Sie Ihren konkreten Regelkreis der Projektplanung und -steuerung im Referenzprojekt: Wie sind Sie von der Baseline zur laufenden Steuerung gekommen?",
+          f: ["Wie oft und in welcher Tiefe haben Sie Soll-Ist-Vergleiche durchgeführt?", "Welche Kennzahlen waren für Sie im Alltag wirklich entscheidend?"],
+          e: ["Durchgängige Planungslogik (Ziele → PSP → Termine → Ressourcen → Kosten → Risiken → Baseline)", "Gelebter Steuerungsregelkreis (Ist erfassen → Soll-Ist → Abweichungsanalyse → Prognose → Maßnahme)", "Pragmatischer Einsatz aussagekräftiger Kennzahlen und Berichte"],
+          s: ["Steuerung eines Projekts mit mehreren parallel laufenden Arbeitspaketen und Abhängigkeiten.", "Jederzeit ein belastbares Lagebild behalten und frühzeitig statt reaktiv steuern.", "Ich habe nach Freigabe der Baseline feste Steuerungszyklen (Wochen-Syncs, monatliches Controlling, Statusberichte) etabliert, Abweichungen mit Ursachen bewertet und konsequent Maßnahmen nachgehalten.", "Kontinuierliche Transparenz für Team und Auftraggeber über die gesamte Laufzeit."]
+        },
+        {
+          id: "4.5.10-2", ce: "4.5.10",
+          q: "Nennen Sie eine konkrete Planabweichung in Ihrem Referenzprojekt und zeigen Sie Schritt für Schritt, wie Ihre Steuerungsmaßnahme gewirkt hat.",
+          f: ["Woran haben Sie gemessen, ob Ihre Maßnahme tatsächlich erfolgreich war?", "Was hätten Sie getan, wenn die Maßnahme nicht gegriffen hätte?"],
+          e: ["Klare Ursachenanalyse statt bloßer Symptombekämpfung", "Verbindliche Maßnahmenplanung (Was, Wer, Bis wann, erwartete Wirkung)", "Systematische Wirksamkeitskontrolle im nächsten Zyklus"],
+          s: ["Soll-Ist-Vergleich zeigte eine deutliche Abweichung bei Leistung, Termin oder Aufwand.", "Das Projekt kontrolliert zurück auf Kurs bringen.", "Ich habe die Hauptursache ermittelt, eine gezielte Korrekturmaßnahme mit klarem Verantwortlichen und Termin definiert und die Wirkung im folgenden Berichtszyklus überprüft.", "Die Abweichung wurde deutlich reduziert bzw. vollständig aufgeholt."]
+        },
+        {
+          id: "4.5.10-3", ce: "4.5.10",
+          q: "Wie haben Sie Phasenübergänge, Meilensteine oder Quality Gates in Ihrem Referenzprojekt gestaltet?",
+          f: ["Gab es ein Gate, das nur unter Auflagen oder gar nicht beim ersten Versuch passiert wurde?", "Wie haben Sie das gemanagt?"],
+          e: ["Meilensteine und Gates als echte Entscheidungs- und Prüfpunkte statt bloßer Kalenderdaten", "Vorab definierte Prüfkriterien und bewusste Go/No-Go-Entscheidung", "Professioneller Umgang mit Auflagen oder Nacharbeit"],
+          s: ["Übergang zwischen zentralen Projektphasen (z. B. Konzept → Umsetzung → Einführung).", "Verhindern, dass unfertige Grundlagen kostspielige Fehler in Folgephasen verursachen.", "Ich habe je Gate konkrete Kriterien festgelegt, die Erfüllung vorab geprüft, eine transparente Gate-Vorlage erstellt und offene Auflagen verbindlich terminiert.", "Hohe Planungssicherheit und bewusste Entscheidungen durch den Lenkungskreis."]
+        },
+        {
+          id: "4.5.10-4", ce: "4.5.10",
+          q: "Wie haben Sie den Projektabschluss gestaltet – inklusive Abnahme, Lessons Learned, Dokumentation und Entlastung?",
+          f: ["Was kam am Projektende eventuell zu kurz – und warum?", "Wie haben Sie dafür gesorgt, dass Ihre Lessons Learned nicht in der Schublade verschwinden?"],
+          e: ["Vollständiger Abschluss (Abnahme, Übergabe, Nachkalkulation, Abschlussbericht, Lessons Learned, Würdigung, formale Entlastung)", "Aktive Nutzung der Erkenntnisse (konkrete Empfehlungen, Weitergabe an PMO/Kollegen)", "Bewusster sozialer Abschluss für das Team"],
+          s: ["Die fachlichen Ergebnisse waren fertiggestellt, das Team wurde bereits für Folgeaufgaben angefragt.", "Einen geordneten, vollständigen Projektabschluss statt eines schleichenden Auslaufens sichern.", "Ich habe den Abschluss frühzeitig eingeplant, Abnahme und Betriebsübergabe protokolliert, einen strukturierten Lessons-Learned-Workshop moderiert, das Team gewürdigt und den Abschlussbericht zur Entlastung vorgelegt.", "Saubere Übergabe, formale Entlastung und verwertbare Erkenntnisse für die Organisation."]
+        },
+
+        // 4.5.11 Chancen und Risiken (4)
+        {
+          id: "4.5.11-1", ce: "4.5.11",
+          q: "Wie haben Sie Risiken in Ihrem Referenzprojekt systematisch identifiziert, bewertet und gesteuert?",
+          f: ["Mit welcher konkreten Methode haben Sie Risiken gefunden und priorisiert?", "Woran haben Sie festgemacht, welche Risiken aktive Maßnahmen erhalten und welche akzeptiert werden?"],
+          e: ["Durchgängiger Risikomanagementprozess (Identifizieren, Bewerten nach Wahrscheinlichkeit × Auswirkung, Strategien, Verantwortliche, Überwachen)", "Unterscheidung präventiver Maßnahmen und Notfallpläne", "Verankerung im laufenden Projektalltag statt einmaliger Excel-Liste"],
+          s: ["Projektstart mit spürbaren technischen, terminlichen oder organisatorischen Unsicherheiten.", "Unliebsame Überraschungen frühzeitig sichtbar und beherrschbar machen.", "Ich habe im Team Risiko-Workshops durchgeführt, Risiken sauber nach Ursache-Ereignis-Auswirkung formuliert, bewertet, konkrete Maßnahmen mit Verantwortlichen hinterlegt und im Statusbericht regelmäßig geprüft.", "Hohe Risikotransparenz und handlungsfähige Steuerung über alle Phasen."]
+        },
+        {
+          id: "4.5.11-2", ce: "4.5.11",
+          q: "Schildern Sie ein konkretes Risiko, das in Ihrem Referenzprojekt tatsächlich eingetreten ist – wie wirksam war Ihre Vorbereitung?",
+          f: ["War das Risiko vorher auf Ihrem Radar oder kam es unerwartet?", "Was haben Sie bei Eintritt konkret getan, und was würden Sie heute anders absichern?"],
+          e: ["Ehrliche Analyse von Treffsicherheit und Reaktionsfähigkeit", "Klare Umsetzung des Notfallplans bzw. schnelle Krisenreaktion", "Lerngewinn für Risikoidentifikation und Reserven"],
+          s: ["Ein relevantes Projektrisiko trat während der Umsetzung tatsächlich ein und wurde zum akuten Problem.", "Auswirkungen auf Zieltermin, Kosten und Qualität schnellstmöglich begrenzen.", "Ich habe umgehend die vorbereitete Notfallmaßnahme aktiviert (bzw. sofort ein Maßnahmenpaket geschnürt), den Auftraggeber informiert und die Restrisiken neu bewertet.", "Der Schaden blieb deutlich unter dem ursprünglichen Worst Case; frühzeitige Vorbereitung zahlte sich aus."]
+        },
+        {
+          id: "4.5.11-3", ce: "4.5.11",
+          q: "Haben Sie im Referenzprojekt auch gezielt Projektchancen identifiziert und genutzt?",
+          f: ["Nennen Sie ein konkretes Beispiel für eine erkannte Chance und Ihre Maßnahme.", "Wie verhindern Sie im Alltag, dass Chancen neben Risiken untergehen?"],
+          e: ["Bewusstsein, dass ICB4 ausdrücklich Chancen UND Risiken betrachtet", "Kenntnis von Chancenstrategien (ausnutzen, fördern, teilen, akzeptieren)", "Konkretes Beispiel für zusätzlichen Nutzen, Zeit- oder Kostenvorteil"],
+          s: ["Während des Projekts ergab sich eine unerwartete Synergie, technische Vereinfachung oder vorgezogene Nutzungsmöglichkeit.", "Den positiven Effekt gezielt heben, ohne Kernziele zu gefährden.", "Ich habe die Chance aktiv bewertet, Aufwand und Risiko geprüft, die Freigabe abgestimmt und die Umsetzung gezielt eingeplant.", "Zusätzlicher Nutzen bzw. Entlastung bei Aufwand/Termin; seitdem frage ich in Risiko-Reviews stets explizit auch nach Chancen."]
+        },
+        {
+          id: "4.5.11-4", ce: "4.5.11",
+          q: "Wie haben Sie sichergestellt, dass Ihr Risikoregister lebendig blieb und nicht nach der Planungsphase veraltete?",
+          f: ["Wie oft wurden Risiken neu bewertet und neue Risiken aufgenommen?", "Wie haben Sie das Team motiviert, Risiken offen anzusprechen?"],
+          e: ["Feste Verankerung im Steuerungsrhythmus (Team-Meetings, Statusbericht, Phasenübergänge)", "Psychologische Sicherheit: Risiken melden wird als Professionalität, nicht als Schwäche gewertet", "Neubewertung von Restrisiken nach umgesetzten Maßnahmen"],
+          s: ["In längeren Projekten verändern sich Risiken laufend und neue tauchen an Schnittstellen auf.", "Risikomanagement als aktives Frühwarnsystem statt Pflichtübung leben.", "Ich habe Top-Risiken als festen Tagesordnungspunkt in Team- und Lenkungskreisrunden verankert, Maßnahmenfortschritt geprüft und offene Risiko-Hinweise ausdrücklich wertgeschätzt.", "Neue Risiken kamen frühzeitig auf den Tisch, solange noch voller Handlungsspielraum bestand."]
+        },
+
+        // 4.5.12 Stakeholder (4)
+        {
+          id: "4.5.12-1", ce: "4.5.12",
+          q: "Wie haben Sie die Stakeholder in Ihrem Referenzprojekt identifiziert, analysiert und in konkrete Maßnahmen überführt?",
+          f: ["Welche Kriterien haben Sie für die Bewertung genutzt (z. B. Einfluss, Einstellung, Betroffenheit)?", "Welche Stakeholder haben Sie anfangs eventuell übersehen?"],
+          e: ["Systematische Umfeld- und Stakeholderanalyse (intern/extern, sachlich/sozial)", "Ableitung differenzierter Strategien (partizipativ, diskursiv, restriktiv) und konkreter Maßnahmen", "Regelmäßige Aktualisierung über die Laufzeit"],
+          s: ["Das Projekt betraf zahlreiche interne und externe Gruppen mit sehr unterschiedlichen Erwartungen.", "Alle relevanten Akteure frühzeitig erkennen und gezielt ansprechen.", "Ich habe mit dem Kernteam eine Stakeholderanalyse erstellt, Einfluss und Einstellung bewertet, konkrete Kommunikations- und Beteiligungsmaßnahmen abgeleitet und diese regelmäßig überprüft.", "Gezielte Einbindung statt Gießkannenprinzip; spätere Überraschungen durch übersehene Gruppen blieben aus."]
+        },
+        {
+          id: "4.5.12-2", ce: "4.5.12",
+          q: "Erzählen Sie von dem kritischsten oder schwierigsten Stakeholder in Ihrem Referenzprojekt – wie haben Sie ihn für das Projekt gewonnen oder eingehegt?",
+          f: ["Welche konkrete Strategie haben Sie gewählt und warum?", "Was hat letztlich den Wendepunkt gebracht?"],
+          e: ["Differenzierter Umgang mit hohem Einfluss und negativer Einstellung (erst Dialog und Verständnis, keine Ignoranz)", "Suche nach konkretem Nutzen oder fairen Kompromissen", "Realistische Einschätzung: nicht jeder wird Fan, aber arbeitsfähige Akzeptanz ist erreichbar"],
+          s: ["Ein einflussreicher Stakeholder stand dem Projekt anfangs offen skeptisch oder ablehnend gegenüber.", "Blockaden verhindern und möglichst eine konstruktive Zusammenarbeit erreichen.", "Ich habe das persönliche Gespräch gesucht, seine konkreten Bedenken ernst genommen, nachvollziehbare Anpassungen geprüft, ihn punktuell in Reviews eingebunden und kontinuierlich transparent informiert.", "Die Haltung wandelte sich von Ablehnung zu sachlicher Kooperation."]
+        },
+        {
+          id: "4.5.12-3", ce: "4.5.12",
+          q: "Wie haben Sie die Zusammenarbeit mit Ihrem Auftraggeber gestaltet – besonders dann, wenn dieser wenig Zeit hatte oder wechselnde Erwartungen äußerte?",
+          f: ["Wie haben Sie sichergestellt, dass der Auftraggeber seine eigene Rolle aktiv wahrnimmt?", "Wie sind Sie vorgegangen, wenn Sie eine Entscheidung dringend brauchten?"],
+          e: ["Aktives „Führen nach oben“ (Managing up): kompakte, entscheidungsreife Kommunikation", "Klare Erwartungen an die Auftraggeberrolle (Sponsoring, Entscheidungen, Rückendeckung)", "Verbindliches Festhalten von Absprachen"],
+          s: ["Zeitlich stark eingebundener Auftraggeber mit hohem Entscheidungsbedarf fürs Projekt.", "Verlässliche Rückendeckung und zügige Entscheidungen sichern.", "Ich habe feste, kurze Jour-Fixes etabliert, Themen strikt nach Entscheidungsbedarf priorisiert, klare Optionen mit Empfehlung vorgelegt und Beschlüsse kurz schriftlich bestätigt.", "Effiziente Zusammenarbeit und schnelle Entscheidungen ohne Verzögerungen."]
+        },
+        {
+          id: "4.5.12-4", ce: "4.5.12",
+          q: "Woran haben Sie während des Projekts erkannt, wie zufrieden die wichtigsten Stakeholder tatsächlich waren?",
+          f: ["Wie haben Sie reagiert, als sich die Stimmung bei einer Gruppe verschlechterte?", "Haben sich Stakeholder-Rollen während des Projekts verändert?"],
+          e: ["Aktives Monitoring (Feedbackgespräche, Beteiligung, Beschwerden, Reviews) statt Annahmen", "Anpassung der Stakeholderanalyse bei personellen oder organisatorischen Wechseln", "Frühe Korrektur bei sinkender Akzeptanz"],
+          s: ["Über eine längere Projektlaufzeit veränderten sich Ansprechpartner und Stimmungen in Fachbereichen.", "Veränderungen früh erkennen und Akzeptanz dauerhaft sichern.", "Ich habe regelmäßig Stimmungsbilder eingeholt, neue Ansprechpartner sofort abgeholt und die Stakeholdermaßnahmen bei Bedarf neu justiert.", "Keine unerwarteten Akzeptanzbrüche zum Projektabschluss."]
+        },
+
+        // 4.5.13 Change und Transformation (3)
+        {
+          id: "4.5.13-1", ce: "4.5.13",
+          q: "Welche Veränderungen für Menschen, Prozesse oder Strukturen brachte Ihr Referenzprojekt mit sich – und wie haben Sie die Veränderungsbereitschaft eingeschätzt?",
+          f: ["Welche Gruppen waren am stärksten betroffen – und welche Ängste oder Verlusterfahrungen gab es?", "Wie früh haben Sie das Thema Change in die Projektplanung aufgenommen?"],
+          e: ["Verständnis, dass Projekte fast immer soziale/organisatorische Veränderung bedeuten", "Betrachtung von Individuum, Team und Organisation (sachlich, emotional, politisch)", "Frühzeitige Integration von Change-Maßnahmen in den Projektplan"],
+          s: ["Das Projektergebnis veränderte etablierte Arbeitsabläufe, Rollen oder Werkzeuge spürbar.", "Veränderungsbereitschaft realistisch einschätzen und Akzeptanz systematisch aufbauen.", "Ich habe frühzeitig analysiert, welche Gruppen was konkret ändern müssen, potenzielle Bedenken erfasst und Kommunikation, Beteiligung sowie Qualifizierung fest im Plan verankert.", "Die Veränderung wurde nicht als nachträgliche Pflichtübung, sondern als Kernbestandteil des Projekts gesteuert."]
+        },
+        {
+          id: "4.5.13-2", ce: "4.5.13",
+          q: "Schildern Sie eine konkrete Situation mit aktivem oder passivem Widerstand gegen die Veränderung – wie sind Sie damit umgegangen?",
+          f: ["Welche berechtigte Botschaft steckte möglicherweise hinter dem Widerstand?", "Was haben Sie konkret verändert, statt den Widerstand einfach „wegzudrücken“?"],
+          e: ["Widerstand als normales Signal und Informationsquelle begreifen (nicht persönlich nehmen)", "Erkennen sowohl aktiver als auch passiver Formen (Schweigen, Verzögern)", "Dialog, Beteiligung (z. B. Key User/Multiplikatoren), ehrliche Information und Quick Wins"],
+          s: ["Betroffene Mitarbeitende äußerten deutliche Skepsis oder nutzten neue Abläufe zunächst nur zögerlich.", "Ursachen verstehen, Ängste abbauen und echte Mitarbeit ermöglichen.", "Ich habe das direkte Gespräch mit Betroffenen gesucht, berechtigte Praxishinweise in die Lösung aufgenommen, Multiplikatoren eingebunden und frühe sichtbare Verbesserungen (Quick Wins) gezeigt.", "Der Widerstand ließ spürbar nach und frühere Skeptiker wurden teils zu konstruktiven Unterstützern."]
+        },
+        {
+          id: "4.5.13-3", ce: "4.5.13",
+          q: "Wie haben Sie sichergestellt, dass die neuen Arbeitsweisen oder Lösungen nach Projektende nicht wieder in alte Muster zurückfallen?",
+          f: ["Welche Rolle spielten Führungskräfte der Linie bei der Verankerung?", "Welche konkreten Maßnahmen (Schulung, Support, Anpassung von Prozessen) haben am meisten gewirkt?"],
+          e: ["Verständnis für nachhaltige Verankerung (z. B. Refreeze / Kotter-Schritte 7–8)", "Einbindung der Linienführungskräfte als Vorbilder und Verantwortliche", "Begleitmaßnahmen nach Go-Live (Support, Feedbackschleifen, Abbau alter Parallelwege)"],
+          s: ["Nach Einführung der neuen Lösung bestand das Risiko, dass Mitarbeitende unter Alltagsdruck in alte Routinen zurückkehren.", "Die Veränderung dauerhaft im Regelbetrieb verankern.", "Ich habe Führungskräfte aktiv eingebunden, praxisnahe Schulungen und eine begleitete Anlaufphase (Hypercare) organisiert, Feedback zügig eingearbeitet und alte Parallelprozesse geordnet abgelöst.", "Die neue Arbeitsweise etablierte sich stabil als neuer Standard."]
+        }
+      ];
+
+      const Q_MAP = {};
+      QUESTIONS.forEach(q => { Q_MAP[q.id] = q; });
+
+      /* ========================
+         STATE & PERSISTENCE
+         ======================== */
+      // state[qId] = { st: "ok" | "pr" | "", note: "..." }
+      let state = {};
+      try {
+        const raw = lget(STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed && typeof parsed === "object") state = parsed;
+        }
+      } catch (e) {
+        state = {};
+      }
+
+      function saveState() {
+        return lset(STORAGE_KEY, JSON.stringify(state));
+      }
+
+      function getEntry(id) {
+        const e = state[id];
+        return {
+          st: e && (e.st === "ok" || e.st === "pr") ? e.st : "",
+          note: e && typeof e.note === "string" ? e.note : ""
+        };
+      }
+
+      function setStatus(id, st) {
+        const cur = getEntry(id);
+        const nextSt = cur.st === st ? "" : st;
+        if (!nextSt && !cur.note.trim()) {
+          delete state[id];
+        } else {
+          state[id] = { st: nextSt, note: cur.note };
+        }
+        saveState();
+        updateProgress();
+      }
+
+      function setNote(id, note) {
+        const cur = getEntry(id);
+        if (!cur.st && !note.trim()) {
+          delete state[id];
+        } else {
+          state[id] = { st: cur.st, note: note };
+        }
+        const ok = saveState();
+        updateProgress();
+        return ok;
+      }
+
+      /* ========================
+         HELPERS
+         ======================== */
+      const $ = id => document.getElementById(id);
+      const esc = s => String(s)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+
+      function toB64(str) {
+        const bytes = new TextEncoder().encode(str);
+        let bin = "";
+        for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+        return btoa(bin);
+      }
+
+      function fromB64(b64) {
+        const bin = atob(b64.trim());
+        const bytes = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+        return new TextDecoder().decode(bytes);
+      }
+
+      function fmtTime(sec) {
+        const s = Math.max(0, sec);
+        const m = Math.floor(s / 60);
+        const r = s % 60;
+        return String(m).padStart(2, "0") + ":" + String(r).padStart(2, "0");
+      }
+
+      function playBeep() {
+        if (!$("sim-sound").checked) return;
+        try {
+          const Ctx = window.AudioContext || window.webkitAudioContext;
+          if (!Ctx) return;
+          const ctx = new Ctx();
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = "sine";
+          osc.frequency.value = 660;
+          gain.gain.value = 0.08;
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start();
+          osc.stop(ctx.currentTime + 0.35);
+          setTimeout(() => { try { ctx.close(); } catch (e) {} }, 500);
+        } catch (e) {}
+      }
+
+      /* ========================
+         PROGRESS OVERVIEW
+         ======================== */
+      function updateProgress() {
+        const total = QUESTIONS.length;
+        let ok = 0, pr = 0, noted = 0;
+        QUESTIONS.forEach(q => {
+          const e = getEntry(q.id);
+          if (e.st === "ok") ok++;
+          else if (e.st === "pr") pr++;
+          if (e.note.trim()) noted++;
+        });
+        const pct = total ? Math.round((ok / total) * 100) : 0;
+        const pctPr = total ? Math.round((pr / total) * 100) : 0;
+
+        $("prog-title").textContent = `${ok} von ${total} sitzt (${pct} %)`;
+        $("prog-sub").textContent = `Üben: ${pr} · Offen: ${total - ok - pr} · Mit Notiz: ${noted}`;
+        $("prog-ok").style.width = pct + "%";
+        $("prog-warn").style.width = pctPr + "%";
+        $("tab-qcount").textContent = String(total);
+
+        const areas = ["Perspective", "People", "Practice"];
+        $("area-stats").innerHTML = areas.map(a => {
+          const qs = QUESTIONS.filter(q => CE_MAP[q.ce].area === a);
+          const aOk = qs.filter(q => getEntry(q.id).st === "ok").length;
+          return `<span class="pill acc">${a}: ${aOk} / ${qs.length} sitzt</span>`;
+        }).join("");
+
+        let rows = `<tr><th>CE</th><th>Kompetenzelement</th><th class="n">Fragen</th><th class="n">Sitzt</th><th class="n">Üben</th><th class="n">Notiz</th></tr>`;
+        CES.forEach(c => {
+          const qs = QUESTIONS.filter(q => q.ce === c[0]);
+          const cOk = qs.filter(q => getEntry(q.id).st === "ok").length;
+          const cPr = qs.filter(q => getEntry(q.id).st === "pr").length;
+          const cNo = qs.filter(q => getEntry(q.id).note.trim()).length;
+          rows += `<tr><td>${c[0]}</td><td>${esc(c[1])}</td><td class="n">${qs.length}</td><td class="n">${cOk}</td><td class="n">${cPr}</td><td class="n">${cNo}</td></tr>`;
+        });
+        $("ce-table").innerHTML = rows;
+      }
+
+      /* ========================
+         TABS
+         ======================== */
+      let activeTab = "vorgehen";
+      function switchTab(tab) {
+        activeTab = tab;
+        document.querySelectorAll(".tabs button").forEach(b => {
+          const on = b.dataset.tab === tab;
+          b.classList.toggle("on", on);
+          b.setAttribute("aria-selected", on ? "true" : "false");
+        });
+        document.querySelectorAll(".panel").forEach(p => {
+          p.classList.toggle("on", p.id === "panel-" + tab);
+        });
+        if (tab === "katalog") renderCatalog();
+        if (tab === "sim") {
+          updateSimPoolInfo();
+          if (!simCurrent) nextSimQuestion();
+          else renderSim();
+        }
+      }
+
+      document.querySelectorAll(".tabs button").forEach(b => {
+        b.addEventListener("click", () => switchTab(b.dataset.tab));
+      });
+      $("go-katalog").addEventListener("click", () => switchTab("katalog"));
+      $("go-sim").addEventListener("click", () => switchTab("sim"));
+
+      /* ========================
+         KATALOG RENDERING
+         ======================== */
+      function populateCeSelects() {
+        const ceOpts = [`<option value="all">Alle 28 Kompetenzelemente</option>`].concat(
+          CES.map(c => {
+            const cnt = QUESTIONS.filter(q => q.ce === c[0]).length;
+            return `<option value="${c[0]}">${c[0]} ${esc(c[1])} (${cnt})</option>`;
+          })
+        );
+        $("f-ce").innerHTML = ceOpts.join("");
+
+        const simOpts = [
+          `<option value="all">Alle Bereiche (28 CE · ${QUESTIONS.length} Fragen)</option>`,
+          `<option value="Perspective">Perspective (4.3)</option>`,
+          `<option value="People">People (4.4)</option>`,
+          `<option value="Practice">Practice (4.5)</option>`
+        ].concat(CES.map(c => `<option value="${c[0]}">${c[0]} ${esc(c[1])}</option>`));
+        $("sim-area").innerHTML = simOpts.join("");
+      }
+
+      function renderGuideHtml(q) {
+        const starLabels = [
+          ["S – Situation", q.s[0]],
+          ["T – Aufgabe (Task)", q.s[1]],
+          ["A – Eigene Handlung (Action, Ich-Form)", q.s[2]],
+          ["R – Ergebnis & Reflexion (Result)", q.s[3]]
+        ];
+        return `
+          <div class="guide-in">
+            <h4>Worauf die Assessoren achten</h4>
+            <ul>${q.e.map(x => `<li>${esc(x)}</li>`).join("")}</ul>
+            <h4>Antwortgerüst nach STAR</h4>
+            <div class="star-grid">
+              ${starLabels.map(sl => `<div class="star-item"><b>${esc(sl[0])}</b>${esc(sl[1])}</div>`).join("")}
+            </div>
+          </div>`;
+      }
+
+      function matchesCatalog(q) {
+        const fArea = $("f-area").value;
+        const fCe = $("f-ce").value;
+        const fStatus = $("f-status").value;
+        const term = $("f-search").value.trim().toLowerCase();
+        const ce = CE_MAP[q.ce];
+        const e = getEntry(q.id);
+
+        if (fArea !== "all" && ce.area !== fArea) return false;
+        if (fCe !== "all" && q.ce !== fCe) return false;
+        if (fStatus === "ok" && e.st !== "ok") return false;
+        if (fStatus === "pr" && e.st !== "pr") return false;
+        if (fStatus === "open" && e.st !== "") return false;
+        if (fStatus === "noted" && !e.note.trim()) return false;
+
+        if (term) {
+          const hay = [q.ce, ce.name, ce.area, q.q, q.f.join(" "), q.e.join(" "), e.note].join(" ").toLowerCase();
+          if (!hay.includes(term)) return false;
+        }
+        return true;
+      }
+
+      const openGroupState = {};
+      let allExpandedDefault = true;
+
+      function renderCatalog() {
+        const filtered = QUESTIONS.filter(matchesCatalog);
+        $("kat-count").textContent = `${filtered.length} von ${QUESTIONS.length} Fragen angezeigt`;
+
+        if (!filtered.length) {
+          $("kat-list").innerHTML = `<div class="card"><p style="margin:0;">Keine Fragen für diese Filterauswahl gefunden. Passe Filter oder Suchbegriff an.</p></div>`;
+          return;
+        }
+
+        // Gruppieren nach CE in Reihenfolge von CES
+        const byCe = {};
+        filtered.forEach(q => {
+          if (!byCe[q.ce]) byCe[q.ce] = [];
+          byCe[q.ce].push(q);
+        });
+
+        let html = "";
+        CES.forEach(c => {
+          const list = byCe[c[0]];
+          if (!list || !list.length) return;
+          const cOk = list.filter(q => getEntry(q.id).st === "ok").length;
+          const cPr = list.filter(q => getEntry(q.id).st === "pr").length;
+          const isOpen = openGroupState[c[0]] !== undefined ? openGroupState[c[0]] : allExpandedDefault;
+
+          html += `<details class="ce-group" data-ce="${c[0]}" ${isOpen ? "open" : ""}>`;
+          html += `<summary>
+            <span class="ce-title">
+              <span class="pill acc">${esc(c[2])}</span>
+              <span>${c[0]} ${esc(c[1])}</span>
+            </span>
+            <span class="row" style="gap:6px;">
+              <span class="pill ok">${cOk}/${list.length} sitzt</span>
+              ${cPr ? `<span class="pill warn">${cPr} üben</span>` : ""}
+            </span>
+          </summary><div class="ce-body">`;
+
+          list.forEach(q => {
+            const e = getEntry(q.id);
+            const cls = e.st === "ok" ? "st-ok" : e.st === "pr" ? "st-pr" : "";
+            html += `<article class="qcard ${cls}" data-qid="${q.id}">
+              <div class="row between">
+                <span class="mut">${q.id} · ${esc(c[1])}</span>
+                <div class="row" style="gap:6px;">
+                  <button type="button" class="sm ok-btn ${e.st === "ok" ? "on" : ""}" data-act="ok" data-id="${q.id}">Sitzt</button>
+                  <button type="button" class="sm warn-btn ${e.st === "pr" ? "on" : ""}" data-act="pr" data-id="${q.id}">Üben</button>
+                </div>
+              </div>
+              <div class="q-text">${esc(q.q)}</div>
+              <div class="followups">
+                <strong>Typische kritische Nachfragen</strong>
+                <ul>${q.f.map(x => `<li>${esc(x)}</li>`).join("")}</ul>
+              </div>
+              <details class="guide">
+                <summary>Worauf die Assessoren achten &amp; STAR-Antwortgerüst</summary>
+                ${renderGuideHtml(q)}
+              </details>
+              <div class="note-wrap">
+                <div class="note-head">
+                  <label for="note-${q.id}">Meine Antwort (Stichpunkte zu meinem Projekt)</label>
+                  <span class="save-ind" id="ind-${q.id}">Gespeichert</span>
+                </div>
+                <textarea id="note-${q.id}" data-note="${q.id}" placeholder="Eigene Stichpunkte zu deinem Referenzprojekt (S / T / A in Ich-Form / R &amp; Reflexion) …">${esc(e.note)}</textarea>
+              </div>
+            </article>`;
+          });
+          html += `</div></details>`;
+        });
+
+        $("kat-list").innerHTML = html;
+      }
+
+      // Event Delegation für Katalog (performant & ohne Verlust beim Tippen)
+      const saveTimers = {};
+      $("kat-list").addEventListener("click", ev => {
+        const btn = ev.target.closest("button[data-act]");
+        if (!btn) return;
+        const id = btn.dataset.id;
+        const act = btn.dataset.act;
+        setStatus(id, act);
+
+        // Nur Karte & Gruppenzähler aktualisieren statt komplettes DOM neu zu zeichnen (erhält Scroll/Focus)
+        const card = btn.closest(".qcard");
+        const e = getEntry(id);
+        card.classList.toggle("st-ok", e.st === "ok");
+        card.classList.toggle("st-pr", e.st === "pr");
+        card.querySelector('button[data-act="ok"]').classList.toggle("on", e.st === "ok");
+        card.querySelector('button[data-act="pr"]').classList.toggle("on", e.st === "pr");
+
+        const grp = card.closest(".ce-group");
+        if (grp) {
+          const ceId = grp.dataset.ce;
+          const cards = grp.querySelectorAll(".qcard");
+          let gOk = 0, gPr = 0;
+          cards.forEach(c => {
+            const st = getEntry(c.dataset.qid).st;
+            if (st === "ok") gOk++;
+            else if (st === "pr") gPr++;
+          });
+          const summaryRight = grp.querySelector("summary .row");
+          if (summaryRight) {
+            summaryRight.innerHTML = `<span class="pill ok">${gOk}/${cards.length} sitzt</span>${gPr ? `<span class="pill warn">${gPr} üben</span>` : ""}`;
+          }
+          // Wenn Statusfilter aktiv ist und Eintrag nicht mehr passt, nur Hinweis oder sanft belassen bis nächster Filterwechsel
+          void ceId;
+        }
+      });
+
+      $("kat-list").addEventListener("toggle", ev => {
+        const d = ev.target;
+        if (d.classList && d.classList.contains("ce-group")) {
+          openGroupState[d.dataset.ce] = d.open;
+        }
+      }, true);
+
+      function flashSaved(el, ok) {
+        if (!el) return;
+        el.textContent = ok ? "Gespeichert" : "Nur im RAM (Backup nutzen)";
+        el.style.color = ok ? "var(--ok)" : "var(--warn)";
+        el.classList.add("show");
+        clearTimeout(el._t);
+        el._t = setTimeout(() => el.classList.remove("show"), 1600);
+      }
+
+      $("kat-list").addEventListener("input", ev => {
+        const ta = ev.target.closest("textarea[data-note]");
+        if (!ta) return;
+        const id = ta.dataset.note;
+        clearTimeout(saveTimers[id]);
+        saveTimers[id] = setTimeout(() => {
+          const ok = setNote(id, ta.value);
+          flashSaved($("ind-" + id), ok);
+        }, 250);
+      });
+
+      $("kat-list").addEventListener("blur", ev => {
+        const ta = ev.target.closest("textarea[data-note]");
+        if (!ta) return;
+        const id = ta.dataset.note;
+        clearTimeout(saveTimers[id]);
+        const ok = setNote(id, ta.value);
+        flashSaved($("ind-" + id), ok);
+      }, true);
+
+      $("f-area").addEventListener("change", () => {
+        $("f-ce").value = "all";
+        renderCatalog();
+      });
+      $("f-ce").addEventListener("change", () => {
+        if ($("f-ce").value !== "all") {
+          $("f-area").value = CE_MAP[$("f-ce").value].area;
+        }
+        renderCatalog();
+      });
+      $("f-status").addEventListener("change", renderCatalog);
+      let searchTimer = null;
+      $("f-search").addEventListener("input", () => {
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(renderCatalog, 150);
+      });
+
+      $("btn-expand").addEventListener("click", () => {
+        allExpandedDefault = true;
+        document.querySelectorAll(".ce-group").forEach(d => {
+          d.open = true;
+          openGroupState[d.dataset.ce] = true;
+        });
+      });
+      $("btn-collapse").addEventListener("click", () => {
+        allExpandedDefault = false;
+        document.querySelectorAll(".ce-group").forEach(d => {
+          d.open = false;
+          openGroupState[d.dataset.ce] = false;
+        });
+      });
+
+      /* ========================
+         SIMULATION (2 MINUTEN)
+         ======================== */
+      const SIM_DURATION = 120;
+      let simCurrent = null;
+      let simRevealed = false;
+      let simRemaining = SIM_DURATION;
+      let simRunning = false;
+      let simInterval = null;
+      let simSeen = new Set();
+      let simCount = 0;
+      let simOkCount = 0;
+
+      function getSimPool() {
+        const areaOrCe = $("sim-area").value;
+        const onlyPr = $("sim-only-pr").checked;
+        return QUESTIONS.filter(q => {
+          const ce = CE_MAP[q.ce];
+          if (areaOrCe !== "all") {
+            if (areaOrCe === "Perspective" || areaOrCe === "People" || areaOrCe === "Practice") {
+              if (ce.area !== areaOrCe) return false;
+            } else if (q.ce !== areaOrCe) {
+              return false;
+            }
+          }
+          if (onlyPr && getEntry(q.id).st !== "pr") return false;
+          return true;
+        });
+      }
+
+      function updateSimPoolInfo() {
+        const pool = getSimPool();
+        $("sim-pool-info").textContent = `Pool: ${pool.length} ${pool.length === 1 ? "Frage" : "Fragen"}`;
+        $("sim-session-info").textContent = `Runde: ${simCount} geübt · ${simOkCount} sitzt`;
+      }
+
+      function stopSimTimer() {
+        if (simInterval) {
+          clearInterval(simInterval);
+          simInterval = null;
+        }
+        simRunning = false;
+      }
+
+      function resetSimTimer() {
+        stopSimTimer();
+        simRemaining = SIM_DURATION;
+        updateTimerDom();
+      }
+
+      function toggleSimTimer() {
+        if (simRunning) {
+          stopSimTimer();
+          updateTimerDom();
+          return;
+        }
+        if (simRemaining <= 0) simRemaining = SIM_DURATION;
+        simRunning = true;
+        updateTimerDom();
+        simInterval = setInterval(() => {
+          simRemaining--;
+          if (simRemaining <= 0) {
+            simRemaining = 0;
+            stopSimTimer();
+            playBeep();
+          }
+          updateTimerDom();
+        }, 1000);
+      }
+
+      function updateTimerDom() {
+        const v = $("sim-timer-val");
+        const b = $("sim-timer-bar");
+        const btn = $("sim-timer-toggle");
+        const hint = $("sim-timer-hint");
+        if (!v) return;
+
+        v.textContent = fmtTime(simRemaining);
+        const pct = Math.max(0, Math.min(100, (simRemaining / SIM_DURATION) * 100));
+        b.style.width = pct + "%";
+
+        const isDone = simRemaining === 0;
+        const isWarn = !isDone && simRemaining <= 30;
+        v.classList.toggle("warn", isWarn);
+        v.classList.toggle("done", isDone);
+        b.classList.toggle("warn", isWarn);
+        b.classList.toggle("done", isDone);
+
+        btn.textContent = simRunning ? "Pause" : (simRemaining < SIM_DURATION && simRemaining > 0 ? "Weiter" : "Timer starten (2:00)");
+        if (isDone) hint.textContent = "Zeit abgelaufen – komm kurz zum Fazit und decke den Erwartungshorizont auf.";
+        else if (isWarn) hint.textContent = "Noch unter 30 Sekunden – jetzt zum Ergebnis & Fazit (R) kommen!";
+        else if (simRunning) hint.textContent = "Antworte laut in der Ich-Form nach STAR (Situation · Task · Action · Result).";
+        else hint.textContent = "Starte den Timer und antworte laut – wie im echten Prüfungsinterview.";
+      }
+
+      function nextSimQuestion() {
+        stopSimTimer();
+        simRemaining = SIM_DURATION;
+        simRevealed = false;
+        const pool = getSimPool();
+        updateSimPoolInfo();
+
+        if (!pool.length) {
+          simCurrent = null;
+          renderSim();
+          return;
+        }
+
+        let candidates = pool.filter(q => !simSeen.has(q.id));
+        if (!candidates.length) {
+          simSeen.clear();
+          candidates = pool.filter(q => !simCurrent || q.id !== simCurrent.id || pool.length === 1);
+        }
+        const pick = candidates[Math.floor(Math.random() * candidates.length)];
+        simCurrent = pick;
+        simSeen.add(pick.id);
+        renderSim();
+      }
+
+      function renderSim() {
+        updateSimPoolInfo();
+        const stage = $("sim-stage");
+        if (!simCurrent) {
+          const onlyPr = $("sim-only-pr").checked;
+          stage.innerHTML = `<p style="margin:0 0 10px;"><strong>Keine passenden Fragen im Pool.</strong></p>
+            <p class="mut" style="margin:0 0 12px;">${onlyPr
+              ? "Du hast aktuell noch keine Fragen in dieser Auswahl mit „Üben“ markiert. Schalte „Nur ‚Üben‘“ aus oder markiere zunächst Fragen im Katalog."
+              : "Wähle einen anderen Kompetenzbereich."}</p>
+            ${onlyPr ? `<button class="primary" id="sim-clear-pr">Filter „Nur ‚Üben‘“ ausschalten</button>` : ""}`;
+          const clrBtn = $("sim-clear-pr");
+          if (clrBtn) {
+            clrBtn.addEventListener("click", () => {
+              $("sim-only-pr").checked = false;
+              nextSimQuestion();
+            });
+          }
+          return;
+        }
+
+        const q = simCurrent;
+        const ce = CE_MAP[q.ce];
+        const e = getEntry(q.id);
+
+        stage.innerHTML = `
+          <div class="row between">
+            <div class="row" style="gap:6px;">
+              <span class="pill acc">${esc(ce.area)}</span>
+              <span class="pill">${q.ce} ${esc(ce.name)}</span>
+            </div>
+            ${e.st === "ok" ? `<span class="pill ok">Aktuell: Sitzt</span>` : e.st === "pr" ? `<span class="pill warn">Aktuell: Üben</span>` : `<span class="pill">Noch nicht bewertet</span>`}
+          </div>
+
+          <div class="q-text" style="font-size:19px;margin:14px 0 10px;">${esc(q.q)}</div>
+
+          <div class="timer-box">
+            <div class="timer-val" id="sim-timer-val">${fmtTime(simRemaining)}</div>
+            <div class="timer-bar"><div id="sim-timer-bar" style="width:${(simRemaining / SIM_DURATION) * 100}%"></div></div>
+            <div class="mut" id="sim-timer-hint" style="margin-bottom:10px;"></div>
+            <div class="row" style="justify-content:center;">
+              <button class="primary" id="sim-timer-toggle">Timer starten (2:00)</button>
+              <button id="sim-timer-reset">Zurücksetzen</button>
+            </div>
+          </div>
+
+          ${!simRevealed ? `
+            <div class="row between" style="margin-top:12px;">
+              <button class="primary" id="sim-reveal">Erwartungshorizont &amp; STAR-Gerüst anzeigen</button>
+              <button id="sim-skip">Andere Zufallsfrage →</button>
+            </div>
+          ` : `
+            <div class="followups">
+              <strong>Mögliche kritische Nachfragen der Assessoren</strong>
+              <ul>${q.f.map(x => `<li>${esc(x)}</li>`).join("")}</ul>
+            </div>
+            <div style="border:1px solid var(--bd);border-radius:10px;background:var(--bg);margin:10px 0;">
+              ${renderGuideHtml(q)}
+            </div>
+            <div class="note-wrap">
+              <div class="note-head">
+                <label for="sim-note">Meine Antwort (Stichpunkte zu meinem Projekt)</label>
+                <span class="save-ind" id="sim-note-ind">Gespeichert</span>
+              </div>
+              <textarea id="sim-note" placeholder="Notizen direkt nach dem Üben ergänzen …">${esc(e.note)}</textarea>
+            </div>
+            <div class="row between" style="margin-top:14px;padding-top:12px;border-top:1px solid var(--bd);">
+              <div class="row">
+                <span class="mut" style="font-weight:600;">Selbstbewertung:</span>
+                <button class="ok-btn ${e.st === "ok" ? "on" : ""}" id="sim-mark-ok">Sitzt</button>
+                <button class="warn-btn ${e.st === "pr" ? "on" : ""}" id="sim-mark-pr">Üben</button>
+              </div>
+              <button class="primary" id="sim-next">Nächste Zufallsfrage →</button>
+            </div>
+          `}
+        `;
+
+        updateTimerDom();
+        $("sim-timer-toggle").addEventListener("click", toggleSimTimer);
+        $("sim-timer-reset").addEventListener("click", resetSimTimer);
+
+        if (!simRevealed) {
+          $("sim-reveal").addEventListener("click", () => {
+            stopSimTimer();
+            simRevealed = true;
+            renderSim();
+          });
+          $("sim-skip").addEventListener("click", nextSimQuestion);
+        } else {
+          const ta = $("sim-note");
+          let simSaveT = null;
+          ta.addEventListener("input", () => {
+            clearTimeout(simSaveT);
+            simSaveT = setTimeout(() => {
+              const ok = setNote(q.id, ta.value);
+              flashSaved($("sim-note-ind"), ok);
+            }, 250);
+          });
+          ta.addEventListener("blur", () => {
+            clearTimeout(simSaveT);
+            const ok = setNote(q.id, ta.value);
+            flashSaved($("sim-note-ind"), ok);
+          });
+
+          $("sim-mark-ok").addEventListener("click", () => {
+            const wasOk = getEntry(q.id).st === "ok";
+            if (!wasOk) {
+              setStatus(q.id, "ok");
+              simCount++;
+              simOkCount++;
+            }
+            nextSimQuestion();
+          });
+          $("sim-mark-pr").addEventListener("click", () => {
+            const wasPr = getEntry(q.id).st === "pr";
+            if (!wasPr) {
+              setStatus(q.id, "pr");
+              simCount++;
+            }
+            nextSimQuestion();
+          });
+          $("sim-next").addEventListener("click", nextSimQuestion);
+        }
+      }
+
+      $("sim-area").addEventListener("change", () => {
+        simSeen.clear();
+        nextSimQuestion();
+      });
+      $("sim-only-pr").addEventListener("change", () => {
+        simSeen.clear();
+        nextSimQuestion();
+      });
+
+      /* ========================
+         EXPORT / IMPORT
+         ======================== */
+      function setBackupMsg(text, isOk) {
+        const el = $("backup-msg");
+        el.textContent = text;
+        el.className = "msg " + (isOk ? "ok" : "bad");
+      }
+
+      function buildExportPayload() {
+        return {
+          app: "ipma-level-c-interview",
+          version: 1,
+          exportedAt: new Date().toISOString(),
+          data: state
+        };
+      }
+
+      function downloadFile(filename, content, mime) {
+        const blob = new Blob([content], { type: mime });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => {
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        }, 200);
+      }
+
+      $("ex-code").addEventListener("click", () => {
+        try {
+          const code = toB64(JSON.stringify(buildExportPayload()));
+          $("code-box").value = code;
+          $("code-box").select();
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(code).then(
+              () => setBackupMsg("Backup-Code erzeugt und in die Zwischenablage kopiert.", true),
+              () => setBackupMsg("Backup-Code erzeugt (bitte manuell aus dem Feld kopieren).", true)
+            );
+          } else {
+            setBackupMsg("Backup-Code erzeugt (bitte aus dem Feld kopieren).", true);
+          }
+        } catch (e) {
+          setBackupMsg("Fehler beim Erzeugen des Backup-Codes.", false);
+        }
+      });
+
+      $("ex-json").addEventListener("click", () => {
+        const stamp = new Date().toISOString().slice(0, 10);
+        const json = JSON.stringify(buildExportPayload(), null, 2);
+        downloadFile(`ipma-c-interview-backup-${stamp}.json`, json, "application/json;charset=utf-8");
+        setBackupMsg("Backup-Datei (.json) wurde heruntergeladen.", true);
+      });
+
+      $("ex-txt").addEventListener("click", () => {
+        const stamp = new Date().toISOString().slice(0, 10);
+        const lines = [
+          "IPMA Level C – Interview-Vorbereitung (Eigene Antworten)",
+          "Exportiert am: " + new Date().toLocaleString("de-DE"),
+          "================================================================",
+          ""
+        ];
+        let countNoted = 0;
+        CES.forEach(c => {
+          const qs = QUESTIONS.filter(q => q.ce === c[0]);
+          const hasAny = qs.some(q => {
+            const e = getEntry(q.id);
+            return e.st || e.note.trim();
+          });
+          if (!hasAny) return;
+          lines.push(`[${c[2]}] ${c[0]} ${c[1]}`);
+          lines.push("----------------------------------------------------------------");
+          qs.forEach(q => {
+            const e = getEntry(q.id);
+            if (!e.st && !e.note.trim()) return;
+            if (e.note.trim()) countNoted++;
+            const stLabel = e.st === "ok" ? "SITZT" : e.st === "pr" ? "ÜBEN" : "OFFEN";
+            lines.push(`(${q.id}) [${stLabel}] ${q.q}`);
+            if (e.note.trim()) {
+              lines.push("Meine Stichpunkte:");
+              lines.push(e.note.trim());
+            } else {
+              lines.push("(Noch keine Stichpunkte hinterlegt)");
+            }
+            lines.push("");
+          });
+        });
+
+        if (lines.length === 4) {
+          lines.push("Noch keine Antworten oder Bewertungen eingetragen.");
+          lines.push("");
+        }
+
+        lines.push("================================================================");
+        lines.push("WIEDERHERSTELLUNGS-CODE (Base64-JSON, für Re-Import im Trainer):");
+        lines.push(toB64(JSON.stringify(buildExportPayload())));
+        lines.push("");
+
+        downloadFile(`ipma-c-interview-antworten-${stamp}.txt`, lines.join("\r\n"), "text/plain;charset=utf-8");
+        setBackupMsg(`Textdatei heruntergeladen (${countNoted} beantwortete Fragen enthalten, inkl. Backup-Code am Dateiende).`, true);
+      });
+
+      function parseImportText(raw) {
+        let txt = (raw || "").trim();
+        if (!txt) throw new Error("Leere Eingabe.");
+
+        // Falls komplette .txt-Exportdatei eingefügt wurde, den Base64-Code am Ende extrahieren
+        const marker = "WIEDERHERSTELLUNGS-CODE";
+        const idx = txt.indexOf(marker);
+        if (idx !== -1) {
+          const after = txt.slice(idx).split(/\r?\n/).slice(1).join("").trim();
+          if (after) txt = after;
+        }
+
+        let obj = null;
+        if (txt.startsWith("{")) {
+          obj = JSON.parse(txt);
+        } else {
+          obj = JSON.parse(fromB64(txt));
+        }
+
+        const data = (obj && typeof obj === "object" && obj.data && typeof obj.data === "object") ? obj.data : obj;
+        if (!data || typeof data !== "object" || Array.isArray(data)) {
+          throw new Error("Ungültiges Format.");
+        }
+
+        const cleaned = {};
+        Object.keys(data).forEach(k => {
+          if (!Q_MAP[k]) return;
+          const v = data[k];
+          if (!v || typeof v !== "object") return;
+          const st = v.st === "ok" || v.st === "pr" ? v.st : "";
+          const note = typeof v.note === "string" ? v.note : "";
+          if (st || note.trim()) cleaned[k] = { st, note };
+        });
+        return cleaned;
+      }
+
+      function applyImport(raw, replace) {
+        try {
+          const incoming = parseImportText(raw);
+          const keys = Object.keys(incoming);
+          if (replace) {
+            state = incoming;
+          } else {
+            keys.forEach(k => {
+              const cur = getEntry(k);
+              const inc = incoming[k];
+              state[k] = {
+                st: inc.st || cur.st,
+                note: inc.note.trim() ? inc.note : cur.note
+              };
+            });
+          }
+          saveState();
+          updateProgress();
+          if (activeTab === "katalog") renderCatalog();
+          if (activeTab === "sim") renderSim();
+          setBackupMsg(`Import erfolgreich: ${keys.length} Einträge ${replace ? "übernommen (ersetzt)" : "zusammengeführt"}.`, true);
+        } catch (e) {
+          setBackupMsg("Import fehlgeschlagen: Code oder Datei ist ungültig.", false);
+        }
+      }
+
+      $("im-merge").addEventListener("click", () => applyImport($("code-box").value, false));
+      $("im-replace").addEventListener("click", () => {
+        if (!confirm("Aktuelle Notizen und Status wirklich komplett durch den Import ersetzen?")) return;
+        applyImport($("code-box").value, true);
+      });
+
+      $("im-file").addEventListener("change", ev => {
+        const file = ev.target.files && ev.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = () => {
+          $("code-box").value = String(reader.result || "");
+          applyImport($("code-box").value, false);
+        };
+        reader.onerror = () => setBackupMsg("Datei konnte nicht gelesen werden.", false);
+        reader.readAsText(file, "utf-8");
+        ev.target.value = "";
+      });
+
+      $("reset-status").addEventListener("click", () => {
+        if (!confirm("Alle Bewertungen („Sitzt“/„Üben“) zurücksetzen? Deine eigenen Notizen bleiben erhalten.")) return;
+        Object.keys(state).forEach(k => {
+          if (state[k].note && state[k].note.trim()) state[k].st = "";
+          else delete state[k];
+        });
+        saveState();
+        updateProgress();
+        renderCatalog();
+        setBackupMsg("Status wurde zurückgesetzt (Notizen blieben erhalten).", true);
+      });
+
+      $("reset-all").addEventListener("click", () => {
+        if (!confirm("Wirklich ALLE eigenen Notizen und Bewertungen unwiderruflich löschen?")) return;
+        state = {};
+        saveState();
+        updateProgress();
+        renderCatalog();
+        setBackupMsg("Alle lokalen Daten wurden gelöscht.", true);
+      });
+
+      /* ========================
+         INIT
+         ======================== */
+      if (!storageAvailable) {
+        $("ls-warn").style.display = "block";
+      }
+      populateCeSelects();
+      updateProgress();
+      renderCatalog();
+    })();
+  </script>
+</body>
+</html>

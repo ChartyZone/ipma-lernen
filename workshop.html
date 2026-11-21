@@ -1,0 +1,3171 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="light dark" />
+  <title>IPMA Level C Workshop-Trainer – Zarko Saric</title>
+  <style>
+    :root {
+      --bg: #f5f7fa;
+      --surface: #ffffff;
+      --surface-alt: #eef2f7;
+      --surface-hover: #e6ecf5;
+      --border: #d8e0ec;
+      --border-strong: #bcc8db;
+      --text: #141c2b;
+      --text-muted: #506078;
+      --accent: #1d4ed8;
+      --accent-hover: #1e40af;
+      --accent-soft: #e0ebff;
+      --accent-text: #163a9e;
+      --success: #0f766e;
+      --success-soft: #dcfce7;
+      --success-text: #115e59;
+      --warn: #b45309;
+      --warn-soft: #fef3c7;
+      --warn-text: #92400e;
+      --danger: #b91c1c;
+      --danger-soft: #fee2e2;
+      --danger-text: #991b1b;
+      --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
+      --shadow-md: 0 4px 14px rgba(15, 23, 42, 0.08);
+      --radius: 12px;
+      --radius-sm: 8px;
+      --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --font-mono: ui-monospace, "Cascadia Code", "SF Mono", Menlo, Consolas, monospace;
+      --max-w: 1080px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #0d1117;
+        --surface: #161b22;
+        --surface-alt: #1f2630;
+        --surface-hover: #27303d;
+        --border: #2c3645;
+        --border-strong: #3f4d61;
+        --text: #e6edf3;
+        --text-muted: #98a6b8;
+        --accent: #60a5fa;
+        --accent-hover: #93c5fd;
+        --accent-soft: rgba(96, 165, 250, 0.16);
+        --accent-text: #93c5fd;
+        --success: #34d399;
+        --success-soft: rgba(52, 211, 153, 0.14);
+        --success-text: #6ee7b7;
+        --warn: #fbbf24;
+        --warn-soft: rgba(251, 191, 36, 0.14);
+        --warn-text: #fcd34d;
+        --danger: #f87171;
+        --danger-soft: rgba(248, 113, 113, 0.15);
+        --danger-text: #fca5a5;
+        --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
+        --shadow-md: 0 6px 18px rgba(0, 0, 0, 0.42);
+      }
+    }
+
+    :root[data-theme="dark"] {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --surface-alt: #1f2630;
+      --surface-hover: #27303d;
+      --border: #2c3645;
+      --border-strong: #3f4d61;
+      --text: #e6edf3;
+      --text-muted: #98a6b8;
+      --accent: #60a5fa;
+      --accent-hover: #93c5fd;
+      --accent-soft: rgba(96, 165, 250, 0.16);
+      --accent-text: #93c5fd;
+      --success: #34d399;
+      --success-soft: rgba(52, 211, 153, 0.14);
+      --success-text: #6ee7b7;
+      --warn: #fbbf24;
+      --warn-soft: rgba(251, 191, 36, 0.14);
+      --warn-text: #fcd34d;
+      --danger: #f87171;
+      --danger-soft: rgba(248, 113, 113, 0.15);
+      --danger-text: #fca5a5;
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
+      --shadow-md: 0 6px 18px rgba(0, 0, 0, 0.42);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--font-sans);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      font-size: 16px;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /* Header */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .header-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0.7rem 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.65rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      cursor: pointer;
+      text-decoration: none;
+      color: var(--text);
+    }
+    .brand:hover {
+      text-decoration: none;
+    }
+
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: var(--accent);
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 0.95rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      letter-spacing: -0.02em;
+      flex-shrink: 0;
+    }
+    :root[data-theme="dark"] .brand-mark {
+      color: #0d1117;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) .brand-mark {
+        color: #0d1117;
+      }
+    }
+
+    .brand-title {
+      font-weight: 750;
+      font-size: 1.02rem;
+      line-height: 1.2;
+    }
+    .brand-sub {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 650;
+      background: var(--accent-soft);
+      color: var(--accent-text);
+      white-space: nowrap;
+    }
+    .pill.success {
+      background: var(--success-soft);
+      color: var(--success-text);
+    }
+    .pill.warn {
+      background: var(--warn-soft);
+      color: var(--warn-text);
+    }
+    .pill.danger {
+      background: var(--danger-soft);
+      color: var(--danger-text);
+    }
+    .pill.neutral {
+      background: var(--surface-alt);
+      color: var(--text-muted);
+    }
+
+    .search-box {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .search-input {
+      width: 190px;
+      padding: 0.42rem 0.75rem;
+      border-radius: 999px;
+      border: 1px solid var(--border-strong);
+      background: var(--bg);
+      color: var(--text);
+      font-size: 0.88rem;
+      outline: none;
+      transition: border-color 0.15s, width 0.2s;
+    }
+    .search-input:focus {
+      border-color: var(--accent);
+      width: 240px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      padding: 0.45rem 0.85rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-strong);
+      background: var(--surface);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      min-height: 36px;
+      transition: background 0.15s, border-color 0.15s, transform 0.08s;
+    }
+    .btn:hover {
+      background: var(--surface-hover);
+    }
+    .btn:active {
+      transform: translateY(1px);
+    }
+    .btn-primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #ffffff;
+    }
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      border-color: var(--accent-hover);
+    }
+    :root[data-theme="dark"] .btn-primary {
+      color: #0d1117;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) .btn-primary {
+        color: #0d1117;
+      }
+    }
+    .btn-success {
+      background: var(--success-soft);
+      border-color: var(--success);
+      color: var(--success-text);
+    }
+    .btn-danger {
+      background: var(--danger-soft);
+      border-color: var(--danger);
+      color: var(--danger-text);
+    }
+    .btn-sm {
+      padding: 0.3rem 0.65rem;
+      font-size: 0.82rem;
+      min-height: 32px;
+    }
+    .btn.active-toggle {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #ffffff;
+    }
+    :root[data-theme="dark"] .btn.active-toggle {
+      color: #0d1117;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) .btn.active-toggle {
+        color: #0d1117;
+      }
+    }
+
+    /* Navigation Tabs */
+    .nav-bar {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+    }
+    .nav-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 0.75rem;
+      display: flex;
+      gap: 0.2rem;
+      overflow-x: auto;
+      scrollbar-width: thin;
+      -webkit-overflow-scrolling: touch;
+    }
+    .nav-tab {
+      flex: 0 0 auto;
+      padding: 0.62rem 0.85rem;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      border: none;
+      border-bottom: 3px solid transparent;
+      background: transparent;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .nav-tab:hover {
+      color: var(--text);
+    }
+    .nav-tab.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    /* Main Layout */
+    main {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 1.25rem 1rem 3.5rem;
+    }
+
+    .view {
+      display: none;
+      animation: fadeIn 0.16s ease-out;
+    }
+    .view.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(3px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1 {
+      font-size: 1.65rem;
+      line-height: 1.25;
+      margin: 0 0 0.5rem;
+      letter-spacing: -0.02em;
+    }
+    h2 {
+      font-size: 1.28rem;
+      line-height: 1.3;
+      margin: 1.6rem 0 0.65rem;
+      letter-spacing: -0.01em;
+    }
+    h3 {
+      font-size: 1.05rem;
+      line-height: 1.35;
+      margin: 1.1rem 0 0.45rem;
+    }
+    p {
+      margin: 0 0 0.75rem;
+    }
+    ul, ol {
+      margin: 0 0 0.85rem;
+      padding-left: 1.35rem;
+    }
+    li {
+      margin-bottom: 0.35rem;
+    }
+
+    .lead {
+      color: var(--text-muted);
+      font-size: 1rem;
+      margin-bottom: 1.15rem;
+    }
+
+    /* Cards & Grids */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.15rem 1.25rem;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 1rem;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, var(--surface) 0%, var(--accent-soft) 100%);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin: 0.85rem 0 0;
+    }
+
+    .grid-tiles {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .tile {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.15rem;
+      cursor: pointer;
+      text-align: left;
+      color: inherit;
+      font: inherit;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.14s, border-color 0.14s, box-shadow 0.14s;
+    }
+    .tile:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent);
+      box-shadow: var(--shadow-md);
+    }
+    .tile-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      margin-bottom: 0.45rem;
+    }
+    .tile-icon {
+      font-size: 1.35rem;
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: var(--surface-alt);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .tile-title {
+      font-weight: 750;
+      font-size: 1.05rem;
+      margin: 0 0 0.35rem;
+    }
+    .tile-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin: 0 0 0.75rem;
+    }
+    .tile-foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.82rem;
+      color: var(--accent);
+      font-weight: 650;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1rem;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 0.85rem;
+    }
+
+    /* Callouts */
+    .callout {
+      border-left: 4px solid var(--accent);
+      background: var(--accent-soft);
+      padding: 0.9rem 1.05rem;
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      margin: 1rem 0;
+      font-size: 0.94rem;
+    }
+    .callout.warn {
+      border-left-color: var(--warn);
+      background: var(--warn-soft);
+    }
+    .callout.success {
+      border-left-color: var(--success);
+      background: var(--success-soft);
+    }
+    .callout.danger {
+      border-left-color: var(--danger);
+      background: var(--danger-soft);
+    }
+    .callout strong {
+      display: block;
+      margin-bottom: 0.2rem;
+    }
+
+    /* Details / Accordions */
+    details {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      margin-bottom: 0.7rem;
+      overflow: hidden;
+    }
+    details[open] {
+      border-color: var(--border-strong);
+    }
+    summary {
+      padding: 0.85rem 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      background: var(--surface);
+      user-select: none;
+    }
+    summary::-webkit-details-marker {
+      display: none;
+    }
+    summary::after {
+      content: "+";
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--accent);
+      flex-shrink: 0;
+      width: 24px;
+      text-align: center;
+    }
+    details[open] > summary {
+      border-bottom: 1px solid var(--border);
+      background: var(--surface-alt);
+    }
+    details[open] > summary::after {
+      content: "−";
+    }
+    .details-body {
+      padding: 1rem;
+    }
+
+    /* Tables */
+    .table-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin: 0.75rem 0;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      min-width: 520px;
+    }
+    th, td {
+      padding: 0.6rem 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    th {
+      background: var(--surface-alt);
+      font-weight: 700;
+      font-size: 0.84rem;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      color: var(--text-muted);
+    }
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Code / PSP Tree / Templates */
+    pre.tree-box {
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.95rem 1rem;
+      overflow-x: auto;
+      font-family: var(--font-mono);
+      font-size: 0.84rem;
+      line-height: 1.55;
+      margin: 0.65rem 0;
+      white-space: pre;
+    }
+
+    .template-box {
+      background: var(--surface-alt);
+      border: 1px dashed var(--border-strong);
+      border-radius: var(--radius-sm);
+      padding: 0.9rem 1rem;
+      margin: 0.6rem 0;
+      font-size: 0.92rem;
+    }
+
+    /* Timeline / Roadmap */
+    .roadmap-step {
+      display: grid;
+      grid-template-columns: 112px 1fr;
+      gap: 1rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem 1.15rem;
+      margin-bottom: 0.85rem;
+      box-shadow: var(--shadow-sm);
+    }
+    .step-time {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.3rem;
+      border-right: 2px solid var(--accent-soft);
+      padding-right: 0.85rem;
+    }
+    .step-num {
+      font-size: 0.76rem;
+      font-weight: 750;
+      text-transform: uppercase;
+      color: var(--accent);
+      letter-spacing: 0.04em;
+    }
+    .step-mins {
+      font-size: 1.15rem;
+      font-weight: 800;
+    }
+    .step-cum {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    /* Timer Widget */
+    .timer-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.85rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.95rem 1.15rem;
+      margin-bottom: 1.15rem;
+    }
+    .timer-display {
+      font-family: var(--font-mono);
+      font-size: 1.55rem;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      color: var(--accent);
+    }
+
+    /* Phrasebook */
+    .quote-list {
+      display: grid;
+      gap: 0.55rem;
+      margin-top: 0.5rem;
+    }
+    .quote-item {
+      background: var(--surface-alt);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      padding: 0.6rem 0.85rem;
+      font-size: 0.94rem;
+    }
+    .quote-item small {
+      display: block;
+      color: var(--text-muted);
+      margin-top: 0.2rem;
+      font-size: 0.8rem;
+    }
+
+    /* Do / Don't */
+    .dodont-do {
+      border-top: 4px solid var(--success);
+    }
+    .dodont-dont {
+      border-top: 4px solid var(--danger);
+    }
+
+    /* Progress Bar */
+    .progress-wrap {
+      margin: 0.65rem 0 1rem;
+    }
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.86rem;
+      font-weight: 650;
+      margin-bottom: 0.35rem;
+    }
+    .progress-track {
+      width: 100%;
+      height: 11px;
+      border-radius: 999px;
+      background: var(--surface-alt);
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--success);
+      border-radius: 999px;
+      transition: width 0.25s ease;
+    }
+
+    /* Checklist */
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.72rem 0.85rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--surface);
+      margin-bottom: 0.5rem;
+      cursor: pointer;
+      transition: background 0.14s, border-color 0.14s;
+    }
+    .check-item:hover {
+      background: var(--surface-alt);
+    }
+    .check-item.checked {
+      background: var(--success-soft);
+      border-color: var(--success);
+    }
+    .check-item input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      margin-top: 0.12rem;
+      accent-color: var(--success);
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+    .check-item.checked .check-title {
+      text-decoration: line-through;
+      opacity: 0.82;
+    }
+    .check-title {
+      font-weight: 650;
+      display: block;
+    }
+    .check-note {
+      font-size: 0.86rem;
+      color: var(--text-muted);
+      display: block;
+      margin-top: 0.15rem;
+    }
+
+    /* Quiz / Self-test */
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      margin-bottom: 1rem;
+      align-items: center;
+    }
+
+    .quiz-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem 1.15rem;
+      margin-bottom: 0.85rem;
+      box-shadow: var(--shadow-sm);
+    }
+    .quiz-card.status-ok {
+      border-left: 5px solid var(--success);
+    }
+    .quiz-card.status-todo {
+      border-left: 5px solid var(--warn);
+    }
+    .quiz-head {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .quiz-q {
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: 0.7rem;
+    }
+    .quiz-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+    }
+
+    /* Case Study Tabs */
+    .case-switcher {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .case-tab {
+      flex: 1 1 220px;
+      padding: 0.8rem 0.95rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-strong);
+      background: var(--surface);
+      color: var(--text);
+      text-align: left;
+      cursor: pointer;
+      font: inherit;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .case-tab:hover {
+      background: var(--surface-alt);
+    }
+    .case-tab.active {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+    }
+    .case-tab strong {
+      display: block;
+      font-size: 0.95rem;
+    }
+    .case-tab span {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* Search Results Panel */
+    .search-panel {
+      display: none;
+      background: var(--surface);
+      border: 1px solid var(--accent);
+      border-radius: var(--radius);
+      padding: 1rem 1.15rem;
+      margin-bottom: 1.25rem;
+      box-shadow: var(--shadow-md);
+    }
+    .search-panel.visible {
+      display: block;
+    }
+    .search-hit {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.55rem 0.65rem;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      border-bottom: 1px solid var(--border);
+    }
+    .search-hit:last-child {
+      border-bottom: none;
+    }
+    .search-hit:hover {
+      background: var(--surface-alt);
+    }
+
+    /* Org Chart Boxes */
+    .org-chart {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.6rem;
+      margin: 0.75rem 0;
+    }
+    .org-level {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.6rem;
+      width: 100%;
+    }
+    .org-node {
+      background: var(--surface-alt);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-sm);
+      padding: 0.55rem 0.85rem;
+      text-align: center;
+      min-width: 150px;
+      flex: 0 1 auto;
+      font-size: 0.86rem;
+    }
+    .org-node.primary {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      font-weight: 700;
+    }
+    .org-arrow {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1;
+    }
+
+    footer {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 1.25rem 1rem 2rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+
+    @media (max-width: 640px) {
+      .roadmap-step {
+        grid-template-columns: 1fr;
+        gap: 0.55rem;
+      }
+      .step-time {
+        flex-direction: row;
+        align-items: baseline;
+        border-right: none;
+        border-bottom: 2px solid var(--accent-soft);
+        padding-right: 0;
+        padding-bottom: 0.45rem;
+        gap: 0.65rem;
+      }
+      .search-input, .search-input:focus {
+        width: 150px;
+      }
+      .hero {
+        padding: 1.1rem;
+      }
+      h1 {
+        font-size: 1.4rem;
+      }
+    }
+
+    /* Einheitliche Top-Navigationsleiste */
+    .ipma-topnav, .ipma-topnav * { box-sizing: border-box; }
+    .ipma-topnav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: #ffffff;
+      border-bottom: 1px solid #d8dce2;
+      font: 500 14px/1.2 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    }
+    .ipma-topnav-in {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      overflow-x: auto;
+      white-space: nowrap;
+      -webkit-overflow-scrolling: touch;
+    }
+    .ipma-topnav a {
+      color: #1b1f24;
+      text-decoration: none;
+      padding: 7px 12px;
+      border-radius: 8px;
+      transition: background 0.15s, color 0.15s;
+      flex-shrink: 0;
+    }
+    .ipma-topnav a:hover {
+      background: #eef2f7;
+      text-decoration: none;
+    }
+    .ipma-topnav a.active {
+      background: #2f6fed;
+      color: #ffffff;
+      font-weight: 600;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) .ipma-topnav {
+        background: #161b22;
+        border-bottom-color: #30363d;
+      }
+      :root:not([data-theme="light"]) .ipma-topnav a { color: #e6edf3; }
+      :root:not([data-theme="light"]) .ipma-topnav a:hover { background: #21262d; }
+      :root:not([data-theme="light"]) .ipma-topnav a.active { background: #2f6fed; color: #ffffff; }
+    }
+    :root[data-theme="dark"] .ipma-topnav {
+      background: #161b22;
+      border-bottom-color: #30363d;
+    }
+    :root[data-theme="dark"] .ipma-topnav a { color: #e6edf3; }
+    :root[data-theme="dark"] .ipma-topnav a:hover { background: #21262d; }
+    :root[data-theme="dark"] .ipma-topnav a.active { background: #2f6fed; color: #ffffff; }
+    .site-header { top: 47px; }
+    @media (max-width: 720px) {
+      .site-header { position: static; top: auto; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="ipma-topnav" aria-label="Seitennavigation">
+    <div class="ipma-topnav-in">
+      <a href="index.html">Start</a>
+      <a href="schriftlich.html">Schriftlich</a>
+      <a href="workshop.html" class="active" aria-current="page">Workshop</a>
+      <a href="interview.html">Interview</a>
+    </div>
+  </nav>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="#home" aria-label="Zur Startseite">
+        <span class="brand-mark">IPMA</span>
+        <span>
+          <span class="brand-title">Level C Workshop-Trainer</span><br />
+          <span class="brand-sub">Zarko Saric · ICB4 · 24./25.11.2026</span>
+        </span>
+      </a>
+      <div class="header-actions">
+        <span id="countdown-pill" class="pill" title="Countdown zum Workshop-Termin">24./25.11.2026</span>
+        <div class="search-box">
+          <input id="global-search" class="search-input" type="search" placeholder="Suchen (z. B. PSP, Konflikt)…" aria-label="Inhalte durchsuchen" />
+        </div>
+        <button id="theme-btn" class="btn btn-sm" type="button" title="Farbschema wechseln">Design: Auto</button>
+      </div>
+    </div>
+    <nav class="nav-bar" aria-label="Hauptnavigation">
+      <div class="nav-inner" id="nav-tabs">
+        <button class="nav-tab" data-route="home" type="button">Start</button>
+        <button class="nav-tab" data-route="ueberblick" type="button">1. Überblick</button>
+        <button class="nav-tab" data-route="fahrplan" type="button">2. Fahrplan</button>
+        <button class="nav-tab" data-route="methoden" type="button">3. Methoden</button>
+        <button class="nav-tab" data-route="fallstudien" type="button">4. Fallstudien</button>
+        <button class="nav-tab" data-route="verhalten" type="button">5. Verhalten</button>
+        <button class="nav-tab" data-route="checkliste" type="button">6. Checkliste</button>
+        <button class="nav-tab" data-route="selbsttest" type="button">7. Selbsttest</button>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section id="search-results" class="search-panel" aria-live="polite"></section>
+
+    <!-- STARTSEITE -->
+    <section id="view-home" class="view">
+      <div class="hero">
+        <h1>Hallo Zarko – bereit für deinen IPMA-Level-C-Workshop!</h1>
+        <p class="lead" style="margin-bottom:0.65rem;">
+          Dein kompakter Offline-Trainer für das Online-Assessment nach <strong>ICB4</strong> am <strong>24./25.11.2026</strong>.
+          Hier trainierst du genau das, was im Team-Workshop zählt: strukturiertes Vorgehen unter Zeitdruck, saubere GPM-/ICB4-Methoden und klar beobachtbares Team- und Führungsverhalten.
+        </p>
+        <div class="hero-meta">
+          <span class="pill" id="home-countdown">Termin: 24./25.11.2026</span>
+          <span class="pill success" id="home-quiz-stat">Selbsttest: 0 / 25 sicher</span>
+          <span class="pill warn" id="home-check-stat">Checkliste: 0 / 0 erledigt</span>
+          <span class="pill neutral">100 % offline · lokal gespeichert</span>
+        </div>
+      </div>
+
+      <div class="callout warn">
+        <strong>Wichtiger Hinweis zu Prüfungsregeln</strong>
+        Alle Angaben zum Ablauf dienen der allgemeinen Orientierung auf Basis typischer Lehrgangsinformationen (Fallstudie im Team, zwei Teile, Online-Whiteboard, keine eigenen Unterlagen). Verbindliche und aktuelle Informationen zu Ablauf, Hilfsmitteln und Bewertungskriterien findest du ausschließlich bei der Zertifizierungsstelle <strong>PM-ZERT / GPM</strong> unter <strong>pm-zert.de</strong> sowie in deinen offiziellen Einladungsunterlagen.
+      </div>
+
+      <h2>Trainingsbereiche</h2>
+      <div class="grid-tiles">
+        <button class="tile" data-go="ueberblick" type="button">
+          <div>
+            <div class="tile-head">
+              <span class="tile-icon" aria-hidden="true">🧭</span>
+              <span class="pill neutral">Grundlagen</span>
+            </div>
+            <div class="tile-title">1. Überblick &amp; Assessoren-Blick</div>
+            <p class="tile-desc">Ablauf der Fallstudie, ICB4-Kompetenzindikatoren (People &amp; Practice), Rolle im gemischten B/C-Team und typische Stolperfallen.</p>
+          </div>
+          <div class="tile-foot"><span>Bereich öffnen</span><span>→</span></div>
+        </button>
+
+        <button class="tile" data-go="fahrplan" type="button">
+          <div>
+            <div class="tile-head">
+              <span class="tile-icon" aria-hidden="true">⏱️</span>
+              <span class="pill">Mit Übungs-Timer</span>
+            </div>
+            <div class="tile-title">2. Vorgehens-Fahrplan</div>
+            <p class="tile-desc">Schritt-für-Schritt-Plan für 2,5 bis 3 Stunden Fallstudie – von Auftragsklärung und Rollenverteilung bis Puffer und Präsentation.</p>
+          </div>
+          <div class="tile-foot"><span>Fahrplan &amp; Timer</span><span>→</span></div>
+        </button>
+
+        <button class="tile" data-go="methoden" type="button">
+          <div>
+            <div class="tile-head">
+              <span class="tile-icon" aria-hidden="true">🧰</span>
+              <span class="pill neutral">11 Methoden</span>
+            </div>
+            <div class="tile-title">3. Methoden-Baukasten</div>
+            <p class="tile-desc">Kurzanleitung, Whiteboard-Vorlage &amp; Mini-Beispiel: SMART, Stakeholder, Phasenplan, PSP, RACI, Gantt, Risiken, Angebot, Marketing, Big Picture, Lessons Learned.</p>
+          </div>
+          <div class="tile-foot"><span>Methoden ansehen</span><span>→</span></div>
+        </button>
+
+        <button class="tile" data-go="fallstudien" type="button">
+          <div>
+            <div class="tile-head">
+              <span class="tile-icon" aria-hidden="true">📋</span>
+              <span class="pill success">3 Musterlösungen</span>
+            </div>
+            <div class="tile-title">4. Übungsfallstudien</div>
+            <p class="tile-desc">Inkl. Altdeponie-Sanierung &amp; Neubau (85.000 EW), IT-ERP-Einführung im Konzern und Standortumzug mit Eröffnungs-Event – komplett mit Musterlösungen.</p>
+          </div>
+          <div class="tile-foot"><span>Fälle trainieren</span><span>→</span></div>
+        </button>
+
+        <button class="tile" data-go="verhalten" type="button">
+          <div>
+            <div class="tile-head">
+              <span class="tile-icon" aria-hidden="true">💬</span>
+              <span class="pill neutral">Formulierungshilfen</span>
+            </div>
+            <div class="tile-title">5. Verhaltens-Tipps im Team</div>
+            <p class="tile-desc">Direkt einsetzbare Sätze für Moderation, Konfliktklärung, Einbinden stiller Teilnehmender, Zeitmanagement, Entscheidungen &amp; Feedback plus Do's/Don'ts.</p>
+          </div>
+          <div class="tile-foot"><span>Sätze trainieren</span><span>→</span></div>
+        </button>
+
+        <button class="tile" data-go="checkliste" type="button">
+          <div>
+            <div class="tile-head">
+              <span class="tile-icon" aria-hidden="true">✅</span>
+              <span class="pill warn" id="tile-check-badge">0 erledigt</span>
+            </div>
+            <div class="tile-title">6. Checkliste „Am Workshop-Tag“</div>
+            <p class="tile-desc">Technik, Zoom, Online-Whiteboard (Mural), Verpflegung und Rahmenregeln zum Abhaken – wird automatisch im Browser gespeichert.</p>
+          </div>
+          <div class="tile-foot"><span>Checkliste öffnen</span><span>→</span></div>
+        </button>
+
+        <button class="tile" data-go="selbsttest" type="button">
+          <div>
+            <div class="tile-head">
+              <span class="tile-icon" aria-hidden="true">🎯</span>
+              <span class="pill success" id="tile-quiz-badge">0 / 25</span>
+            </div>
+            <div class="tile-title">7. Selbsttest (25 Szenarien)</div>
+            <p class="tile-desc">„Was tust du, wenn …?“ – 25 realistische Workshop-Situationen mit Musterantwort und Fortschrittstracking („Kann ich / Noch nicht“).</p>
+          </div>
+          <div class="tile-foot"><span>Selbsttest starten</span><span>→</span></div>
+        </button>
+      </div>
+
+      <div class="card" style="margin-top:1.25rem;">
+        <h3 style="margin-top:0;">Empfohlene Lernstrategie für die letzten Tage bis 24.11.2026</h3>
+        <ol style="margin-bottom:0;">
+          <li><strong>Tag 1–2:</strong> <em>Überblick</em> &amp; <em>Fahrplan</em> verinnerlichen. Alle 11 <em>Methoden</em> einmal im Kopf skizzieren (ohne Unterlagen!).</li>
+          <li><strong>Tag 2–3:</strong> Alle 3 <em>Übungsfallstudien</em> erst selbst auf einem leeren Blatt Papier in je 20–30 Minuten grob gliedern, dann mit den Musterlösungen abgleichen.</li>
+          <li><strong>Tag 3–4:</strong> <em>Verhaltens-Sätze</em> laut aussprechen (Muskelgedächtnis!) und den <em>Selbsttest</em> so lange wiederholen, bis mindestens 22 von 25 Fragen auf „Kann ich“ stehen.</li>
+          <li><strong>Abend vor dem Workshop:</strong> <em>Checkliste</em> abhaken, Whiteboard-Grundfunktionen (Sticky Notes, Rahmen, Zoom) kurz testen, gut schlafen.</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- 1. UEBERBLICK -->
+    <section id="view-ueberblick" class="view">
+      <h1>1. Überblick: Ablauf &amp; was Assessoren beobachten</h1>
+      <p class="lead">
+        Im Online-Workshop zeigst du in einer realistischen Projektsimulation, dass du Projekte moderater Komplexität nach <strong>IPMA ICB4</strong> methodisch sicher und sozial kompetent steuern kannst.
+      </p>
+
+      <div class="callout warn">
+        <strong>Orientierung statt Prüfungsordnung</strong>
+        Die folgende Darstellung fasst allgemeine Erfahrungswerte und typische Lehrgangsangaben zusammen. Maßgeblich für Ablauf, Zeitfenster, Bewertungsregeln und erlaubte Hilfsmittel sind ausschließlich die offiziellen Dokumente von <strong>PM-ZERT / GPM (pm-zert.de)</strong> und deine persönliche Einladung.
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <h2 style="margin-top:0;">Typischer Workshop-Rahmen (laut Lehrgang)</h2>
+          <ul>
+            <li><strong>Format:</strong> Online-Assessment im Team (typisch bis zu ca. 12 Teilnehmende, oft gemischt aus <strong>Level C</strong> und <strong>Level B</strong>).</li>
+            <li><strong>Struktur:</strong> Zwei Workshop-Teile mit unterschiedlichen Aufgabenstellungen (z. B. erst Projektinitialisierung/-planung, später Angebot, Steuerung, Krisen/Änderungen oder Marketing/Kommunikation), jeweils ca. <strong>2,5 bis 3 Stunden</strong> inkl. Ergebnispräsentation.</li>
+            <li><strong>Arbeitsmittel:</strong> Videokonferenz (z. B. Zoom mit Breakout-Räumen) und gemeinsames Online-Whiteboard (z. B. Mural). <strong>Keine eigenen Unterlagen</strong> erlaubt (Methoden müssen frei aus dem Kopf abrufbar sein).</li>
+            <li><strong>Bewertungsprinzip:</strong> Zwei (oder mehr) Assessoren beobachten das konkrete, sichtbare und hörbare Verhalten anhand von ICB4-Kompetenzindikatoren. Als grobe Orientierung gilt ein Bestehen ab ca. <strong>40 %</strong> der beobachtbaren Indikatoren (verbindliche Regelung siehe pm-zert.de).</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h2 style="margin-top:0;">Das Prinzip „Beobachtbares Verhalten“</h2>
+          <p>
+            Assessoren können <strong>nicht in deinen Kopf schauen</strong>. Wenn du ein Risiko erkennst oder den Zeitplan im Blick hast, es aber nicht aussprichst oder am Whiteboard festhältst, existiert dieser Indikator für die Bewertung nicht.
+          </p>
+          <ul>
+            <li><strong>Denke laut – aber strukturiert:</strong> „Mir fällt auf, dass wir noch keine Annahmen zur Genehmigungsdauer festgehalten haben. Soll ich dazu einen Kasten anlegen?“</li>
+            <li><strong>Mach Verantwortung sichtbar:</strong> Übernimm klar benannte Rollen (z. B. Zeitwächter, Teilgruppen-Moderation, Risikoanalyse, Zusammenfassung, Präsentationsteil).</li>
+            <li><strong>Kein „Gegeneinander“:</strong> Es ist kein Verdrängungswettbewerb! Wenn du anderen hilfst, Struktur ins Team bringst und Stille einbindest, punktet das <em>Team</em> – und ganz besonders <em>du</em>.</li>
+          </ul>
+        </div>
+      </div>
+
+      <h2>Was Assessoren konkret beobachten (ICB4-Kompetenzen)</h2>
+      <p>Die ICB4 gliedert Projektmanagement-Kompetenzen in <strong>People</strong> (persönlich/sozial), <strong>Practice</strong> (Methoden/Technik) und <strong>Perspective</strong> (Kontext). Im Workshop stehen besonders die <strong>People-Kompetenzen</strong> im Zusammenspiel mit sauberer <strong>Practice</strong> im Fokus:</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>ICB4-Kompetenzbereich</th>
+              <th>Woran Assessoren das konkret erkennen (Indikatoren)</th>
+              <th>Dein praktischer Hebel im Online-Workshop</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Kommunikation</strong><br /><span class="pill neutral">People</span></td>
+              <td>Klare, prägnante Beiträge; aktives Zuhören; Rückfragen bei Unklarheiten; Zusammenfassen; visuelles Arbeiten am Whiteboard; adressatengerechte Präsentation.</td>
+              <td>Kurz und punktgenau sprechen; Aussagen anderer kurz spiegeln („Wenn ich dich richtig verstehe …“); Ergebnisse sauber auf dem Board strukturieren.</td>
+            </tr>
+            <tr>
+              <td><strong>Teamarbeit</strong><br /><span class="pill neutral">People</span></td>
+              <td>Konstruktive Zusammenarbeit; Einbinden ruhiger Teilnehmender; Anerkennen von Beiträgen anderer; Arbeitsteilung vereinbaren; gemeinsame Verantwortung tragen.</td>
+              <td>Gezielt nachfragen („Wie siehst du das?“), Teilgruppen-Schnittstellen abstimmen, Ergebnisse der anderen wertschätzen und integrieren.</td>
+            </tr>
+            <tr>
+              <td><strong>Führung</strong><br /><span class="pill neutral">People</span></td>
+              <td>Orientierung geben, wenn die Gruppe stockt; Vorschläge für Vorgehen &amp; Rollen machen; Entscheidungen herbeiführen; Verantwortung übernehmen ohne zu dominieren.</td>
+              <td>Früh Struktur vorschlagen („Wollen wir erst 5 Minuten still lesen und dann Rollen klären?“), in der Teilgruppe den roten Faden halten.</td>
+            </tr>
+            <tr>
+              <td><strong>Konflikte &amp; Krisen</strong><br /><span class="pill neutral">People</span></td>
+              <td>Spannungen früh bemerken und ruhig ansprechen; Sachebene von Beziehungsebene trennen; verschiedene Sichtweisen zulassen; tragfähigen Kompromiss suchen.</td>
+              <td>Bei hitziger Debatte deeskalieren: „Ich höre zwei valide Punkte – lass uns kurz beide Optionen mit Vor- und Nachteilen nebeneinander legen.“</td>
+            </tr>
+            <tr>
+              <td><strong>Verhandlungen</strong><br /><span class="pill neutral">People</span></td>
+              <td>Interessen hinter Positionen klären; Win-Win-Optionen entwickeln; im Angebot realistische Bedingungen/Annahmen und Grenzen sauber formulieren.</td>
+              <td>Bei knappen Vorgaben nicht blind „Ja“ sagen, sondern Optionen anbieten (z. B. Umfang vs. Termin vs. Budget sauber begründen).</td>
+            </tr>
+            <tr>
+              <td><strong>Ergebnisorientierung</strong><br /><span class="pill neutral">People</span></td>
+              <td>Auftragsbezug halten; Prioritäten setzen (80/20 statt Perfektionismus); Zeitbudget steuern; konsistentes, präsentierbares Gesamtergebnis sicherstellen.</td>
+              <td>Immer wieder auf die Aufgabenstellung prüfen („Beantwortet das alle Fragen des Auftraggebers?“), rechtzeitig das Finalisieren einleiten.</td>
+            </tr>
+            <tr>
+              <td><strong>Vielseitigkeit (Kreativität)</strong><br /><span class="pill neutral">People</span></td>
+              <td>Pragmatische Lösungen bei fehlenden Daten entwickeln; kreative Maßnahmen für Stakeholder/Risiken/Marketing vorschlagen; verschiedene Perspektiven einnehmen.</td>
+              <td>Realistische Annahmen vorschlagen, unkonventionelle Akzeptanzmaßnahmen (z. B. Bürgerdialog, Pilotgruppe) einbringen.</td>
+            </tr>
+            <tr>
+              <td><strong>Selbstreflexion &amp; Integrität</strong><br /><span class="pill neutral">People</span></td>
+              <td>Verlässlichkeit bei zugesagten Aufgaben; eigene Fehler offen korrigieren; ruhig bleiben unter Zeitdruck; wertschätzender Umgang.</td>
+              <td>Zugesagte Timebox einhalten; bei eigenen Irrtümern kurz korrigieren statt rechtfertigen; im Feedback ehrlich und konstruktiv bleiben.</td>
+            </tr>
+            <tr>
+              <td><strong>Practice-Methoden</strong><br /><span class="pill">Practice</span></td>
+              <td>Korrekte Anwendung von Zielen/SMART, Stakeholderanalyse, PSP (100-%-Regel), Phasen/Meilensteine, RACI/Organigramm, Gantt/kritischer Pfad, Risiken, Kosten/Angebot.</td>
+              <td>Saubere Fachbegriffe nutzen und auf <strong>Konsistenz</strong> zwischen den Artefakten achten (z. B. Kosten &amp; Termine passen zum PSP!).</td>
+            </tr>
+            <tr>
+              <td><strong>Kontext / Perspective</strong><br /><span class="pill neutral">Perspective</span></td>
+              <td>Berücksichtigung von Strategie, Governance, gesetzlichen Vorgaben (Compliance), Politik/Machtverhältnissen und Unternehmenskultur.</td>
+              <td>Genehmigungen, Betriebsrat, Ausschreibungsrecht, Kommunalpolitik oder Konzernkultur explizit in Stakeholder &amp; Risiken aufnehmen.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Level C im gemischten B/C-Team: So positionierst du dich stark</h2>
+      <div class="card">
+        <ul>
+          <li><strong>Kein „Kleinmachen“ vor Level-B-Kandidaten:</strong> Ihr arbeitet auf Augenhöhe an derselben Fallstudie. Level B übernimmt ggf. gern die Gesamtkoordination oder strategische Perspektive – du kannst als Level C souverän eine Teilgruppe moderieren, Kernmethoden (PSP, Risiken, Termine, Stakeholder) sauber liefern, das Zeitmanagement sichern und Konsistenz einfordern.</li>
+          <li><strong>Rollen wechseln zwischen Teil 1 und Teil 2:</strong> Wenn in Teil 1 jemand anderes moderiert hat, übernimm in Teil 2 aktiv die Moderation oder die Leitung einer zentralen Teilgruppe. So zeigst du Bandbreite!</li>
+          <li><strong>Aufgabenstellung genau lesen:</strong> Oft gibt es spezifische Teilaufgaben für Level C bzw. allgemeine Teamaufgaben. Prüfe sofort, welche Lieferobjekte explizit von deiner Gruppe erwartet werden.</li>
+        </ul>
+      </div>
+
+      <h2>Typische Fehler – und wie du sie vermeidest</h2>
+      <div class="grid-2">
+        <div class="card dodont-dont">
+          <h3 style="margin-top:0;color:var(--danger-text);">Häufige Stolperfallen</h3>
+          <ul>
+            <li><strong>Zu langes Schweigen:</strong> Erst nach 45 Minuten etwas sagen – Assessoren können keine Kompetenz bewerten, die nicht sichtbar wird.</li>
+            <li><strong>Dominieren &amp; Unterbrechen:</strong> Andere abwürgen, Monologe halten oder Boards anderer ungefragt umbauen.</li>
+            <li><strong>Sofort in Lösungen springen:</strong> Ohne Auftragsklärung und Rollenverteilung direkt Post-its kleben – führt zu Chaos und Doppelarbeit.</li>
+            <li><strong>Fehlende Zahlen totdiskutieren:</strong> 20 Minuten grübeln, wie viel eine Deponie „wirklich“ kostet, statt zügig eine plausible Annahme festzuhalten.</li>
+            <li><strong>Insel-Lösungen ohne Konsistenz:</strong> PSP enthält 5 Phasen, der Terminplan 3, das Angebot nennt einen anderen Endtermin als der Phasenplan.</li>
+            <li><strong>Zeitfalle am Schluss:</strong> Bis 2 Minuten vor Schluss weiterplanen und keine durchdachte Präsentation mit klaren Übergaben haben.</li>
+          </ul>
+        </div>
+        <div class="card dodont-do">
+          <h3 style="margin-top:0;color:var(--success-text);">Erfolgsrezept für Zarko</h3>
+          <ul>
+            <li><strong>Früh konstruktiv sichtbar sein:</strong> Schon in den ersten 10 Minuten einen hilfreichen Struktur- oder Rollenvorschlag machen.</li>
+            <li><strong>Qualität vor Redezeit:</strong> Lieber 6 prägnante, strukturierende Beiträge als 30 Minuten Dauerreden.</li>
+            <li><strong>Annahmen-Parkplatz etablieren:</strong> Jede Lücke in der Fallstudie sofort als begründete Annahme auf dem Board dokumentieren.</li>
+            <li><strong>Querverbindungen prüfen:</strong> Aktiv den Konsistenzcheck zwischen Scope, Termin, Kosten, Risiken und Angebot anstoßen.</li>
+            <li><strong>Präsentation als Teamleistung:</strong> 20–25 Minuten vor Ende konsequent auf Synthese &amp; Präsentationsprobe umschalten.</li>
+            <li><strong>Ruhig &amp; souverän bleiben:</strong> Auch wenn ein Teil nicht 100 % perfekt ist: Transparenz und professionelle Priorisierung werden hoch bewertet!</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. FAHRPLAN -->
+    <section id="view-fahrplan" class="view">
+      <h1>2. Vorgehens-Fahrplan für die Fallstudie</h1>
+      <p class="lead">
+        Ein klarer Zeitplan verhindert Stress und sichert, dass euer Team alle Lieferobjekte konsistent und präsentierbar fertigstellt. Wähle dein Zeitbudget (150 oder 180 Minuten) und nutze optional den Übungs-Timer.
+      </p>
+
+      <div class="timer-bar">
+        <div>
+          <div style="font-size:0.82rem;color:var(--text-muted);font-weight:650;">Gesamtzeit-Modus</div>
+          <div style="display:flex;gap:0.45rem;margin-top:0.35rem;">
+            <button class="btn btn-sm active-toggle" id="mode-150" type="button">150 Min (2,5 h)</button>
+            <button class="btn btn-sm" id="mode-180" type="button">180 Min (3,0 h)</button>
+          </div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:0.8rem;color:var(--text-muted);font-weight:650;" id="timer-label">Übungs-Timer (bereit)</div>
+          <div class="timer-display" id="timer-display">10:00</div>
+        </div>
+        <div style="display:flex;gap:0.4rem;flex-wrap:wrap;">
+          <button class="btn btn-primary btn-sm" id="timer-start" type="button">Start</button>
+          <button class="btn btn-sm" id="timer-pause" type="button">Pause</button>
+          <button class="btn btn-sm" id="timer-reset" type="button">Reset</button>
+        </div>
+      </div>
+
+      <div id="roadmap-list"></div>
+
+      <div class="callout success">
+        <strong>Goldene Zeitwächter-Regel (Timeboxing)</strong>
+        Kündige Zeitmarken immer <strong>vorher</strong> freundlich an: „Wir haben für diesen Block noch 5 Minuten – lasst uns die letzten zwei Risiken priorisieren und dann zusammenführen.“ So führst du ergebnisorientiert, ohne das Team abzuwürgen.
+      </div>
+    </section>
+
+    <!-- 3. METHODEN-BAUKASTEN -->
+    <section id="view-methoden" class="view">
+      <h1>3. Methoden-Baukasten (ICB4 &amp; GPM)</h1>
+      <p class="lead">
+        Da im Workshop keine eigenen Unterlagen erlaubt sind, musst du die Grundstruktur der wichtigsten PM-Methoden frei beherrschen. Jede Methode enthält Kurzanleitung, Whiteboard-Vorlage und ein kompaktes Mini-Beispiel.
+      </p>
+      <div class="filter-bar">
+        <button class="btn btn-sm" id="methods-expand-all" type="button">Alle aufklappen</button>
+        <button class="btn btn-sm" id="methods-collapse-all" type="button">Alle zuklappen</button>
+      </div>
+      <div id="methods-container"></div>
+    </section>
+
+    <!-- 4. FALLSTUDIEN -->
+    <section id="view-fallstudien" class="view">
+      <h1>4. Übungsfallstudien mit Musterlösungen</h1>
+      <p class="lead">
+        Trainiere realitätsnah: Lies zuerst nur die Aufgabenstellung, skizziere deine Lösung 15–25 Minuten auf einem leeren Blatt Papier und klappe danach die einzelnen Musterlösungen zum Vergleich auf.
+      </p>
+
+      <div class="case-switcher" id="case-switcher"></div>
+      <div id="case-detail"></div>
+    </section>
+
+    <!-- 5. VERHALTEN -->
+    <section id="view-verhalten" class="view">
+      <h1>5. Verhaltens-Tipps &amp; Formulierungshilfen im Team</h1>
+      <p class="lead">
+        Unter Zeitdruck fallen einem gute Formulierungen oft nicht spontan ein. Lies diese Sätze ein paar Mal laut durch – so hast du im Online-Workshop sofort souveräne, deeskalierende und strukturierende Formulierungen parat.
+      </p>
+
+      <div id="phrases-container" class="grid-2"></div>
+
+      <h2>Do's und Don'ts im Online-Assessment</h2>
+      <div class="grid-2">
+        <div class="card dodont-do">
+          <h3 style="margin-top:0;color:var(--success-text);">Do's – Das überzeugt Assessoren</h3>
+          <ul>
+            <li><strong>Kamera an &amp; Präsenz zeigen:</strong> Blick Richtung Kamera, Nicken, kurze verbale Bestätigung – im Online-Raum fehlt sonst Körpersprache.</li>
+            <li><strong>Namen nutzen:</strong> „Danke, Anna, für den Punkt zum Betriebsrat. Lukas, wie passt das in euren Terminplan?“ – schafft sofort Teamgefühl.</li>
+            <li><strong>Prozess vor Inhalt:</strong> Erst 5 Minuten klären, <em>wie</em> ihr vorgeht, dann erst Inhalte füllen.</li>
+            <li><strong>Entscheidungen explizit festhalten:</strong> „Haben wir Konsens, dass wir mit 180 €/h als Annahme kalkulieren? Kurzes Handzeichen oder Daumen hoch.“</li>
+            <li><strong>Annahmen sichtbar parken:</strong> Fehlende Angaben pragmatisch annehmen, dokumentieren und in der Präsentation offen nennen.</li>
+            <li><strong>Stille einbeziehen:</strong> Aktiv Raum öffnen ohne Bloßstellen („Wer hat zu den Risiken noch eine andere Perspektive?“).</li>
+            <li><strong>Ergebnisorientiert priorisieren:</strong> Lieber ein konsistentes 80-%-Gesamtpaket als ein überperfekter PSP ohne Termin- und Kostenplan.</li>
+            <li><strong>Wertschätzend im Konflikt:</strong> Interesse verstehen, Optionen vergleichen, auf Projektziel zurückführen.</li>
+          </ul>
+        </div>
+        <div class="card dodont-dont">
+          <h3 style="margin-top:0;color:var(--danger-text);">Don'ts – Das kostet Punkte</h3>
+          <ul>
+            <li><strong>Abtauchen &amp; still mitarbeiten:</strong> Nur im Hintergrund Kärtchen verschieben ohne Kommunikation – Assessoren sehen deinen Beitrag kaum.</li>
+            <li><strong>Andere unterbrechen oder abwerten:</strong> „Das stimmt so nicht, nach GPM macht man das anders“ wirkt belehrend und schadet Teamarbeit.</li>
+            <li><strong>Methoden-Dogmatismus:</strong> 15 Minuten streiten, ob ein PSP rein objekt- oder phasenorientiert sein muss, statt ein brauchbares Ergebnis zu bauen.</li>
+            <li><strong>Unabgesprochene Alleingänge:</strong> Einfach das Layout anderer löschen oder eigene Annahmen treffen, ohne das Team zu informieren.</li>
+            <li><strong>Ausreden statt Verantwortung:</strong> „Das lag an der anderen Teilgruppe“ in der Präsentation – immer als <em>Wir-Team</em> auftreten!</li>
+            <li><strong>Überziehen bei der Präsentation:</strong> Zeigt mangelndes Zeitmanagement und fehlende Ergebnisorientierung.</li>
+            <li><strong>Sich in Details verlieren:</strong> Z. B. technische Baustoff-Details diskutieren statt Projektmanagement (Ziele, Risiken, Termine, Stakeholder, Kosten).</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. CHECKLISTE -->
+    <section id="view-checkliste" class="view">
+      <h1>6. Checkliste „Am Workshop-Tag“</h1>
+      <p class="lead">
+        Hake alle Punkte vor dem 24./25.11.2026 ab, damit Technik und Rahmenbedingungen sitzen und dein Kopf komplett frei für das Assessment ist. Dein Fortschritt wird lokal gespeichert.
+      </p>
+
+      <div class="card">
+        <div class="progress-wrap" style="margin-top:0;">
+          <div class="progress-meta">
+            <span id="check-progress-text">0 von 0 Punkten erledigt</span>
+            <span id="check-progress-pct">0 %</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" id="check-progress-bar" style="width:0%;"></div>
+          </div>
+        </div>
+        <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+          <button class="btn btn-sm" id="check-reset" type="button">Alle Häkchen zurücksetzen</button>
+        </div>
+      </div>
+
+      <div id="checklist-container"></div>
+    </section>
+
+    <!-- 7. SELBSTTEST -->
+    <section id="view-selbsttest" class="view">
+      <h1>7. Selbsttest: 25 Workshop-Szenarien</h1>
+      <p class="lead">
+        Teste dich an 25 realistischen „Was tust du, wenn …?“-Situationen aus dem Online-Assessment. Überlege erst laut deine Antwort, klappe die Musterantwort auf und markiere ehrlich <strong>Kann ich</strong> oder <strong>Noch nicht</strong>.
+      </p>
+
+      <div class="card">
+        <div class="progress-wrap" style="margin-top:0;">
+          <div class="progress-meta">
+            <span id="quiz-progress-text">0 von 25 sicher („Kann ich“)</span>
+            <span id="quiz-progress-pct">0 %</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" id="quiz-progress-bar" style="width:0%;"></div>
+          </div>
+        </div>
+        <div class="filter-bar" style="margin-bottom:0;">
+          <button class="btn btn-sm active-toggle" data-qfilter="all" type="button">Alle (25)</button>
+          <button class="btn btn-sm" data-qfilter="open" type="button">Unbeantwortet</button>
+          <button class="btn btn-sm" data-qfilter="todo" type="button">Noch nicht</button>
+          <button class="btn btn-sm" data-qfilter="ok" type="button">Kann ich</button>
+          <span style="flex:1 1 auto;"></span>
+          <button class="btn btn-sm" id="quiz-reset" type="button">Fortschritt zurücksetzen</button>
+        </div>
+      </div>
+
+      <div id="quiz-container"></div>
+    </section>
+  </main>
+
+  <footer>
+    <span>IPMA Level C Workshop-Trainer · Persönliche Vorbereitung für Zarko Saric (24./25.11.2026)</span>
+    <span>Fachbasis: IPMA ICB4 / GPM-Standard · Verbindliche Prüfungsregeln: <strong>pm-zert.de</strong></span>
+  </footer>
+
+  <script>
+    (function () {
+      "use strict";
+
+      /* ========================
+         SAFE LOCALSTORAGE HELPERS
+         ======================== */
+      const STORAGE_PREFIX = "ipma_c_trainer_zarko_v1_";
+
+      function lget(key) {
+        try {
+          return window.localStorage.getItem(key);
+        } catch (e) {
+          return null;
+        }
+      }
+
+      function lset(key, value) {
+        try {
+          window.localStorage.setItem(key, value);
+        } catch (e) {
+          // Ignore storage errors (private mode / quota / file:// restrictions)
+        }
+      }
+
+      function lsGet(key, fallback) {
+        try {
+          const raw = lget(STORAGE_PREFIX + key);
+          return raw ? JSON.parse(raw) : fallback;
+        } catch (e) {
+          return fallback;
+        }
+      }
+
+      function lsSet(key, value) {
+        try {
+          lset(STORAGE_PREFIX + key, JSON.stringify(value));
+        } catch (e) {
+          // Ignore storage errors (private mode / quota / file:// restrictions)
+        }
+      }
+
+      /* ========================
+         DATA: FAHRPLAN
+         ======================== */
+      const ROADMAP_STEPS = [
+        {
+          step: 1,
+          title: "Aufgabe still lesen & Auftrag klären",
+          min150: 10,
+          min180: 12,
+          goal: "Alle verstehen exakt dasselbe: Auftraggeber, Lieferobjekte, Fristen, Randbedingungen und offene Lücken.",
+          actions: [
+            "5 Minuten still lesen (ohne sofort loszureden) – jeder markiert Kernanforderungen, Zieltermine, Zahlen und Lücken.",
+            "5 Minuten gemeinsamer Abgleich: Was ist das Pflicht-Ergebnis am Ende dieses Workshop-Teils? Welche speziellen Level-C- oder Team-Deliverables gibt es?"
+          ],
+          levelCTip: "Schlage aktiv das stille Lesen vor („Lasst uns 5 Minuten still lesen, damit niemand etwas übersieht“) und fasse danach die Pflicht-Lieferobjekte am Whiteboard zusammen."
+        },
+        {
+          step: 2,
+          title: "Team-Setup: Rollen, Moderation, Zeitwächter & Board",
+          min150: 8,
+          min180: 10,
+          goal: "Klare Zusammenarbeit ohne Doppelarbeit oder Chaos am Online-Whiteboard.",
+          actions: [
+            "Moderation (Gesamtprozess), Zeitwächter (Timeboxing), ggf. Board-Koordinator benennen.",
+            "Whiteboard grob in Zonen/Rahmen einteilen: Auftrag & Ziele | Annahmen | Stakeholder | PSP & Termine | Organisation | Risiken | Kosten/Angebot | Präsentation."
+          ],
+          levelCTip: "Biete aktiv eine Rolle an (z. B. Zeitwächter oder Moderation einer Teilgruppe). Kläre kurz Spielregeln (z. B. Hand heben, Timeboxes einhalten)."
+        },
+        {
+          step: 3,
+          title: "Gemeinsames Grundverständnis & Annahmen-Board",
+          min150: 15,
+          min180: 18,
+          goal: "Alle Teilgruppen arbeiten auf derselben Basis – fehlende Werte werden pragmatisch als Annahmen fixiert.",
+          actions: [
+            "Projektziele (SMART), Nicht-Ziele und grobe Meilensteine im Plenum festziehen.",
+            "Annahmen-Kasten anlegen: Fehlende Zahlen (z. B. Budget, Fläche, Tagessätze, Genehmigungsstand) realistisch schätzen und verbindlich festlegen."
+          ],
+          levelCTip: "Verhindere endlose Grundsatzdebatten: „Die Information fehlt im Text – lasst uns als Annahme X festhalten und im Angebot transparent ausweisen.“"
+        },
+        {
+          step: 4,
+          title: "Arbeitsteilung in Teilgruppen & Schnittstellen",
+          min150: 7,
+          min180: 10,
+          goal: "Paralleles Arbeiten in 3–4 kleinen Gruppen (je 2–4 Personen), damit alle aktiv sichtbar sind.",
+          actions: [
+            "Beispiel-Zuschnitt bei 10–12 Personen: Gruppe A (Ziele, Stakeholder, Marketing), Gruppe B (PSP, Phasenplan, Termine), Gruppe C (Organigramm/RACI, Risiken), Gruppe D (Kalkulation, Angebot, Annahmen).",
+            "Schnittstellen & Rückkehrzeit (inkl. kurzem Zwischen-Sync) klar vereinbaren."
+          ],
+          levelCTip: "Frage aktiv nach Schnittstellen: „Gruppe B liefert uns bis Minute 60 die Hauptphasen und den groben Aufwand, damit Gruppe D sauber kalkulieren kann.“"
+        },
+        {
+          step: 5,
+          title: "Erarbeitung in Teilgruppen (inkl. 5-Min-Zwischen-Sync)",
+          min150: 55,
+          min180: 68,
+          goal: "Hochwertige, gut lesbare Methoden-Artefakte erstellen – 80/20 statt Verkünsteln.",
+          actions: [
+            "In der Teilgruppe kurz Vorgehen abstimmen, alle einbinden, Ergebnisse direkt visuell auf dem Board bauen.",
+            "Nach der Hälfte genau 5 Minuten Kurz-Sync im Plenum (oder via Sprecher): Passen Termine, Scope und Annahmen noch zusammen? Gibt es Blocker?"
+          ],
+          levelCTip: "Achte in deiner Teilgruppe darauf, dass auch ruhigere Teilnehmende zu Wort kommen und euer Board-Bereich übersichtlich (große Schrift, klare Überschriften) bleibt."
+        },
+        {
+          step: 6,
+          title: "Ergebnisse zusammenführen & Konsistenzcheck",
+          min150: 20,
+          min180: 24,
+          goal: "Aus Einzelergebnissen wird EIN stimmiges Projektkonzept ohne Widersprüche.",
+          actions: [
+            "Jede Teilgruppe stellt ihr Ergebnis in 2–3 Minuten vor.",
+            "Aktiver Konsistenzcheck: Stimmen Endtermin, Meilensteine, PSP-Umfang, Risiken (inkl. Kostenpuffer!) und Angebot überein? Sind alle Fragen der Aufgabenstellung beantwortet?"
+          ],
+          levelCTip: "Ein gezielter Konsistenz-Hinweis ist Gold wert für Ergebnisorientierung: „Im Risiko-Board haben wir 10 % Reserve für Altlasten – ist der Puffer im Angebotspreis schon enthalten?“"
+        },
+        {
+          step: 7,
+          title: "Präsentation vorbereiten, Storyline & Probe",
+          min150: 25,
+          min180: 28,
+          goal: "Souveräner, geschlossener Teamauftritt mit rotem Faden und sauberem Zeitmanagement.",
+          actions: [
+            "Big Picture / Management Summary als Einstieg bauen.",
+            "Sprechanteile fair verteilen (jeder sollte kurz sichtbar sein), Übergaben benennen, Zeit pro Block festlegen (z. B. 10–15 min Gesamtpräsentation).",
+            "Einmal kurz die Übergänge und Kernbotschaften trocken durchsprechen."
+          ],
+          levelCTip: "Übernimm einen klaren, gut strukturierten Präsentationsteil (z. B. Risiken & Gegenmaßnahmen oder Angebot & Annahmen) und übergib mit Namen an die nächste Person."
+        },
+        {
+          step: 8,
+          title: "Puffer, Board-Aufräumen & Durchatmen",
+          min150: 10,
+          min180: 10,
+          goal: "Kein hektisches Basteln in letzter Sekunde – entspannt und professionell starten.",
+          actions: [
+            "Whiteboard aufräumen (überflüssige Notizen entfernen, Zoom-Ansicht prüfen, Lesbarkeit checken).",
+            "Bildschirmteilung / Präsentationspfad testen, Schluck Wasser trinken, Fokus auf die Präsentation."
+          ],
+          levelCTip: "Puffer konsequent verteidigen – wenn etwas offen bleibt, lieber als „nächster Schritt nach Beauftragung“ im Ausblick benennen."
+        }
+      ];
+
+      /* ========================
+         DATA: 11 METHODEN
+         ======================== */
+      const METHODS = [
+        {
+          id: "m-auftrag",
+          title: "1. Projektauftrag, Ziele (SMART), Zielbeziehungen, Nicht-Ziele & KPIs",
+          icb: "Practice: Anforderungen & Ziele · Projektdesign",
+          guide: [
+            "Kläre zuerst: Warum machen wir das Projekt (Ausgangslage/Nutzen), was genau ist das Ergebnis (Leistungsziel), bis wann (Terminziel) und mit welchem Budget (Kostenziel)?",
+            "Formuliere Ziele strikt nach <strong>SMART</strong>: <strong>S</strong>pezifisch, <strong>M</strong>essbar, <strong>A</strong>kzeptiert/Attraktiv, <strong>R</strong>ealistisch, <strong>T</strong>erminiert.",
+            "Definiere explizite <strong>Nicht-Ziele</strong>, um Scope Creep zu verhindern und Erwartungen zu steuern.",
+            "Analysiere <strong>Zielbeziehungen</strong>: komplementär (fördern sich), neutral (unabhängig) oder konkurrierend (Zielkonflikt, z. B. Magisches Dreieck: Qualität/Leistung – Zeit – Kosten).",
+            "Lege 3–5 messbare <strong>KPIs</strong> (Key Performance Indicators) fest, woran der Projekterfolg objektiv überprüft wird."
+          ],
+          template: `PROJEKTAUFTRAG (Kurzraster fürs Whiteboard)
+• Ausgangslage / Anlass: [Problem / Chance]
+• Auftraggeber & Projektleiter: [Rollen]
+• Leistungsziele (SMART): [Was, wie messbar, bis wann]
+• Termin- & Kostenziele: [Meilenstein / Budget]
+• Nicht-Ziele (Out of Scope): [Was explizit NICHT gemacht wird]
+• Zielkonflikte & Priorität: [z. B. Termin > Kosten > Zusatzfeatures]
+• KPIs: [Messgröße | Zielwert | Messzeitpunkt]`,
+          example: "<strong>Mini-Beispiel (ERP-Einführung):</strong> SMART-Ziel: „Das neue ERP-System ist bis 31.12.2027 an allen 3 Standorten produktiv, sodass 95 % aller Aufträge durchgängig digital abgewickelt werden (Budget max. 1,2 Mio. €).“ <strong>Nicht-Ziel:</strong> Ablösung der Produktionsmaschinen-Steuerung (SPS). <strong>Zielkonflikt:</strong> Kurze Einführungszeit konkurriert mit intensiver Individualprogrammierung → Priorität: Standard vor Anpassung. <strong>KPI:</strong> Durchlaufzeit Auftragsanlage ≤ 5 Min., Systemverfügbarkeit ≥ 99,5 %."
+        },
+        {
+          id: "m-stakeholder",
+          title: "2. Umfeld- und Stakeholderanalyse (inkl. Maßnahmen & Widerstände)",
+          icb: "Practice: Stakeholder · Perspective: Macht & Interessen",
+          guide: [
+            "Unterscheide erst kurz das <strong>Projektumfeld</strong>: sachlich (Technik, Recht, Umwelt, Wirtschaft) und sozial (interne & externe Stakeholder).",
+            "Identifiziere alle relevanten Personen/Gruppen, die das Projekt beeinflussen können oder davon betroffen sind (Auftraggeber, Betriebsrat, Behörden, Bürger, Lieferanten, Team, Politik).",
+            "Bewerte jeden Stakeholder nach <strong>Einfluss/Macht</strong> (hoch/mittel/niedrig) und <strong>Einstellung</strong> (+ positiv, 0 neutral, − kritisch/ablehnend) sowie Erwartungen/Befürchtungen.",
+            "Leite konkrete, differenzierte <strong>Maßnahmen</strong> ab – besonders für <em>hoher Einfluss + kritische Einstellung</em> (früh einbinden, Sorgen ernst nehmen, Transparenz, Mitgestaltung statt Überrumpelung)."
+          ],
+          template: `STAKEHOLDER-TABELLE
+| Stakeholder | Intern/Extern | Einfluss | Einstellung | Erwartung / Widerstand | Konkrete Maßnahme | Verantwortlich |
+|-------------|---------------|----------|-------------|------------------------|-------------------|----------------|
+| z. B. Bürger| Extern        | Hoch     | Negativ (-) | Angst vor Lärm/Geruch  | Infoabend, Hotline| PL / Komm.     |`,
+          example: "<strong>Mini-Beispiel (Altdeponie):</strong> <em>Anwohner / Bürgerinitiative</em> (extern, Einfluss hoch, Einstellung −): Befürchten Geruch, LKW-Verkehr und Wertverlust. Maßnahme: Frühzeitiger Bürgerdialog vor Baubeginn, feste LKW-Routen außerhalb von Wohngebieten, offenes Emissions-Monitoring im Web, feste Ansprechperson."
+        },
+        {
+          id: "m-phasen",
+          title: "3. Phasenplan mit Meilensteinen (Quality Gates)",
+          icb: "Practice: Ablauf & Termine · Planung & Steuerung",
+          guide: [
+            "Gliedere das Projekt in 4–6 logische, zeitlich aufeinanderfolgende <strong>Phasen</strong> (z. B. Initialisierung → Konzeption/Genehmigung → Planung/Ausschreibung → Umsetzung/Bau → Inbetriebnahme & Abschluss).",
+            "Setze ans Ende jeder Phase einen eindeutigen <strong>Meilenstein</strong> (Zeitpunkt, Dauer = 0, prüfbares Ergebnis, oft als <strong>Quality Gate / Freigabe</strong> durch den Lenkungskreis).",
+            "Meilensteine sind Ereignisse im Perfekt formuliert: „Genehmigung erteilt“, „Ausschreibung abgeschlossen“, „Abnahme erfolgt“."
+          ],
+          template: `PHASENPLAN
+Phase 1: Initialisierung & Analyse (Monat 1–2)   ──► M1: Projektauftrag & Grobkonzept freigegeben
+Phase 2: Detailplanung & Genehmigung (Monat 3–6) ──► M2: Baugenehmigung & Budget freigegeben
+Phase 3: Vergabe & Vorbereitung (Monat 7–9)      ──► M3: Hauptgewerke vergeben
+Phase 4: Umsetzung / Realisierung (Monat 10–22)  ──► M4: Teilabnahme / Abnahme erfolgt
+Phase 5: Inbetriebnahme & Abschluss (Monat 23–24)──► M5: Projekt abgeschlossen & übergeben`,
+          example: "<strong>Mini-Beispiel (Standortumzug):</strong> P1 Bedarfsanalyse & Mietvertrag (M1: Vertrag unterschrieben) → P2 Ausbau & IT-Planung (M2: Umbauplan freigegeben) → P3 Ausbau & IT-Test (M3: Standort abnahmebereit) → P4 Umzugswochenende (M4: Arbeitsfähigkeit 100 % hergestellt) → P5 Nachbetreuung & Abschluss (M5: Altstandort übergeben, Lessons Learned dokumentiert)."
+        },
+        {
+          id: "m-psp",
+          title: "4. Projektstrukturplan (PSP) – Gliederung, 100-%-Regel, Codierung",
+          icb: "Practice: Leistungsumfang & Lieferobjekte",
+          guide: [
+            "Der PSP ist der „Plan der Pläne“: Er zerlegt den gesamten Projektumfang hierarchisch in plan- und steuerbare <strong>Arbeitspakete (AP)</strong>.",
+            "<strong>Gliederungsarten:</strong> <em>objektorientiert</em> (nach Bauteilen/Systemen), <em>funktionsorientiert</em> (nach Fachabteilungen), <em>phasenorientiert</em> (nach Zeitphasen) oder <em>gemischt</em> (Praxisstandard: 1. Ebene nach Objekten oder Phasen + eigenes Teilprojekt „Projektmanagement“).",
+            "<strong>100-%-Regel:</strong> Alle Elemente einer Ebene zusammen ergeben exakt 100 % der darüberliegenden Ebene – nichts vergessen (z. B. PM, Schulung, Abnahme, Dokumentation!), nichts doppelt, nichts außerhalb des Auftrags.",
+            "<strong>Codierung:</strong> Eindeutige Nummerierung (z. B. <code>1.0</code>, <code>1.1</code>, <code>1.1.1</code>). Arbeitspakete liegen auf der untersten Ebene, haben genau einen Verantwortlichen und ein klares Lieferergebnis."
+          ],
+          template: `1.0 Gesamtprojekt [Name]
+├── 1.1 Projektmanagement (Querschnitt)
+│   ├── 1.1.1 Projektplanung & Steuerung
+│   ├── 1.1.2 Risikomanagement & Controlling
+│   └── 1.1.3 Stakeholder- & Kommunikationsmanagement
+├── 1.2 Teilprojekt A [Objekt oder Phase]
+│   ├── 1.2.1 Arbeitspaket A1
+│   └── 1.2.2 Arbeitspaket A2
+└── 1.3 Teilprojekt B [Objekt oder Phase]
+    ├── 1.3.1 Arbeitspaket B1
+    └── 1.3.2 Abnahme & Projektabschluss`,
+          example: "<strong>Mini-Beispiel (Gemischter PSP, Deponieprojekt):</strong> 1.1 Projektmanagement & Genehmigung | 1.2 Sanierung Altdeponie (1.2.1 Boden-/Altlastenanalyse, 1.2.2 Abdichtung & Entgasung, 1.2.3 Rekultivierung) | 1.3 Neubau Deponie (1.3.1 Standort & Bauabschnitt 1, 1.3.2 Bauabschnitt 2, 1.3.3 Inbetriebnahme) | 1.4 Kommunikation & Marketing."
+        },
+        {
+          id: "m-orga",
+          title: "5. Projektorganigramm, Rollen inkl. Lenkungskreis & RACI-Matrix",
+          icb: "Practice: Organisation, Information & Dokumentation",
+          guide: [
+            "Kläre die <strong>Projektorganisationsform</strong> (Einfluss-, Matrix- oder reine Projektorganisation; im Workshop oft Matrix- oder reine Projektorganisation je nach Größe).",
+            "Typische Rollen: <strong>Auftraggeber</strong> (Sponsor), <strong>Lenkungskreis</strong> (strategische Entscheidungen, Eskalationsinstanz, Budget-/Phasenfreigabe), <strong>Projektleitung</strong> (operative Gesamtsteuerung), <strong>Teilprojektleitung</strong>, <strong>Projektteam</strong>, optional <strong>PMO / Fachbeirat</strong>.",
+            "<strong>RACI-Matrix</strong> ordnet Aufgaben/Arbeitspakete eindeutig Rollen zu: <strong>R</strong> = Responsible (führt durch), <strong>A</strong> = Accountable (trägt Gesamtverantwortung/genehmigt – <em>genau 1× pro Zeile!</em>), <strong>C</strong> = Consulted (wird fachlich eingebunden), <strong>I</strong> = Informed (wird informiert)."
+          ],
+          template: `RACI-MATRIX (Beispielstruktur)
+| Arbeitspaket / Entscheidung     | Auftraggeber | Lenkungskreis | Projektleiter | Teil-PL | Fachbereich |
+|---------------------------------|--------------|---------------|---------------|---------|-------------|
+| Projektauftrag freigeben        | A            | C             | R             | I       | I           |
+| PSP & Terminplan erstellen      | I            | I             | A             | R       | C           |
+| Budgetänderung > 10 % genehmigen| C            | A             | R             | C       | I           |`,
+          example: "<strong>Mini-Beispiel:</strong> Bei einer ERP-Einführung sitzt der Vorstand/IT-Leiter im Lenkungskreis (A für Phasenfreigaben), der Projektleiter steuert das Tagesgeschäft (A für Termin-/Risikoplan), Teilprojektleiter (IT, Fachbereiche, Change) sind R für ihre Pakete, der Betriebsrat wird frühzeitig als C eingebunden."
+        },
+        {
+          id: "m-termin",
+          title: "6. Terminplan / Balkenplan (Gantt) und Kritischer Pfad",
+          icb: "Practice: Ablauf & Termine",
+          guide: [
+            "Leite die Vorgänge direkt aus den Arbeitspaketen des PSP ab (Konsistenz!).",
+            "Schätze Dauern (realistisch inkl. Genehmigungs-, Liefer- und Prüfzeiten!) und bestimme <strong>Abhängigkeiten</strong>: Normalfolge (EA – Ende-Anfang), Anfangsfolge (AA), Endfolge (EE).",
+            "Zeichne einen übersichtlichen <strong>Balkenplan (Gantt)</strong> auf einer Zeitachse (Monate/Quartale) inkl. Meilenstein-Rauten (◆).",
+            "Markiere den <strong>Kritischen Pfad</strong>: die längste Kette abhängiger Vorgänge mit <strong>Gesamtpuffer = 0</strong>. Jede Verzögerung dort verschiebt direkt den Endtermin!",
+            "Steuerungshebel bei Verzug: <em>Fast-Tracking</em> (Parallelisieren – erhöht Risiko), <em>Crashing</em> (mehr Ressourcen – erhöht Kosten), oder <em>Scope-Anpassung</em> (mit Auftraggeber klären)."
+          ],
+          template: `BALKENPLAN (Text-Skizze fürs Whiteboard)
+Vorgang                  | M1-3 | M4-6 | M7-12 | M13-18 | M19-24 | Kritisch?
+-------------------------|------|------|-------|--------|--------|----------
+1. Genehmigung           | ████ | ████ |       |        |        | JA (KP)
+2. Ausschreibung         |      |   ██ | ██    |        |        | JA (KP)
+3. Bauabschnitt 1        |      |      |   ███ | ██████ | ███    | JA (KP)
+4. Marketing / Dialog    | ████ | ████ | █████ | ██████ | ██████ | Nein (Puffer)
+◆ M1 Genehmigung (M6) · ◆ M2 Teilbetrieb (M24)`,
+          example: "<strong>Mini-Beispiel (Altdeponie/Neubau):</strong> Auf dem kritischen Pfad des Neubaus liegen Planfeststellung/Genehmigung → Ausschreibung → Basisabdichtung Bauabschnitt 1 → behördliche Abnahme. Das Marketingkonzept läuft parallel und hat Puffer, muss aber rechtzeitig vor der öffentlichen Auslegung starten."
+        },
+        {
+          id: "m-risiko",
+          title: "7. Risikoanalyse (Wahrscheinlichkeit × Auswirkung & Maßnahmen)",
+          icb: "Practice: Chancen & Risiken",
+          guide: [
+            "Identifiziere die Top-5 bis Top-8 Risiken aus verschiedenen Kategorien (Technik, Termine, Kosten, Recht/Genehmigung, Stakeholder, Ressourcen).",
+            "Formuliere Risiken klar nach <strong>Ursache → Ereignis → Auswirkung</strong>.",
+            "Bewerte <strong>Eintrittswahrscheinlichkeit (EW)</strong> (z. B. 1–3 oder 1–5) und <strong>Auswirkung (AW)</strong> (1–3 oder 1–5) → <strong>Risikowert = EW × AW</strong> (Ampel: Grün/Gelb/Rot).",
+            "Definiere für Top-Risiken konkrete Strategien: <strong>Vermeiden</strong> (Ursache ausschließen), <strong>Vermindern</strong> (Prävention oder Notfallplan), <strong>Übertragen</strong> (Versicherung, Vertragsstrafe), <strong>Akzeptieren</strong> (bewusst + Risikobudget).",
+            "Benenne stets einen <strong>Risikoverantwortlichen</strong> und idealerweise ein <strong>Frühwarnzeichen (Trigger)</strong>."
+          ],
+          template: `RISIKOMATRIX / -TABELLE
+| Nr | Risiko (Ursache → Folge) | EW (1-5) | AW (1-5) | Wert | Strategie & Maßnahme | Verantwortlich |
+|----|--------------------------|----------|----------|------|----------------------|----------------|
+| R1 | Verzögerte Genehmigung   | 4        | 5        | 20   | Vermindern: Vorab-Abstimmung Behörde, Puffer | PL |`,
+          example: "<strong>Mini-Beispiel:</strong> Risiko „Überraschende Schadstofffunde in der Altdeponie führen zu Mehrkosten (+30 %) und 2 Monaten Verzug“ (EW 4 × AW 4 = 16, hoch). Maßnahme: Sofortige Vorab-Beprobung in Woche 2, 15 % Risikoreserve im Angebot, vertragliche Nachforderungsklausel bei unvorhergesehenen Gefahrstoffen."
+        },
+        {
+          id: "m-angebot",
+          title: "8. Kostenschätzung und Angebot (Termin, Preis, Leistung, Annahmen)",
+          icb: "Practice: Kosten & Finanzierung · Beschaffung · People: Verhandlungen",
+          guide: [
+            "<strong>Schätzmethoden:</strong> Top-down (Analogie/Kennwerte), Bottom-up (Aufwand je PSP-Arbeitspaket × Tagessatz + Sach-/Fremdkosten), Dreipunktschätzung <code>(O + 4M + P) / 6</code>.",
+            "Vergiss nie: <strong>Interne Personalkosten, externe Dienstleister, Material/Lizenzen, Genehmigungen, Kommunikation/Schulung, Projektmanagement (oft 10–15 %) und Risikoreserve (oft 10–15 %)</strong>.",
+            "Ein professionelles <strong>Angebot</strong> im Assessment besteht zwingend aus 4 Säulen: <strong>1. Leistungsumfang (inkl. Ausschlüsse)</strong>, <strong>2. Terminplan / Meilensteine</strong>, <strong>3. Preis / Zahlungsplan</strong>, <strong>4. Explizite Annahmen & Mitwirkungspflichten</strong> (z. B. Auftraggeber stellt Grundstück/Daten rechtzeitig bereit)."
+          ],
+          template: `ANGEBOTS-STRUKTUR (4-Säulen-Schema)
+1. LEISTUNG: Was ist enthalten (Bezug zum PSP)? Was ist explizit ausgeschlossen?
+2. TERMIN:   Startdatum, Hauptmeilensteine, Endtermin (unter Vorbehalt Genehmigung)
+3. PREIS:    Aufschlüsselung nach Paketen + PM + Risikoaufschlag (netto/brutto) + Zahlungsmeilensteine (z. B. 30/40/30 %)
+4. ANNAHMEN: Liste aller fehlenden Angaben, Mitwirkungspflichten des AG, Angebotsgültigkeit (z. B. 60 Tage)`,
+          example: "<strong>Mini-Beispiel:</strong> „Pauschalpreis 1,15 Mio. € netto (inkl. 12 % Risikoreserve und 10 % PM) für Leistungsumfang gemäß PSP 1.1–1.4. Annahme: Baugrund ohne Kampfmittel, Genehmigung innerhalb von 4 Monaten, Mitwirkung Fachbereich 20 % Kapazität. Zusatzleistungen nach Nachweis (1.100 €/PT).“"
+        },
+        {
+          id: "m-kommunikation",
+          title: "9. Kommunikations- und Marketingkonzept",
+          icb: "People: Persönliche Kommunikation · Practice: Stakeholder",
+          guide: [
+            "<strong>Projektkommunikation</strong> (intern & extern) strukturiert den Informationsfluss über eine <strong>Kommunikationsmatrix</strong>: Zielgruppe, Inhalt/Botschaft, Kanal/Format, Frequenz, Verantwortlicher.",
+            "<strong>Projektmarketing</strong> geht einen Schritt weiter: Es schafft aktiv <strong>Vertrauen, Verständnis und Akzeptanz</strong> – besonders wichtig bei kritischen Vorhaben (Deponie, Standortumzug, IT-Change).",
+            "Gute Marketing-Elemente: Einprägsamer Projektname/Slogan (z. B. „Saubere Zukunft 2029“), transparente Fakten (Umwelt-/Sicherheitsstandards), Dialogformate (Bürgerabend, Townhall, FAQ-Website, Baustellenführungen), Multiplikatoren (Gemeinderat, Betriebsrat, Key User)."
+          ],
+          template: `KOMMUNIKATIONSMATRIX & MARKETING
+• Leitbotschaft / Slogan: [Nutzen für Zielgruppe in 1 Satz]
+• Zielgruppe | Botschaft | Kanal | Takt | Verantwortlich
+  - Lenkungskreis | Status (Ampel), Risiken, Entscheidungen | Statusbericht + Meeting | monatlich | PL
+  - Öffentlichkeit/MA | Nutzen, Zeitplan, Auswirkungen, Kontakt | Infoabend, Website, FAQ | meilensteinbezogen | Komm-Verantw.`,
+          example: "<strong>Mini-Beispiel (Deponie-Marketing):</strong> Leitmotiv „Sicher entsorgen, Umwelt schützen – für unsere Stadt“. Maßnahmen: Öffentliche Infoveranstaltung vor Ratsbeschluss, transparente Baustellen-Website mit Luft-/Lärm-Messwerten, geführte Besichtigung der sanierten Altdeponie als Grünfläche, Bürgertelefon."
+        },
+        {
+          id: "m-bigpicture",
+          title: "10. Big Picture (Visuelle Gesamtübersicht)",
+          icb: "People: Kommunikation & Ergebnisorientierung · Practice: Projektdesign",
+          guide: [
+            "Das Big Picture zeigt das gesamte Projekt <strong>auf einen Blick</strong> (eine zentrale Whiteboard-Fläche) – ideal als Einstieg und roter Faden für die Abschlusspräsentation.",
+            "Es beantwortet in 60 Sekunden die W-Fragen: <strong>Warum</strong> (Anlass/Nutzen)? <strong>Was</strong> (Kernziele/Scope)? <strong>Wann</strong> (Meilensteine)? <strong>Wer</strong> (Orga/Stakeholder)? <strong>Wieviel</strong> (Budget/Preis)? <strong>Worauf achten</strong> (Top-3-Risiken & Annahmen)?",
+            "Reduziere Text radikal: Stichpunkte, klare Pfeile, Ampelfarben, Zahlen – keine Textwände!"
+          ],
+          template: `BIG PICTURE – 6-FELDER-CANVAS
+┌──────────────────────┬──────────────────────┬──────────────────────┐
+│ 1. WARUM & ZIELE     │ 2. LEISTUNG & PSP    │ 3. ZEITPLAN (◆)      │
+│ Anlass, 3 SMART-Ziele│ 4 Hauptpakete        │ M1 → M2 → M3 → Ende  │
+├──────────────────────┼──────────────────────┼──────────────────────┤
+│ 4. TEAM & STAKEHOLDER│ 5. ANGEBOT & ANNAHMEN│ 6. TOP-3-RISIKEN     │
+│ Orga + Top-3-SH      │ Preis + Kernannahmen │ Risiko + Maßnahme    │
+└──────────────────────┴──────────────────────┴──────────────────────┘`,
+          example: "<strong>Mini-Beispiel:</strong> Zu Beginn eurer 12-minütigen Abschlusspräsentation zoomt ihr 90 Sekunden auf das Big Picture: „Hier sehen Sie unser Gesamtkonzept für die Stadt – links die Sanierung in 6 Monaten, mittig der 2-stufige Neubau, rechts Preis, Annahmen und unser Bürgerdialog.“ Danach taucht jedes Teammitglied kurz in sein Detailboard ein."
+        },
+        {
+          id: "m-lessons",
+          title: "11. Lessons Learned (Erfahrungssicherung)",
+          icb: "Practice: Planung & Steuerung · People: Selbstreflexion",
+          guide: [
+            "Lessons Learned werden nicht erst am Projektende, sondern idealerweise <strong>phasenbegleitend</strong> (nach jedem wichtigen Meilenstein) und im Abschlussworkshop erhoben.",
+            "Wichtig: <strong>Kein Schuldzuweisen (Blame Game)</strong>, sondern sachliche Analyse von Ursachen und übertragbaren Empfehlungen.",
+            "Vier Leitfragen: 1. Was lief gut (beibehalten)? 2. Was lief nicht gut / wo gab es Abweichungen? 3. Was waren die Ursachen? 4. Welche konkrete Empfehlung gilt für zukünftige Projekte – und wer verankert sie im Unternehmen (PMO/Prozesse)?"
+          ],
+          template: `LESSONS-LEARNED-TABELLE
+| Kategorie | Beobachtung (+/-) | Ursache | Konkrete Empfehlung für Folgeprojekte | Verankerung |
+|-----------|-------------------|---------|---------------------------------------|-------------|
+| Termine   | Genehmigung +6 Wo | Unterlagen unvollständig | Frühzeitige Checkliste mit Behörde abstimmen | PMO-Vorlage |`,
+          example: "<strong>Mini-Beispiel:</strong> Im Workshop-Teil 2 oder in der Selbstreflexion am Ende: „Positiv: Unser 5-Minuten-Zwischen-Sync hat den Konflikt zwischen PSP und Kosten früh aufgedeckt. Verbesserung: Nächstes Mal klären wir die Annahmen noch 5 Minuten früher, bevor die Teilgruppen starten.“"
+        }
+      ];
+
+      /* ========================
+         DATA: 3 ÜBUNGSFALLSTUDIEN
+         ======================== */
+      const CASE_STUDIES = [
+        {
+          id: "case-deponie",
+          shortTitle: "Fallstudie 1: Altdeponie & Neubau",
+          subtitle: "Stadt mit 85.000 Einwohnern · Angebot & Marketing",
+          badge: "Pflicht-Training",
+          context: `
+            <p><strong>Ausgangslage:</strong> Eine mittelgroße Stadt mit rund <strong>85.000 Einwohnern</strong> betreibt eine in die Jahre gekommene kommunale Mülldeponie. Aufgrund verschärfter Umweltauflagen und nahezu erschöpfter Kapazität muss die bestehende <strong>Altdeponie innerhalb eines halben Jahres (6 Monate)</strong> fachgerecht saniert und gesichert werden.</p>
+            <p>Parallel dazu soll auf einem neuen Gelände eine moderne <strong>neue Mülldeponie</strong> errichtet werden: Nach <strong>2 Jahren (24 Monate)</strong> muss sie <strong>teilweise in Betrieb</strong> gehen (Bauabschnitt 1), damit die Entsorgungssicherheit der Stadt gewährleistet bleibt; nach <strong>3 Jahren (36 Monate)</strong> soll die neue Deponie <strong>vollständig in Betrieb</strong> sein.</p>
+            <p><strong>Auftrag an euer Projektteam (als Generalunternehmer / Projektkonsortium):</strong> Erarbeitet ein schlüssiges Gesamtkonzept sowie ein <strong>verbindliches Angebot</strong> (Termin, Preis, Leistung inkl. transparenter Annahmen) und ein <strong>Kommunikations- &amp; Marketingkonzept</strong> zur Sicherung der politischen und öffentlichen Akzeptanz. <em>Hinweis: Fehlende technische und kaufmännische Detailwerte sind durch plausible, explizit dokumentierte Annahmen zu ersetzen.</em></p>
+          `,
+          levelCTasks: [
+            "<strong>Teil 1 (Analyse &amp; Projektplanung):</strong> SMART-Ziele, Nicht-Ziele &amp; KPIs formulieren; Umfeld- und Stakeholderanalyse inkl. Widerstands-Maßnahmen; gemischten PSP nach 100-%-Regel erstellen; Phasenplan mit Meilensteinen (6 / 24 / 36 Monate) &amp; kritischem Pfad; Projektorganigramm inkl. Lenkungskreis.",
+            "<strong>Teil 2 (Risiken, Angebot, Marketing &amp; Präsentation):</strong> Top-Risiken bewerten und Maßnahmen definieren; überschlägige Kostenschätzung &amp; 4-Säulen-Angebot (Leistung, Termin, Preis, Annahmen) erstellen; bürgernahes Marketing- &amp; Kommunikationskonzept ausarbeiten; 12-minütige Management-Präsentation (inkl. Big Picture) für den Stadtrat/Auftraggeber strukturieren."
+          ],
+          solution: {
+            ziele: `
+              <ul>
+                <li><strong>Leistungsziel 1 (Altdeponie):</strong> Fachgerechte Sanierung, Oberflächenabdichtung, Entgasung/Sickerwasserfassung und behördliche Abnahme der Altdeponie (Annahme: 6 ha Fläche, Deponieklasse II) innerhalb von <strong>6 Monaten</strong> ab Auftragserteilung.</li>
+                <li><strong>Leistungsziel 2 (Neubau Teilbetrieb):</strong> Fertigstellung und behördliche Freigabe von Bauabschnitt 1 (50 % Kapazität, inkl. Zufahrt, Waage, Sickerwasserbehandlung) innerhalb von <strong>24 Monaten</strong>.</li>
+                <li><strong>Leistungsziel 3 (Neubau Vollbetrieb):</strong> Fertigstellung von Bauabschnitt 2, Betriebsgebäuden, Monitoring-System und Vollbetrieb innerhalb von <strong>36 Monaten</strong>.</li>
+                <li><strong>Kostenziel:</strong> Einhaltung des Angebotsbudgets von <strong>14,8 Mio. € netto</strong> (inkl. PM und 12 % Risikoreserve; Annahme).</li>
+                <li><strong>Akzeptanzziel:</strong> Keine projektstoppenden Klagen/Verzögerungen durch Bürgerproteste; transparente Kommunikation über die gesamte Laufzeit.</li>
+                <li><strong>Nicht-Ziele:</strong> Laufende Müllabfuhr/Logistik der Stadt, Betrieb der Deponie nach Übergabe (nur Einweisung), Grundstückserwerb (liegt beim Auftraggeber), Behandlung unbekannter Kampfmittel oder Sonderabfall-Altlasten außerhalb DK II.</li>
+                <li><strong>KPIs:</strong> Termintreue (Abnahme M6 / M24 / M36 = 0 Tage Verzug), Budgetabweichung ≤ ±5 %, 0 schwere Arbeits-/Umweltunfälle, 100 % Erfüllung behördlicher Grenzwerte, ≥ 4 öffentliche Bürgerdialoge durchgeführt.</li>
+                <li><strong>Zielbeziehungen:</strong> Sehr kurzer 6-Monats-Termin der Altdeponie steht im Zielkonflikt zu Kosten (Schicht-/Parallelbetrieb) und Genehmigungsdauer → Priorität: 1. Umweltrecht/Sicherheit, 2. Meilensteine M6/M24, 3. Kosten.</li>
+              </ul>
+            `,
+            stakeholder: `
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr><th>Stakeholder</th><th>Einfluss</th><th>Einstellung</th><th>Erwartung / möglicher Widerstand</th><th>Maßnahme</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td><strong>Stadtverwaltung / Oberbürgermeister (AG)</strong></td><td>Hoch</td><td>Positiv (+)</td><td>Entsorgungssicherheit, Kostentreue, keine Skandale vor Wahlen</td><td>Monatlicher Lenkungskreis, Ampel-Reporting, klares Change-Management</td></tr>
+                    <tr><td><strong>Stadtrat / Kommunalpolitik</strong></td><td>Hoch</td><td>Gemischt (±)</td><td>Transparenz zu Kosten, Umweltverträglichkeit, Wählerstimmung</td><td>Frühzeitige Vorab-Information in Fachausschüssen, klare Zahlen &amp; Nutzen</td></tr>
+                    <tr><td><strong>Umwelt- &amp; Genehmigungsbehörden</strong></td><td>Hoch</td><td>Neutral (0)</td><td>Lückenlose Einhaltung Deponieverordnung, Immissions- &amp; Grundwasserschutz</td><td>Vorab-Scoping-Termin vor Antragstellung, fester Behördenkoordinator, vollständige Gutachten</td></tr>
+                    <tr><td><strong>Anwohner &amp; Bürgerinitiative</strong></td><td>Hoch</td><td>Negativ (−)</td><td>Angst vor Geruch, Lärm, LKW-Verkehr, Grundwasser, Wertverlust</td><td>Bürgerdialog vor Baubeginn, Hotline, feste LKW-Routen, Live-Messdaten online, Rekultivierung Altdeponie als Naherholungsgrünfläche</td></tr>
+                    <tr><td><strong>Umweltverbände / NGOs</strong></td><td>Mittel–Hoch</td><td>Kritisch (−)</td><td>Naturschutz, Artenvielfalt, Vermeidung von Schadstoffeinträgen</td><td>Fachdialog auf Augenhöhe, Ausgleichsflächen &amp; Öko-Monitoring transparent darstellen</td></tr>
+                    <tr><td><strong>Lokale Presse &amp; Medien</strong></td><td>Mittel–Hoch</td><td>Neutral (0)</td><td>Fakten, schnelle Antworten bei Störungen</td><td>Proaktive Pressemitteilungen an Meilensteinen, zentrale Pressestelle (Ein-Stimmen-Prinzip)</td></tr>
+                    <tr><td><strong>Nachunternehmer / Tiefbau</strong></td><td>Mittel</td><td>Positiv (+)</td><td>Klare Ausschreibung, pünktliche Zahlung, verlässlicher Bauablauf</td><td>Frühzeitige Rahmenverträge, Vertragsstrafen/Boni, wöchentliche Baukoordination</td></tr>
+                    <tr><td><strong>Städtischer Entsorgungsbetrieb</strong></td><td>Mittel</td><td>Positiv (+)</td><td>Reibungsloser Übergang ohne Entsorgungsengpass</td><td>Frühe Einbindung in Anlagenplanung, gemeinsame Übergangslogistik &amp; Schulung</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            `,
+            psp: `<pre class="tree-box">1.0 Gesamtprojekt Altdeponie-Sanierung &amp; Neubau Mülldeponie (85.000 EW)
+├── 1.1 Projektmanagement &amp; Steuerung (Querschnitt)
+│   ├── 1.1.1 Projektauftrag, Planung &amp; Controlling
+│   ├── 1.1.2 Risikomanagement &amp; Claim-/Änderungsmanagement
+│   ├── 1.1.3 Genehmigungs- &amp; Behördenmanagement
+│   └── 1.1.4 Qualitäts-, Arbeits- &amp; Umweltschutz (HSE)
+├── 1.2 Sanierung Altdeponie (Ziel: Monat 6)
+│   ├── 1.2.1 Bestandsaufnahme, Boden- &amp; Altlastenbeprobung
+│   ├── 1.2.2 Profilierung &amp; Oberflächenabdichtung
+│   ├── 1.2.3 Sickerwasserfassung &amp; Deponieentgasung
+│   ├── 1.2.4 Rekultivierung (Grünfläche) &amp; behördliche Abnahme
+├── 1.3 Neubau Mülldeponie – Bauabschnitt 1 / Teilbetrieb (Ziel: Monat 24)
+│   ├── 1.3.1 Detailplanung, Planfeststellung &amp; Vergabe BA 1
+│   ├── 1.3.2 Erschließung, Zufahrt, Waage &amp; Zaunanlage
+│   ├── 1.3.3 Erdbau &amp; Basisabdichtung BA 1
+│   ├── 1.3.4 Sickerwasser- &amp; Gasbehandlungsanlage (Grundstufe)
+│   └── 1.3.5 Probebetrieb, Einweisung &amp; Teilabnahme BA 1
+├── 1.4 Neubau Mülldeponie – Bauabschnitt 2 / Vollbetrieb (Ziel: Monat 36)
+│   ├── 1.4.1 Erdbau &amp; Basisabdichtung BA 2
+│   ├── 1.4.2 Betriebsgebäude, Labor &amp; Erweiterung Technik
+│   ├── 1.4.3 Voll-Inbetriebnahme, Dokumentation &amp; Gesamtabnahme
+│   └── 1.4.4 Projektabschluss &amp; Lessons Learned
+└── 1.5 Kommunikation &amp; Projektmarketing
+    ├── 1.5.1 Kommunikationskonzept &amp; Projektmarke („Saubere Zukunft“)
+    ├── 1.5.2 Bürgerdialoge, Infoportal &amp; Anwohner-Hotline
+    └── 1.5.3 Pressearbeit, Meilenstein-Events &amp; Eröffnungsbegleitung</pre>`,
+            phasen: `
+              <ul>
+                <li><strong>Phase 1 (Monat 1–2):</strong> Initialisierung, Detailbeprobung Altdeponie, Scoping Behörden, Start Bürgerkommunikation → <strong>◆ M1 (M2): Sanierungsplan freigegeben &amp; Genehmigungsantrag Neubau eingereicht</strong></li>
+                <li><strong>Phase 2 (Monat 2–6):</strong> Sanierung Altdeponie (parallel zur Genehmigung Neubau!) → <strong>◆ M2 (M6): Altdeponie saniert &amp; behördlich abgenommen</strong></li>
+                <li><strong>Phase 3 (Monat 3–10):</strong> Planfeststellung, Detailplanung &amp; Ausschreibung Neubau BA 1 → <strong>◆ M3 (M10): Genehmigung Neubau &amp; Vergabe Hauptgewerke</strong> <em>(Kritischer Pfad!)</em></li>
+                <li><strong>Phase 4 (Monat 11–24):</strong> Bau &amp; Technik Bauabschnitt 1, Testbetrieb → <strong>◆ M4 (M24): Teilbetrieb Neubau gestartet &amp; abgenommen</strong> <em>(Kritischer Pfad!)</em></li>
+                <li><strong>Phase 5 (Monat 25–34):</strong> Ausbau Bauabschnitt 2 &amp; Betriebsgebäude → <strong>◆ M5 (M34): Technische Fertigstellung BA 2</strong></li>
+                <li><strong>Phase 6 (Monat 35–36):</strong> Voll-Inbetriebnahme, Übergabe, Dokumentation &amp; Abschluss → <strong>◆ M6 (M36): Vollbetrieb &amp; Projektabschluss</strong></li>
+              </ul>
+              <p><strong>Kritischer Pfad:</strong> Bei der Altdeponie: Beprobung → Abdichtung → Abnahme (null Puffer in 6 Monaten!). Beim Neubau: Behördliche Genehmigung → Ausschreibung → Basisabdichtung BA 1 → Abnahme M24.</p>
+            `,
+            orga: `
+              <div class="org-chart">
+                <div class="org-level"><div class="org-node primary">Lenkungskreis<br /><small>Stadtspitze (AG), Kämmerei, Entsorgungsbetrieb, GF Generalunternehmer</small></div></div>
+                <div class="org-arrow">▼</div>
+                <div class="org-level"><div class="org-node primary">Gesamtprojektleitung (PL)<br /><small>inkl. PMO / Controlling &amp; HSE-Beauftragter</small></div></div>
+                <div class="org-arrow">▼</div>
+                <div class="org-level">
+                  <div class="org-node"><strong>TPL Altdeponie</strong><br /><small>Sanierung &amp; Gutachter</small></div>
+                  <div class="org-node"><strong>TPL Neubau</strong><br /><small>Tiefbau, Technik, Vergabe</small></div>
+                  <div class="org-node"><strong>TPL Genehmigung &amp; Recht</strong><br /><small>Behörden &amp; Umweltrecht</small></div>
+                  <div class="org-node"><strong>TPL Kommunikation</strong><br /><small>Marketing, Bürger, Presse</small></div>
+                </div>
+              </div>
+              <p><strong>Organisationsform:</strong> Reine Projektorganisation beim Generalunternehmer mit klarem Lenkungskreis auf Auftraggeberseite. Entscheidungsbefugnis: Änderungen &gt; 50.000 € oder Meilenstein-Verschiebungen entscheidet der Lenkungskreis.</p>
+            `,
+            risiken: `
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr><th>Nr</th><th>Top-Risiko</th><th>EW</th><th>AW</th><th>Wert</th><th>Maßnahme &amp; Strategie</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>R1</td><td>Genehmigung Neubau dauert länger als 10 Monate → gefährdet Teilbetrieb M24</td><td>4</td><td>5</td><td><span class="pill danger">20</span></td><td><strong>Vermindern:</strong> Sofortiges Behörden-Scoping, Einbindung Fachgutachter ab Monat 1, vertraglicher Vorbehalt für behördliche Laufzeiten</td></tr>
+                    <tr><td>R2</td><td>Unbekannte Schadstoffe/Altlasten in Altdeponie → Verzug M6 &amp; Mehrkosten</td><td>4</td><td>4</td><td><span class="pill danger">16</span></td><td><strong>Vermindern/Übertragen:</strong> Sofort-Beprobung in Woche 2, 12 % Risikoreserve, Nachforderungsklausel für Sonderabfälle außerhalb DK II</td></tr>
+                    <tr><td>R3</td><td>Bürgerproteste / Klage gegen Neubau → Baustopp &amp; Reputationsschaden</td><td>3</td><td>5</td><td><span class="pill danger">15</span></td><td><strong>Vermindern:</strong> Frühzeitiges Marketing-/Dialogkonzept, transparente Umweltwerte, LKW-Routen abseits Wohngebiete</td></tr>
+                    <tr><td>R4</td><td>Witterung (Frost/Starkregen) verzögert Basis-/Oberflächenabdichtung</td><td>4</td><td>3</td><td><span class="pill warn">12</span></td><td><strong>Vermindern:</strong> Zeitpuffer in Wintermonaten, wetterunabhängige Gewerke vorziehen, flexible Schichtplanung</td></tr>
+                    <tr><td>R5</td><td>Baupreissteigerungen &amp; Lieferengpässe (Dichtungsbahnen, Technik)</td><td>3</td><td>4</td><td><span class="pill warn">12</span></td><td><strong>Übertragen/Vermindern:</strong> Frühzeitige Rahmenverträge, Preisgleitklausel ab 5 % Indexänderung, Zweitlieferanten</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            `,
+            angebot: `
+              <p><strong>Explizite Annahmen (fehlende Angaben pragmatisch gesetzt):</strong></p>
+              <ul>
+                <li>Grundstück für die neue Deponie befindet sich bereits im Eigentum der Stadt und ist grundsätzlich planungsrechtlich geeignet (kein Grundstückskauf im Angebot).</li>
+                <li>Altdeponie: ca. 6 ha, Hausmüll/DK II, keine Kampfmittel oder hochtoxischen Sonderaltlasten.</li>
+                <li>Neue Deponie: ausgelegt für 85.000 Einwohner (~35.000–45.000 t Restabfall/Jahr inkl. Gewerbeanteil, Lebensdauer 20+ Jahre), Fläche ca. 12 ha in 2 Bauabschnitten.</li>
+                <li>Zwischenentsorgung von Monat 6 bis Monat 24 (zwischen Schließung Altdeponie und Teilbetrieb Neubau) erfolgt über bestehende Umladestation/Nachbarkreis (Verantwortung Stadt; wir unterstützen die Schnittstelle!).</li>
+                <li>Genehmigungsbehörde entscheidet bei vollständigen Anträgen binnen max. 8 Monaten.</li>
+              </ul>
+              <p><strong>Grobkalkulation / Angebotspreis (Pauschalpreis mit klaren Abgrenzungen):</strong></p>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>Position</th><th>Leistungsinhalt</th><th>Betrag (netto)</th></tr></thead>
+                  <tbody>
+                    <tr><td>1. Sanierung Altdeponie (PSP 1.2)</td><td>Beprobung, Abdichtung, Gas/Sickerwasser, Rekultivierung (6 ha)</td><td>3.200.000 €</td></tr>
+                    <tr><td>2. Neubau BA 1 Teilbetrieb (PSP 1.3)</td><td>Planung, Erschließung, Waage, Basisabdichtung BA 1, Technik</td><td>5.800.000 €</td></tr>
+                    <tr><td>3. Neubau BA 2 Vollbetrieb (PSP 1.4)</td><td>Basisabdichtung BA 2, Betriebsgebäude, Voll-Inbetriebnahme</td><td>2.600.000 €</td></tr>
+                    <tr><td>4. Kommunikation &amp; Marketing (PSP 1.5)</td><td>Bürgerdialog, Infoportal, Pressearbeit, Infomaterial</td><td>250.000 €</td></tr>
+                    <tr><td>5. Projektmanagement &amp; HSE (PSP 1.1)</td><td>~11 % auf Leistungen (Steuerung, Behörden, Controlling)</td><td>1.350.000 €</td></tr>
+                    <tr><td>6. Risikoreserve (12 %)</td><td>Puffer für Witterung, Preisvolatilität, geringfügige Bodenanpassungen</td><td>1.600.000 €</td></tr>
+                    <tr><td><strong>Gesamtangebot (netto)</strong></td><td><strong>zzgl. gesetzl. MwSt. · Gültigkeit: 60 Tage</strong></td><td><strong>14.800.000 €</strong></td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <p><strong>Zahlungsplan:</strong> 15 % Auftragserteilung · 20 % Abnahme Altdeponie (M6) · 15 % Genehmigung Neubau (M10) · 30 % Teilbetrieb BA 1 (M24) · 20 % Vollbetrieb &amp; Endabnahme (M36).</p>
+              <p><strong>Marketing- &amp; Kommunikationskonzept (Kernpunkte):</strong> Leitmotiv <em>„Saubere Stadt 2029 – Sicher entsorgen, Natur zurückgewinnen“</em>. 1) Altdeponie positiv besetzen: wird zur begrünten Ausgleichsfläche. 2) Maximale Transparenz beim Neubau: Infoportal mit Messwerten, Bürger-Infomarkt vor Ratsbeschluss, direkte Hotline, feste LKW-Korridore. 3) Multiplikatoren aktivieren: Stadträte, Umweltverbände und Schulen zu Baustellenführungen einladen.</p>
+            `,
+            praesentation: `
+              <ol>
+                <li><strong>Min. 0–2 · Einstieg &amp; Big Picture (Person 1):</strong> Auftrag verstanden, Kernnutzen für die 85.000 Bürger, Übersicht der 3 Meilensteine (6 / 24 / 36 Monate).</li>
+                <li><strong>Min. 2–4 · Ziele, Annahmen &amp; Organisation (Person 2):</strong> SMART-Ziele, kritische Schnittstelle Übergangsentsorgung M6–M24, Projektorganigramm &amp; Lenkungskreis.</li>
+                <li><strong>Min. 4–6 · PSP &amp; Terminplan / Kritischer Pfad (Person 3):</strong> Leistungsstruktur (100-%-Regel) und wie wir die kritischen Genehmigungs- und Bauzeiten steuern.</li>
+                <li><strong>Min. 6–8 · Stakeholder &amp; Marketingkonzept (Person 4):</strong> Wie wir Bürger, Politik und Behörden früh gewinnen und Widerstände abbauen.</li>
+                <li><strong>Min. 8–10 · Top-Risiken &amp; Gegenmaßnahmen (Person 5):</strong> Offener Umgang mit Altlasten-, Genehmigungs- und Wetterrisiken.</li>
+                <li><strong>Min. 10–12 · Angebot (Preis/Leistung/Termin) &amp; Nächste Schritte (Person 6):</strong> 14,8 Mio. € transparent aufgeschlüsselt, Zahlungsplan, Kick-off-Vorschlag, Fragerunde.</li>
+              </ol>
+            `
+          }
+        },
+        {
+          id: "case-erp",
+          shortTitle: "Fallstudie 2: IT-ERP-Einführung",
+          subtitle: "Industriekonzern (1.200 MA, 3 Standorte) · 14 Monate",
+          badge: "IT & Change",
+          context: `
+            <p><strong>Ausgangslage:</strong> Ein mittelständischer Industriekonzern (<strong>1.200 Mitarbeitende</strong> an <strong>3 Standorten</strong> in Deutschland und Österreich) arbeitet noch mit einem 18 Jahre alten Eigenbau-ERP-System, dessen Wartung in 16 Monaten endet. Medienbrüche führen zu hohen Lagerbeständen und Lieferverzögerungen.</p>
+            <p><strong>Auftrag:</strong> Einführung eines modernen Standard-ERP-Systems (Finanzen, Einkauf, Produktion, Vertrieb) innerhalb von <strong>14 Monaten</strong> bei einem Zielbudget von <strong>1,8 Mio. €</strong>. Der laufende Produktions- und Lieferbetrieb darf beim Go-Live maximal an einem Wochenende (48 Stunden) unterbrochen werden. Ein starker Betriebsrat sowie skeptische langjährige Mitarbeitende sind zentrale Einflussfaktoren.</p>
+            <p><strong>Aufgabe für das Team:</strong> Erstellt Projektkonzept, Stakeholder-/Change-Strategie, PSP, Phasenplan, Orga/RACI, Top-Risiken, internes Budget-/Leistungsangebot inkl. Annahmen sowie eine Präsentation für den Vorstand.</p>
+          `,
+          levelCTasks: [
+            "<strong>Teil 1 (Projektsetup &amp; Struktur):</strong> SMART-Ziele inkl. Nicht-Zielen (Standard vor Individualentwicklung!); Stakeholderanalyse inkl. Betriebsrat und Standortleitern; PSP inkl. Datenmigration, Tests und Change/Schulung; Phasenplan mit Go-Live-Strategie.",
+            "<strong>Teil 2 (Steuerung, Risiko &amp; Change):</strong> Projektorganigramm mit Key-User-Netzwerk; Risikoanalyse (Datenqualität, Produktivitätsknick, Widerstand); Budgetverteilung &amp; Annahmen; internes Kommunikations- und Akzeptanzkonzept; Management-Präsentation."
+          ],
+          solution: {
+            ziele: `
+              <ul>
+                <li><strong>Leistungsziel:</strong> Produktive Einführung des Standard-ERP-Systems (Module FI/CO, MM, PP, SD) an allen 3 Standorten mit &lt; 10 % Individualanpassungen („Standard first“) bis <strong>Monat 14</strong>.</li>
+                <li><strong>Kontinuitätsziel:</strong> Umstellung (Cutover) an einem definierten Wochenende (max. 48 h Downtime), Lieferfähigkeit ab Tag 1 nach Go-Live ≥ 98 %.</li>
+                <li><strong>Kostenziel:</strong> Einhaltung des Budgets von <strong>1,8 Mio. €</strong> (inkl. Lizenzen Jahr 1, Beratung, Schulung, 10 % Reserve).</li>
+                <li><strong>Akzeptanzziel:</strong> 100 % der betroffenen 450 Anwender vor Go-Live geschult; Betriebsvereinbarung bis Monat 6 unterschrieben.</li>
+                <li><strong>Nicht-Ziele:</strong> Austausch von Produktionsmaschinen/MES, Neuentwicklung individueller Altsystem-Spezialberichte, Einführung in künftigen Auslandsgesellschaften.</li>
+                <li><strong>KPIs:</strong> Datenmigrations-Fehlerquote &lt; 0,5 %, Kritische Bugs beim Go-Live = 0, Auftragsdurchlaufzeit nach 6 Monaten −20 %, Anwender-Zufriedenheit ≥ 4/5.</li>
+              </ul>
+            `,
+            stakeholder: `
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>Stakeholder</th><th>Einfluss</th><th>Einstellung</th><th>Erwartung / Widerstand</th><th>Maßnahme</th></tr></thead>
+                  <tbody>
+                    <tr><td><strong>Vorstand (Auftraggeber)</strong></td><td>Hoch</td><td>Positiv (+)</td><td>Budget- &amp; Termintreue, Zukunftsfähigkeit, Standardprozesse</td><td>Lenkungskreis alle 4 Wochen, konsequente Eskalation bei Sonderwünschen</td></tr>
+                    <tr><td><strong>Betriebsrat</strong></td><td>Hoch</td><td>Kritisch (−)</td><td>Sorge vor Leistungsüberwachung, Arbeitsplatzabbau, Überlastung</td><td>Frühzeitige Einbindung ab Monat 1, transparente Datenschutz-/Betriebsvereinbarung</td></tr>
+                    <tr><td><strong>Standort- &amp; Abteilungsleiter</strong></td><td>Hoch</td><td>Gemischt (±)</td><td>Angst vor Kapazitätsverlust im Tagesgeschäft &amp; Verlust von Sonderprozessen</td><td>Klare Freistellungsbudgets für Key User, Einbindung in Prozessentscheidungen</td></tr>
+                    <tr><td><strong>Anwender (450 MA)</strong></td><td>Mittel</td><td>Skeptisch (−)</td><td>Umstellungsangst, Mehraufwand, Verlust gewohnter Excel-Helfer</td><td>Key-User-Konzept (Peers schulen Peers), praxisnahe Trainings, Hypercare-Support</td></tr>
+                    <tr><td><strong>ERP-Implementierungspartner</strong></td><td>Hoch</td><td>Positiv (+)</td><td>Klare Entscheidungen, pünktliche Datenlieferung, faire Vergütung</td><td>Festpreis-Meilensteine mit Abnahmekriterien, gemeinsames Risiko-Board</td></tr>
+                    <tr><td><strong>Interne IT</strong></td><td>Mittel–Hoch</td><td>Gemischt (±)</td><td>Doppelbelastung Alt- + Neusystem, Know-how-Aufbau</td><td>Wissenstransfer-Meilensteine mit Partner, externe Entlastung für Altbetrieb</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            `,
+            psp: `<pre class="tree-box">1.0 Konzernweite ERP-Einführung (3 Standorte)
+├── 1.1 Projektmanagement &amp; Governance
+│   ├── 1.1.1 Planung, Budget- &amp; Termincontrolling
+│   ├── 1.1.2 Risikomanagement &amp; Change-Request-Steuerung
+│   └── 1.1.3 Betriebsrat-Abstimmung &amp; Datenschutz/Compliance
+├── 1.2 Prozessdesign &amp; Konzeption (Fit-to-Standard)
+│   ├── 1.2.1 Ist-Aufnahme &amp; Gap-Analyse (FI, MM, PP, SD)
+│   └── 1.2.2 Zielprozesse &amp; Berechtigungskonzept
+├── 1.3 Systemaufbau, Schnittstellen &amp; Datenmigration
+│   ├── 1.3.1 System-Customizing &amp; Schnittstellen (MES, Lohn, Bank)
+│   ├── 1.3.2 Stammdatenbereinigung (Material, Kunden, Lieferanten)
+│   └── 1.3.3 Testmigrationen (2 Probeläufe) &amp; Produktivmigration
+├── 1.4 Testmanagement &amp; Go-Live
+│   ├── 1.4.1 Integrationstest &amp; User Acceptance Test (UAT)
+│   ├── 1.4.2 Cutover-Planung &amp; Go-Live-Wochenende (max. 48 h)
+│   └── 1.4.3 Hypercare-Phase (6 Wochen) &amp; Regelbetrieb-Übergabe
+└── 1.5 Change Management, Kommunikation &amp; Schulung
+    ├── 1.5.1 Interne Kommunikationskampagne &amp; Key-User-Netzwerk
+    ├── 1.5.2 Schulungsunterlagen &amp; Rollout-Trainings (450 MA)
+    └── 1.5.3 Projektabschluss &amp; Lessons Learned</pre>`,
+            phasen: `
+              <ul>
+                <li><strong>Phase 1 (M1–M2):</strong> Initialisierung, Partner-Onboarding, Key-User-Benennung → <strong>◆ M1 (M2): Projektauftrag &amp; Governance freigegeben</strong></li>
+                <li><strong>Phase 2 (M3–M5):</strong> Fit-to-Standard-Prozessdesign &amp; Start Datenbereinigung → <strong>◆ M2 (M5): Fachkonzept &amp; Betriebsvereinbarung unterzeichnet</strong></li>
+                <li><strong>Phase 3 (M6–M9):</strong> Customizing, Schnittstellen, Testmigration 1 → <strong>◆ M3 (M9): System funktional fertiggestellt</strong> <em>(Kritischer Pfad)</em></li>
+                <li><strong>Phase 4 (M10–M11):</strong> UAT, Testmigration 2, Endanwender-Schulungen → <strong>◆ M4 (M11): Go-Live-Freigabe (Go/No-Go-Gate)</strong> <em>(Kritischer Pfad)</em></li>
+                <li><strong>Phase 5 (M12):</strong> Cutover-Wochenende &amp; Produktivstart (Big Bang mit 2 Monaten Puffer zur Altsystem-Abkündigung!) → <strong>◆ M5 (M12): Produktivstart erfolgt</strong></li>
+                <li><strong>Phase 6 (M13–M14):</strong> Hypercare, Fehlerbehebung, Abschluss → <strong>◆ M6 (M14): Übergabe Regelbetrieb &amp; Projektabschluss</strong></li>
+              </ul>
+            `,
+            orga: `
+              <div class="org-chart">
+                <div class="org-level"><div class="org-node primary">Lenkungskreis<br /><small>Vorstand (AG), CIO, Werksleiter, Projektleitung, Partner-Leitung</small></div></div>
+                <div class="org-arrow">▼</div>
+                <div class="org-level"><div class="org-node primary">Gesamtprojektleitung (Intern) + Co-PL (Implementierungspartner)</div></div>
+                <div class="org-arrow">▼</div>
+                <div class="org-level">
+                  <div class="org-node"><strong>TPL Prozesse &amp; Key User</strong><br /><small>FI, Einkauf, Prod., Vertrieb</small></div>
+                  <div class="org-node"><strong>TPL IT &amp; Migration</strong><br /><small>Customizing, Schnittstellen</small></div>
+                  <div class="org-node"><strong>TPL Test &amp; Cutover</strong><br /><small>UAT, Go-Live-Drehbuch</small></div>
+                  <div class="org-node"><strong>TPL Change &amp; Training</strong><br /><small>Komm., Betriebsrat, Schulung</small></div>
+                </div>
+              </div>
+              <p><strong>Organisationsform:</strong> Matrix-Projektorganisation mit verbindlicher Freistellung (50 % für Teil-PL, 30 % für Key User) zur Vermeidung von Ressourcenkonflikten.</p>
+            `,
+            risiken: `
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>Nr</th><th>Top-Risiko</th><th>EW</th><th>AW</th><th>Wert</th><th>Maßnahme</th></tr></thead>
+                  <tbody>
+                    <tr><td>R1</td><td>Schlechte Altdatenqualität führt zu fehlerhaften Buchungen/Lieferstopp</td><td>5</td><td>5</td><td><span class="pill danger">25</span></td><td>Start Datenbereinigung bereits in Monat 2, feste Daten-Owner, 2 komplette Testmigrationen</td></tr>
+                    <tr><td>R2</td><td>Key User werden im Tagesgeschäft nicht freigestellt → Verzögerung Tests</td><td>4</td><td>4</td><td><span class="pill danger">16</span></td><td>Vorstandsbeschluss zur Backfill-/Freistellungsquote, monatliches Kapazitäts-Tracking</td></tr>
+                    <tr><td>R3</td><td>Scope Creep durch Sonderwünsche der Standorte sprengt Budget &amp; Termin</td><td>4</td><td>4</td><td><span class="pill danger">16</span></td><td>Striktes „Standard first“-Prinzip, Change Requests nur über Lenkungskreis mit Kosten-/Terminnachweis</td></tr>
+                    <tr><td>R4</td><td>Verzögerte Betriebsvereinbarung blockiert Go-Live</td><td>3</td><td>5</td><td><span class="pill danger">15</span></td><td>Betriebsrat ab Woche 2 einbinden, gemeinsamer Workshop Datenschutz/Auswertungen</td></tr>
+                    <tr><td>R5</td><td>Produktivitätsabfall nach Go-Live durch mangelnde Routine</td><td>4</td><td>3</td><td><span class="pill warn">12</span></td><td>Praxisnahe Rollentrainings 3 Wochen vor Go-Live, 6 Wochen Hypercare mit Floorwalkern vor Ort</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            `,
+            angebot: `
+              <p><strong>Explizite Annahmen:</strong> Software-Auswahl ist bereits abgeschlossen; interne Key User werden wie beschlossen freigestellt (Backfill im Tagesgeschäft außerhalb Projektbudget); 3 Standorte übernehmen harmonisierte Standardprozesse; Hardware/Cloud-Infrastruktur ist in Monat 3 verfügbar.</p>
+              <p><strong>Budget- &amp; Leistungsangebot (1,80 Mio. €):</strong></p>
+              <ul>
+                <li>Lizenzen / Cloud-Subskription Jahr 1 &amp; Infrastruktur: <strong>380.000 €</strong></li>
+                <li>Externer Implementierungspartner (Customizing, Schnittstellen, Migration): <strong>780.000 €</strong></li>
+                <li>Interne Projektkosten (PM, IT, Test, Backfill-Unterstützung): <strong>280.000 €</strong></li>
+                <li>Change Management, Kommunikation &amp; Schulungen (450 MA): <strong>180.000 €</strong></li>
+                <li>Risikoreserve (10 %): <strong>180.000 €</strong> → <strong>Gesamt: 1.800.000 €</strong></li>
+              </ul>
+              <p><strong>Internes Marketing-/Change-Konzept:</strong> Kampagne <em>„Ein System. Drei Standorte. Weniger Papierkram.“</em> – monatliches 15-Min-Video-Update, Demo-Sessions („ERP zum Anfassen“) ab Monat 7, sichtbare Key User als Botschafter an jedem Standort, offene FAQ-Ecke im Intranet.</p>
+            `,
+            praesentation: `
+              <ol>
+                <li><strong>Min. 0–2 · Big Picture &amp; Nutzen:</strong> Warum jetzt (Wartungsende in 16 Monaten) und wie wir 2 Monate Sicherheitspuffer einbauen.</li>
+                <li><strong>Min. 2–4 · Scope &amp; „Standard first“:</strong> SMART-Ziele, Nicht-Ziele, klare Change-Regel.</li>
+                <li><strong>Min. 4–6 · Phasenplan, PSP &amp; 48h-Cutover-Konzept:</strong> Wie wir den Betrieb ohne Ausfall umstellen.</li>
+                <li><strong>Min. 6–8 · Stakeholder, Betriebsrat &amp; Change-Konzept:</strong> Menschen mitnehmen statt überfahren.</li>
+                <li><strong>Min. 8–10 · Top-5-Risiken &amp; Gegenmaßnahmen:</strong> Fokus auf Datenqualität &amp; Freistellung.</li>
+                <li><strong>Min. 10–12 · Budget (1,8 Mio. €), Annahmen &amp; Entscheidungsvorlage:</strong> Was der Vorstand heute freigeben soll.</li>
+              </ol>
+            `
+          }
+        },
+        {
+          id: "case-umzug",
+          shortTitle: "Fallstudie 3: Standortumzug & Event",
+          subtitle: "350 MA inkl. IT/Labor + Eröffnungs-Event · 9 Monate",
+          badge: "Logistik & Event",
+          context: `
+            <p><strong>Ausgangslage:</strong> Ein wachsendes Technologieunternehmen verlegt seinen Entwicklungs- und Verwaltungsstandort mit <strong>350 Mitarbeitenden</strong> (inkl. 2 Entwicklungslaboren und lokalem Serverraum) in ein modernes, 12 km entferntes Büro- und Technikgebäude. Der alte Mietvertrag läuft in genau <strong>9 Monaten</strong> aus (Vertragsstrafe bei Verzug: 4.500 €/Tag).</p>
+            <p><strong>Zusatzauftrag:</strong> Zwei Wochen nach dem erfolgreichen Umzug soll eine repräsentative <strong>Standort-Eröffnung</strong> für Mitarbeitende, 120 Schlüsselkunden, Presse und lokale Politik stattfinden.</p>
+            <p><strong>Aufgabe für das Team:</strong> Plant den kompletten Standortumzug ohne Ausfall laufender Kundenprojekte sowie das Eröffnungs-Event. Erstellt Ziele, Stakeholderanalyse, PSP, Phasenplan, Orga, Top-Risiken, ein Angebot/Budget inkl. Annahmen sowie Kommunikations- &amp; Event-Marketing.</p>
+          `,
+          levelCTasks: [
+            "<strong>Teil 1 (Umzugs- &amp; Event-Planung):</strong> SMART-Ziele &amp; Nicht-Ziele; Stakeholderanalyse (Vermieter alt/neu, MA, Betriebsrat, Kunden, Nachbarn); 100-%-PSP für Ausbau, IT/Labor, Umzug und Eröffnungs-Event; Phasenplan mit hartem Fixtermin (Monat 9).",
+            "<strong>Teil 2 (Risiko, Kalkulation, Marketing &amp; Pitch):</strong> Organisation &amp; RACI (inkl. Umzugskoordinatoren je Abteilung); Top-Risiken (Bauverzug, IT-Ausfall, Altmiete); Budget/Angebot inkl. Annahmen; Mitarbeiter- &amp; Kunden-Kommunikationskonzept; Abschlusspräsentation."
+          ],
+          solution: {
+            ziele: `
+              <ul>
+                <li><strong>Terminziel Umzug:</strong> Vollständiger Umzug aller 350 Arbeitsplätze, 2 Labore und IT sowie besenreine Übergabe des Altstandorts bis spätestens <strong>Monat 8,5</strong> (2 Wochen Puffer vor Mietvertragsende in Monat 9).</li>
+                <li><strong>Betriebskontinuität:</strong> Keine Unterbrechung der Kunden-Erreichbarkeit; Arbeitsfähigkeit der Mitarbeitenden am Montag nach dem Umzugswochenende ≥ 95 %.</li>
+                <li><strong>Event-Ziel:</strong> Erfolgreiche Eröffnungsfeier in <strong>Monat 9</strong> für 350 MA + 120 externe Gäste (Zufriedenheit ≥ 4,2/5, positive lokale Medienberichterstattung).</li>
+                <li><strong>Kostenziel:</strong> Gesamtbudget <strong>950.000 € netto</strong> (Annahme; inkl. Innenausbau-Restleistungen, IT/Labor-Umzug, Rückbau Altstandort, Event &amp; Reserve).</li>
+                <li><strong>Nicht-Ziele:</strong> Neubeschaffung kompletter Produktionsanlagen, Änderung von Arbeitsverträgen, private Umzugshilfe für Mitarbeitende.</li>
+                <li><strong>KPIs:</strong> 0 € Vertragsstrafe Altvermieter, IT-Verfügbarkeit am Montag 08:00 Uhr ≥ 99 %, 0 Personenschäden/Datenschutzverstöße beim Umzug, Budgetabweichung ≤ 5 %.</li>
+              </ul>
+            `,
+            stakeholder: `
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>Stakeholder</th><th>Einfluss</th><th>Einstellung</th><th>Erwartung / Widerstand</th><th>Maßnahme</th></tr></thead>
+                  <tbody>
+                    <tr><td><strong>Geschäftsführung (AG)</strong></td><td>Hoch</td><td>Positiv (+)</td><td>Kein Projektstillstand, keine Strafmiete, starkes Kunden-Event</td><td>14-tägiger Lenkungskreis, Meilenstein-Ampeln</td></tr>
+                    <tr><td><strong>Mitarbeitende (350)</strong></td><td>Hoch</td><td>Gemischt (±)</td><td>Sorge vor längerem Arbeitsweg, Großraumbüro, Parkplätzen</td><td>Frühe Info, Baustellenbegehungen, ÖPNV-/Parkkonzept, Mitgestaltung Sozialräume</td></tr>
+                    <tr><td><strong>Betriebsrat</strong></td><td>Hoch</td><td>Kritisch–Neutral</td><td>Ergonomie, Arbeitsschutz, transparente Raumverteilung</td><td>Gemeinsame Begehung &amp; Arbeitsstättenprüfung vorab</td></tr>
+                    <tr><td><strong>Neuer Vermieter / Bauleitung</strong></td><td>Hoch</td><td>Positiv (+)</td><td>Klare Mieterwünsche, pünktliche Abnahme</td><td>Wöchentlicher Jour Fixe Baufortschritt, feste Vertragsstrafen/Puffer</td></tr>
+                    <tr><td><strong>Alter Vermieter</strong></td><td>Mittel–Hoch</td><td>Neutral (0)</td><td>Fristgerechter Rückbau &amp; mängelfreie Übergabe</td><td>Rückbau-Protokoll bereits in Monat 5 verbindlich abstimmen</td></tr>
+                    <tr><td><strong>Schlüsselkunden (120)</strong></td><td>Mittel</td><td>Positiv (+)</td><td>Verlässliche Ansprechpartner, attraktive Einladung</td><td>Vorab-Info neue Adresse, „Save the Date“ 3 Monate vor Event</td></tr>
+                    <tr><td><strong>Behörden / Feuerwehr / Brandschutz</strong></td><td>Hoch</td><td>Neutral (0)</td><td>Einhaltung Labor-, Gefahrstoff- &amp; Brandschutzauflagen</td><td>Frühe Abnahmeplanung für Labor &amp; Event-Sicherheitskonzept</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            `,
+            psp: `<pre class="tree-box">1.0 Standortumzug (350 MA) &amp; Eröffnungs-Event
+├── 1.1 Projektmanagement &amp; Steuerung
+│   ├── 1.1.1 Gesamtplanung, Budget- &amp; Terminsteuerung
+│   ├── 1.1.2 Risikomanagement &amp; Genehmigungen (Brandschutz/Labor)
+│   └── 1.1.3 Qualitäts- &amp; Datenschutzsicherung
+├── 1.2 Neuer Standort – Ausbau &amp; Infrastruktur
+│   ├── 1.2.1 Raumplanung, Arbeitsplätze &amp; Möblierung
+│   ├── 1.2.2 IT-Infrastruktur, Netzwerk, Serverraum &amp; Telefonie
+│   └── 1.2.3 Labor-Infrastruktur, Sicherheit &amp; Vorab-Abnahme
+├── 1.3 Physischer Umzug &amp; Altstandort-Übergabe
+│   ├── 1.3.1 Ausschreibung Spedition &amp; Umzugsdrehbuch (Wellenplan)
+│   ├── 1.3.2 Labor- &amp; IT-Umzug (Spezialtransport)
+│   ├── 1.3.3 Büro-Umzug (350 Arbeitsplätze) &amp; First-Day-Support
+│   └── 1.3.4 Rückbau, Entsorgung &amp; Übergabe Altstandort
+├── 1.4 Interne Kommunikation &amp; Change
+│   ├── 1.4.1 Mitarbeiter-Info, Mobilitätskonzept &amp; Umzugs-Guides
+│   └── 1.4.2 Baustellenführungen &amp; Welcome-Paket am Tag 1
+└── 1.5 Standort-Eröffnungs-Event (Monat 9)
+    ├── 1.5.1 Eventkonzept, Einladungen (120 Kunden + 350 MA) &amp; Presse
+    ├── 1.5.2 Catering, Technik, Labor-Showcases &amp; Sicherheit
+    └── 1.5.3 Durchführung, Nachbereitung &amp; Projektabschluss</pre>`,
+            phasen: `
+              <ul>
+                <li><strong>Phase 1 (M1–M2):</strong> Bestandsaufnahme, Raum-/IT-Konzept, Speditionsausschreibung → <strong>◆ M1 (M2): Raum-, IT- &amp; Umzugskonzept freigegeben</strong></li>
+                <li><strong>Phase 2 (M3–M6):</strong> Ausbau neuer Standort, IT-Verkabelung, Labor-Vorbereitung, Save-the-Date → <strong>◆ M2 (M6): Bau- &amp; IT-Vorabnahme erfolgt</strong> <em>(Kritischer Pfad!)</em></li>
+                <li><strong>Phase 3 (M7):</strong> Möblierung, IT-Lasttest, Detail-Drehbuch, Packphase → <strong>◆ M3 (M7,5): Umzugsbereitschaft (Go/No-Go)</strong></li>
+                <li><strong>Phase 4 (M8):</strong> Umzug in 2 Wellen (Welle 1: Labore/IT-Teil, Welle 2: Büros am Wochenende) → <strong>◆ M4 (M8): Produktivstart neuer Standort</strong></li>
+                <li><strong>Phase 5 (M8,5):</strong> Rückbau &amp; Übergabe Altstandort (2 Wo Puffer vor Strafmiete!) → <strong>◆ M5 (M8,5): Altstandort mängelfrei übergeben</strong></li>
+                <li><strong>Phase 6 (M9):</strong> Eröffnungs-Event, Abschlussbericht &amp; Lessons Learned → <strong>◆ M6 (M9): Event erfolgreich &amp; Projekt abgeschlossen</strong></li>
+              </ul>
+            `,
+            orga: `
+              <div class="org-chart">
+                <div class="org-level"><div class="org-node primary">Lenkungskreis<br /><small>Geschäftsführung (AG), Kaufm. Leitung, Betriebsrat (Gast), PL</small></div></div>
+                <div class="org-arrow">▼</div>
+                <div class="org-level"><div class="org-node primary">Gesamtprojektleitung (PL)</div></div>
+                <div class="org-arrow">▼</div>
+                <div class="org-level">
+                  <div class="org-node"><strong>TPL Gebäude &amp; Logistik</strong><br /><small>Vermieter, Spedition, Rückbau</small></div>
+                  <div class="org-node"><strong>TPL IT &amp; Labore</strong><br /><small>Netzwerk, Server, Fachabnahme</small></div>
+                  <div class="org-node"><strong>TPL Change &amp; MA</strong><br /><small>Abteilungs-Guides (1 pro 25 MA)</small></div>
+                  <div class="org-node"><strong>TPL Event &amp; PR</strong><br /><small>Eröffnungsfeier, Kunden, Presse</small></div>
+                </div>
+              </div>
+            `,
+            risiken: `
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>Nr</th><th>Top-Risiko</th><th>EW</th><th>AW</th><th>Wert</th><th>Maßnahme</th></tr></thead>
+                  <tbody>
+                    <tr><td>R1</td><td>Bau-/Ausbauverzug am neuen Standort → Strafmiete Altstandort (4.500 €/Tag)</td><td>4</td><td>5</td><td><span class="pill danger">20</span></td><td>2 Wochen Zeitpuffer vor M9 einplanen, wöchentliches Bau-Controlling, Option auf temporäres mobiles Arbeiten für Bürobereiche</td></tr>
+                    <tr><td>R2</td><td>IT-/Netzwerkausfall am Montag nach Umzug → Stillstand Kundenprojekte</td><td>3</td><td>5</td><td><span class="pill danger">15</span></td><td>Redundante Internetleitung vorab testen, Parallelbetrieb Kernserver, IT-Notfallteam vor Ort</td></tr>
+                    <tr><td>R3</td><td>Beschädigung sensibler Laborgeräte beim Transport</td><td>3</td><td>4</td><td><span class="pill warn">12</span></td><td>Zertifizierte Spezialspedition, Transportversicherung, Hersteller-Kalibrierung terminieren</td></tr>
+                    <tr><td>R4</td><td>Unzufriedenheit der Mitarbeitenden wegen Arbeitsweg/Bürokonzept</td><td>4</td><td>3</td><td><span class="pill warn">12</span></td><td>Jobticket/Shuttle prüfen, transparente FAQ, frühe Mitgestaltung &amp; Besichtigung</td></tr>
+                    <tr><td>R5</td><td>Mängel bei Altstandort-Übergabe → Nachforderungen Vermieter</td><td>3</td><td>3</td><td><span class="pill">9</span></td><td>Vorbegehung mit altem Vermieter in Monat 5, schriftliches Rückbau-Protokoll</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            `,
+            angebot: `
+              <p><strong>Explizite Annahmen:</strong> Grundausbau (Rohbau, Heizung, Grundbeleuchtung) erfolgt durch den neuen Vermieter; 70 % der Büromöbel werden mitgenommen, 30 % neu beschafft; Mietvertrag neu ist bereits unterzeichnet; IT kann während der Umzugswoche hybrid/mobil arbeiten.</p>
+              <p><strong>Gesamtbudget / Kalkulation (950.000 € netto):</strong></p>
+              <ul>
+                <li>Innenausbau-Anpassungen, Akustik &amp; Ergänzungsmöblierung: <strong>260.000 €</strong></li>
+                <li>IT-Infrastruktur, Netzwerk, Serverraum-Umzug &amp; Redundanz: <strong>190.000 €</strong></li>
+                <li>Spezial- &amp; Büro-Umzug (Spedition, Laborkalibrierung, Versicherung): <strong>145.000 €</strong></li>
+                <li>Rückbau &amp; Entsorgung Altstandort: <strong>95.000 €</strong></li>
+                <li>Eröffnungs-Event (470 Personen: Catering, Technik, Einladungen, Showcases): <strong>85.000 €</strong></li>
+                <li>Projektmanagement &amp; interne Kommunikation: <strong>85.000 €</strong></li>
+                <li>Risikoreserve (~10 %): <strong>90.000 €</strong> → <strong>Gesamt: 950.000 €</strong></li>
+              </ul>
+              <p><strong>Marketing- &amp; Kommunikationskonzept:</strong> Motto <em>„Next Level Campus – Gemeinsam am neuen Standort“</em>. Intern: Umzugs-Guide, Countdown-Newsletter, Welcome-Frühstück am Tag 1. Extern: Exklusive Labor-Showcases beim Eröffnungs-Event, Presse-Kit mit Innovations-Story.</p>
+            `,
+            praesentation: `
+              <ol>
+                <li><strong>Min. 0–2 · Big Picture:</strong> Doppelziel sicher im Griff – null Strafmiete, null Projektausfall, starkes Eröffnungs-Event.</li>
+                <li><strong>Min. 2–4 · Zeitplan &amp; Puffer-Strategie:</strong> Wie wir durch M8,5-Übergabe und 2-Wellen-Umzug den Fixtermin absichern.</li>
+                <li><strong>Min. 4–6 · PSP &amp; Projektorganisation:</strong> Klare Verantwortung inkl. Abteilungs-Umzugsguides.</li>
+                <li><strong>Min. 6–8 · Top-Risiken (Bauverzug, IT, Labor):</strong> Konkrete Präventions- und Notfallpläne.</li>
+                <li><strong>Min. 8–10 · Budget (950 T€), Annahmen &amp; Event-Marketing:</strong> Transparente Kosten &amp; Begeisterung für MA und Kunden.</li>
+                <li><strong>Min. 10–12 · Sofortmaßnahmen für Woche 1 &amp; Fragen:</strong> Entscheidungsvorlage für die Geschäftsführung.</li>
+              </ol>
+            `
+          }
+        }
+      ];
+
+      /* ========================
+         DATA: VERHALTENS-TIPPS
+         ======================== */
+      const PHRASE_GROUPS = [
+        {
+          title: "Moderation & Struktur geben",
+          icb: "Führung · Kommunikation",
+          quotes: [
+            { text: "„Vorschlag für unser Vorgehen: Lasst uns 5 Minuten still lesen, dann 10 Minuten Rollen und Annahmen klären und danach in 3 Teilgruppen starten. Passt das für alle?“", note: "Zeigt sofort Führung, Prozesskompetenz und Konsensorientierung." },
+            { text: "„Bevor wir ins Detail gehen: Was genau müssen wir am Ende dieses Teils laut Aufgabenstellung liefern?“", note: "Schärft den Auftragsbezug (Ergebnisorientierung)." },
+            { text: "„Ich teile uns kurz 4 Zonen auf dem Whiteboard ein, damit sich niemand gegenseitig über die Kärtchen schreibt.“", note: "Praktische Online-Kompetenz und Strukturierung." }
+          ]
+        },
+        {
+          title: "Zusammenfassen & Konsens sichern",
+          icb: "Kommunikation · Ergebnisorientierung",
+          quotes: [
+            { text: "„Ich fasse kurz zusammen, was wir gerade beschlossen haben: 1. …, 2. …, 3. … Haben wir dazu ein gemeinsames Verständnis?“", note: "Schafft Klarheit und sichert verbindliche Zwischenergebnisse." },
+            { text: "„Wenn ich dich richtig verstehe, siehst du das Hauptrisiko bei der Genehmigung – sollen wir das direkt als Top-1-Risiko aufnehmen?“", note: "Aktives Zuhören + direktes Überführen ins Ergebnis." },
+            { text: "„Kurzer Konsistenzcheck: Passen unsere Meilensteine aus Gruppe B zu den Zahlungszielen im Angebot von Gruppe D?“", note: "Top-Indikator für ganzheitliches PM-Denken." }
+          ]
+        },
+        {
+          title: "Konflikte entschärfen & versachlichen",
+          icb: "Konflikte & Krisen · Beziehungen",
+          quotes: [
+            { text: "„Ich höre hier zwei berechtigte Perspektiven: einmal Tempo und einmal Qualitätssicherung. Lasst uns kurz auf die Projektziele schauen, was für den Auftraggeber Priorität hat.“", note: "Trennt Sachebene von Beziehungsebene und holt das Ziel zurück." },
+            { text: "„Pause für 30 Sekunden – ich merke, wir drehen uns im Kreis. Lasst uns Option A und Option B kurz mit je zwei Vor- und Nachteilen nebeneinander schreiben und dann entscheiden.“", note: "Deeskaliert ruhig und strukturiert." },
+            { text: "„Beide Ansätze funktionieren methodisch. Für unsere knappe Zeit schlage ich den pragmatischeren Weg vor – können alle damit leben?“", note: "Verhindert Methoden-Streitereien unter Zeitdruck." }
+          ]
+        },
+        {
+          title: "Stille Teilnehmende einbinden",
+          icb: "Teamarbeit · Führung",
+          quotes: [
+            { text: "„Wir haben jetzt viel aus der Technik-Brille gehört – [Name], wie schätzt du das Thema aus deiner Sicht ein?“", note: "Wertschätzende Einladung ohne Druck oder Bloßstellen." },
+            { text: "„Wer von denen, die eben noch nichts gesagt haben, hat noch einen wichtigen Gedanken zu den Stakeholdern?“", note: "Öffnet bewusst den Raum in großen Online-Runden." },
+            { text: "„[Name], du hattest eben einen guten Punkt am Board notiert – magst du den kurz für alle erläutern?“", note: "Macht stille Beiträge sichtbar und stärkt Teamgeist." }
+          ]
+        },
+        {
+          title: "Zeit managen (Zeitwächter)",
+          icb: "Ergebnisorientierung · Selbstmanagement",
+          quotes: [
+            { text: "„Kurzer Blick auf die Uhr: Wir haben noch 5 Minuten in dieser Phase. Lasst uns den aktuellen Punkt abschließen und dann in die Zusammenführung gehen.“", note: "Frühzeitige, freundliche Ankündigung statt hartem Abbruch." },
+            { text: "„Das Detail ist spannend, kostet uns aber gerade viel Zeit. Ich parke es kurz auf dem Annahmen-Board, damit wir unsere Pflichtaufgaben sicher schaffen.“", note: "Souveränes Timeboxing mit Parkplatz-Technik." },
+            { text: "„Wir haben noch 25 Minuten bis zur Präsentation – ich schlage vor, wir stoppen jetzt die Detailarbeit und bauen unseren roten Faden.“", note: "Rettet die Team-Präsentation." }
+          ]
+        },
+        {
+          title: "Entscheidungen herbeiführen",
+          icb: "Führung · Verhandlungen",
+          quotes: [
+            { text: "„Wir haben zwei gute Vorschläge auf dem Tisch. Da uns die genaue Zahl im Text fehlt: Wer ist für Annahme A (Daumen hoch), wer für B?“", note: "Schnelle, demokratische Entscheidung im Online-Meeting." },
+            { text: "„Gibt es einen schwerwiegenden Einwand gegen diesen Entwurf? Wenn nicht, frieren wir das als Arbeitsstand ein und machen weiter.“", note: "Konsent-Prinzip – ideal unter Zeitdruck." },
+            { text: "„Im Angebot sagen wir nicht blind ‚Ja‘ zu allem, sondern bieten klar: Leistung X zum Preis Y unter Annahme Z.“", note: "Zeigt Verhandlungskompetenz und Realitätssinn." }
+          ]
+        },
+        {
+          title: "Feedback geben & annehmen",
+          icb: "Selbstreflexion · Persönliche Integrität",
+          quotes: [
+            { text: "„Mir hat richtig gut gefallen, wie schnell ihr den PSP strukturiert habt. Ein kleiner Impuls: Wollen wir das Projektmanagement noch als eigenes Teilprojekt ergänzen?“", note: "Wertschätzend, konkret, konstruktiv (Wahrnehmung + Vorschlag)." },
+            { text: "„Guter Punkt, da habe ich vorhin zu schnell drüberweggelesen – danke fürs Aufpassen, ich passe das direkt an.“", note: "Souveräner Umgang mit eigenen Fehlern ohne Rechtfertigung." },
+            { text: "„In der nächsten Runde achte ich darauf, noch früher einen Zwischen-Sync auszurufen, damit wir am Ende weniger Hektik haben.“", note: "Konkrete Selbstreflexion nach Teil 1 oder im Abschlussfeedback." }
+          ]
+        },
+        {
+          title: "Dominante Teilnehmende freundlich einbremsen",
+          icb: "Konflikte · Kommunikation · Teamarbeit",
+          quotes: [
+            { text: "„Danke [Name], das ist ein starker Gedanke – ich notiere den direkt. Lass uns kurz noch zwei weitere Stimmen dazu hören, bevor wir uns festlegen.“", note: "Wertschätzt den Beitrag und gibt das Wort elegant weiter." },
+            { text: "„Ich glaube, wir haben deinen Punkt alle gut verstanden. Damit wir die Zeit halten, lass uns kurz schauen, wie wir das konkret in die Risiko-Tabelle bekommen.“", note: "Beendet Monologe höflich und lenkt aufs Ergebnis." }
+          ]
+        }
+      ];
+
+      /* ========================
+         DATA: CHECKLISTE
+         ======================== */
+      const CHECKLIST_GROUPS = [
+        {
+          group: "Technik & Arbeitsplatz",
+          items: [
+            { id: "c1", title: "Stabile Internetverbindung (idealerweise LAN-Kabel)", note: "WLAN als Backup, Handy-Hotspot für den Notfall bereit." },
+            { id: "c2", title: "Kamera, Mikrofon & Headset vorher getestet", note: "Kamera auf Augenhöhe, gutes Licht von vorn (kein Gegenlicht)." },
+            { id: "c3", title: "Stromversorgung / Netzteil eingesteckt", note: "6+ Stunden Videokonferenz + Whiteboard ziehen viel Akku." },
+            { id: "c4", title: "Zweiter Bildschirm (falls vorhanden) eingerichtet", note: "Links Videokonferenz/Gesichter, rechts Whiteboard – enorm hilfreich!" },
+            { id: "c5", title: "Alle Benachrichtigungen stumm (PC, Teams, E-Mail, Handy)", note: "Fokus-Modus / Nicht stören aktivieren; Handy außer Sichtweite (nur als Notfall-Telefon erreichbar)." },
+            { id: "c6", title: "Ruhiger Raum & Umfeld informiert", note: "Tür zu, Familie/Mitbewohner über Workshop-Zeiten informiert." }
+          ]
+        },
+        {
+          group: "Zoom / Videokonferenz & Online-Whiteboard (z. B. Mural)",
+          items: [
+            { id: "c7", title: "Videokonferenz-Client aktuell & getestet", note: "Einwahllink aus der offiziellen PM-ZERT-Einladung prüfen." },
+            { id: "c8", title: "Klarer Anzeigename eingestellt (Vorname Nachname)", note: "Hilft Assessoren und Teammitgliedern, dich direkt namentlich anzusprechen." },
+            { id: "c9", title: "Whiteboard-Grundfunktionen (Mural/Miro) kurz geübt", note: "Zoomen, Verschieben, Sticky Notes erstellen, Text vergrößern, Rahmen/Pfeile, Rückgängig (Strg+Z)." },
+            { id: "c10", title: "Maus statt nur Touchpad angeschlossen", note: "Navigieren und Schieben am Whiteboard geht mit Maus doppelt so schnell." },
+            { id: "c11", title: "Browser aufgeräumt (keine störenden Tabs/Popups)", note: "Saubere Oberfläche, falls du im Workshop deinen Bildschirm teilst." }
+          ]
+        },
+        {
+          group: "Körper, Energie & Fokus",
+          items: [
+            { id: "c12", title: "Ausreichend Wasser & Kaffee/Tee griffbereit", note: "Am besten in sicherem Abstand zur Tastatur." },
+            { id: "c13", title: "Kleine Snacks für die Pausen vorbereitet", note: "Nüsse, Obst, belegtes Brot – kein schweres Essen, das müde macht." },
+            { id: "c14", title: "Ausgeschlafen & 15 Minuten vorher startklar", note: "10–15 Minuten vor offiziellem Beginn einwählen, entspannt ankommen." },
+            { id: "c15", title: "Professionelle, bequeme Kleidung", note: "Wohlfühlen + souveränes Auftreten vor der Kamera." }
+          ]
+        },
+        {
+          group: "Prüfungsregeln & Unterlagen (PM-ZERT beachten!)",
+          items: [
+            { id: "c16", title: "Keine eigenen Unterlagen / Spickzettel am Platz", note: "Streng an die Vorgaben von PM-ZERT / GPM halten (verbindliche Infos siehe Einladung & pm-zert.de)." },
+            { id: "c17", title: "Blanko-Notizblock & Stift (nur falls ausdrücklich erlaubt)", note: "Vorab in den Einladungsunterlagen prüfen, ob leeres Papier für Skizzen zulässig ist." },
+            { id: "c18", title: "Notfall-Telefonnummer / Kontakt der Zertifizierungsstelle notiert", note: "Falls Internet oder Einwahl unerwartet ausfallen." },
+            { id: "c19", title: "Ausweisdokument griffbereit (falls Identitätsprüfung erfolgt)", note: "Kurz neben den Monitor legen." }
+          ]
+        }
+      ];
+
+      /* ========================
+         DATA: 25 SELBSTTEST-FRAGEN
+         ======================== */
+      const QUIZ_QUESTIONS = [
+        {
+          id: 1,
+          cat: "Start & Moderation",
+          q: "Der Workshop startet, die Fallstudie liegt vor, und nach 30 Sekunden Stille redet noch niemand. Was tust du?",
+          a: "Ich übernehme ruhig und einladend die Initiative: „Wollen wir erst 5 Minuten still lesen, damit jeder die Anforderungen erfasst, und danach kurz Rollen und Vorgehen abstimmen?“ Damit zeige ich Führung und Struktur, ohne jemanden zu überfahren."
+        },
+        {
+          id: 2,
+          cat: "Team & Konflikte",
+          q: "Zwei Teilnehmende diskutieren seit 12 Minuten hitzig darüber, ob der PSP rein objektorientiert oder phasenorientiert sein soll. Die Zeit läuft weg. Was tust du?",
+          a: "Ich greife freundlich ein, trenne Sachebene von Prinzipienstreit und verweise aufs Ziel: „Beide Sichtweisen sind fachlich nachvollziehbar. Nach GPM ist ein gemischter PSP absolut üblich – lasst uns die 1. Ebene nach Hauptobjekten/Phasen plus eigenem Projektmanagement gliedern, damit wir in 3 Minuten weiterkommen. Einverstanden?“"
+        },
+        {
+          id: 3,
+          cat: "Annahmen & Lücken",
+          q: "In der Fallstudie fehlen entscheidende Zahlen (z. B. Grundstücksgröße, Tagessätze oder Bodenbeschaffenheit), und das Team stockt. Wie reagierst du?",
+          a: "Ich schlage vor, ein sichtbares „Annahmen-Board“ anzulegen: „Fehlende Werte gehören bei Fallstudien dazu. Lasst uns realistische, begründete Annahmen treffen, sie klar dokumentieren und später im Angebot sowie in der Präsentation transparent nennen.“"
+        },
+        {
+          id: 4,
+          cat: "Teamarbeit",
+          q: "Du merkst nach 30 Minuten, dass zwei Teilnehmende in eurer Teilgruppe noch kein einziges Wort gesagt haben. Was tust du?",
+          a: "Ich binde sie wertschätzend und offen ein, ohne sie bloßzustellen: „[Name], wir haben jetzt schon einige Risiken gesammelt – aus deiner Erfahrung heraus, welchen blinden Fleck übersehen wir gerade?“"
+        },
+        {
+          id: 5,
+          cat: "Team & Dominanz",
+          q: "Ein sehr dominanter Level-B-Teilnehmer reißt das Gespräch an sich, unterbricht andere und baut allein am Whiteboard herum. Wie gehst du damit um?",
+          a: "Ich bleibe sachlich und wertschätzend, nehme aber die Struktur zurück: „Danke für deine starken Impulse, [Name] – wir sichern die direkt hier. Damit wir alle Perspektiven nutzen und rechtzeitig fertig werden, lass uns die Aufgaben kurz auf 3 Teilgruppen aufteilen und in 25 Minuten wieder synchronisieren.“"
+        },
+        {
+          id: 6,
+          cat: "Methoden: PSP",
+          q: "Euer PSP sieht gut aus, aber es fehlen Projektmanagement, Abnahme, Dokumentation und Kommunikation. Was fällt dir auf und wie sprichst du es an?",
+          a: "Verstoß gegen die <strong>100-%-Regel</strong>! Ich sage: „Unser fachlicher Teil ist super strukturiert. Für die 100-%-Regel sollten wir noch ein Querschnitts-Teilprojekt ‚Projektmanagement‘ sowie Abnahme, Dokumentation und Kommunikation ergänzen – sonst fehlen diese Aufwände später im Termin- und Kostenplan.“"
+        },
+        {
+          id: 7,
+          cat: "Zeitmanagement",
+          q: "Es sind nur noch 25 Minuten bis zur Präsentation, aber eine Teilgruppe will unbedingt noch Details am Gantt-Chart verschönern. Was tust du?",
+          a: "Ich wechsle freundlich, aber klar in die Ergebnisorientierung: „Unser Gantt-Chart transportiert die kritischen Meilensteine schon super. Wenn wir jetzt noch 10 Minuten polieren, fehlt uns die Zeit für den Konsistenzcheck und die Präsentationsprobe. Lasst uns jetzt einfrieren und den roten Faden bauen.“"
+        },
+        {
+          id: 8,
+          cat: "Konsistenz",
+          q: "Beim Zusammenführen merkst du: Im Terminplan dauert das Projekt 24 Monate, im Angebot stehen aber Kosten für nur 18 Monate – und ein Top-Risiko hat keinen Budgetpuffer. Wie reagierst du?",
+          a: "Ich spreche den Widerspruch sofort sachlich an (ohne Vorwurf!): „Mir ist beim Abgleich eine wichtige Schnittstelle aufgefallen: Der Terminplan geht bis Monat 24, die Kalkulation rechnet noch mit 18 Monaten, und unser Altlasten-Risiko braucht einen Puffer. Lasst uns das kurz angleichen, damit unser Angebot 100 % konsistent ist.“"
+        },
+        {
+          id: 9,
+          cat: "Methoden: RACI",
+          q: "In eurer RACI-Matrix stehen bei einer wichtigen Freigabe-Entscheidung drei Personen mit „A“ (Accountable). Was sagst du?",
+          a: "„Kurzer Methoden-Check: Bei RACI darf es pro Zeile genau <strong>ein A</strong> geben – sonst ist am Ende niemand wirklich verantwortlich. Wer trägt die finale Gesamtverantwortung, und wer sollte besser C (Consulted) sein?“"
+        },
+        {
+          id: 10,
+          cat: "Methoden: Ziele",
+          q: "Im Zielkasten steht: „Die neue Deponie soll umweltfreundlich, günstig und schnell gebaut werden.“ Wie verbesserst du das?",
+          a: "Das ist nicht <strong>SMART</strong> und blendet Zielkonflikte aus! Ich konkretisiere mit Messgröße und Termin (z. B. Teilbetrieb M24, Vollbetrieb M36, Budget max. X Mio. €, Einhaltung Deponieverordnung), ergänze Nicht-Ziele und kläre die Priorität im Magischen Dreieck."
+        },
+        {
+          id: 11,
+          cat: "Stakeholder & Widerstand",
+          q: "Bei der Deponie-Fallstudie schlägt jemand vor: „Die Bürger informieren wir erst, wenn der Bagger rollt, sonst gibt es nur Ärger.“ Wie reagierst du?",
+          a: "Ich widerspreche konstruktiv mit Stakeholder-Logik: „Späte Information erzeugt fast sicher Misstrauen, Proteste und Klagen – das ist eines unserer größten Terminrisiken. Frühzeitiger, transparenter Dialog mit klaren Fakten, LKW-Routen und einer Ansprechperson baut Widerstände ab.“"
+        },
+        {
+          id: 12,
+          cat: "Methoden: Kritischer Pfad",
+          q: "Ein Teammitglied fragt in der Vorbereitung: „Woran erkennen wir eigentlich den kritischen Pfad – und was tun wir, wenn er sich verzögert?“ Wie antwortest du knapp und korrekt?",
+          a: "„Der kritische Pfad ist die längste Kette abhängiger Vorgänge mit Gesamtpuffer Null – jede Verzögerung dort verschiebt das Projektende. Bei Verzug prüfen wir Fast-Tracking (Parallelisieren), Crashing (mehr Ressourcen) oder nach Rücksprache mit dem Auftraggeber eine Scope-/Terminanpassung.“"
+        },
+        {
+          id: 13,
+          cat: "Präsentation",
+          q: "In der Präsentation wird eine kritische Rückfrage vom Assessor/Auftraggeber gestellt, für die eigentlich ein anderes Teammitglied zuständig war – und die Person stockt. Was tust du?",
+          a: "Ich lasse 2–3 Sekunden Raum; wenn die Person wirklich hängt, springe ich unterstützend im „Wir“-Ton ein, ohne sie bloßzustellen: „Darf ich kurz ergänzen? Wir hatten dazu in der Gruppe folgende Annahme getroffen …“"
+        },
+        {
+          id: 14,
+          cat: "Methoden: Risiko",
+          q: "Auf dem Risiko-Board stehen nur Stichworte wie „Wetter“, „Kosten“ und „Personal“ ohne Bewertung oder Maßnahmen. Was schlägst du vor?",
+          a: "„Lasst uns die Top-5 schärfen: Ursache → Ereignis → Auswirkung, dann kurz Wahrscheinlichkeit × Auswirkung bewerten und für die roten Risiken eine konkrete Maßnahme (Vermeiden, Vermindern, Übertragen, Akzeptieren) samt Verantwortlichem festlegen.“"
+        },
+        {
+          id: 15,
+          cat: "Verhandlung & Angebot",
+          q: "Der Auftraggeber fordert in der Fallstudie einen extrem knappen Termin, der nur unter bestimmten Bedingungen (z. B. schnelle Genehmigung, Grundstück liegt vor) haltbar ist. Wie gehst du im Angebot damit um?",
+          a: "Wir sagen nicht naiv bedingungslos zu, sondern verhandeln professionell: Wir zeigen den Termin als machbar auf, koppeln ihn aber explizit an dokumentierte Annahmen und Mitwirkungspflichten des Auftraggebers (plus Hinweis auf Termin-/Kostenfolgen bei Abweichung)."
+        },
+        {
+          id: 16,
+          cat: "Online-Technik",
+          q: "Mitten im Workshop stürzt das Whiteboard bei einer Person ab oder die Audioverbindung hakt. Wie reagierst du?",
+          a: "Ruhig bleiben, pragmatisch unterstützen: „Kein Problem, [Name] – probier kurz einen Browser-Reload. Währenddessen teile ich meinen Bildschirm oder notiere deine Punkte direkt für dich auf dem Board, damit du voll dabei bleibst.“"
+        },
+        {
+          id: 17,
+          cat: "Arbeitsteilung",
+          q: "Ihr seid 11 Personen im Hauptraum und alle reden durcheinander über 5 verschiedene Themen gleichzeitig. Was tust du?",
+          a: "Ich schlage eine klare Struktur vor: „Mit 11 Personen im Plenum kommen wir schwer vom Fleck. Lasst uns 3 Minuten die Ziele &amp; Annahmen festziehen und dann in 3–4 kleine Gruppen mit klaren Lieferobjekten und Rückkehrzeit aufteilen.“"
+        },
+        {
+          id: 18,
+          cat: "Methoden: Phasenplan",
+          q: "Worauf achtest du beim Unterschied zwischen einer Phase und einem Meilenstein?",
+          a: "Eine <strong>Phase</strong> ist ein zeitlicher Abschnitt mit Aktivitäten und Dauer (z. B. Monat 3–6: Detailplanung). Ein <strong>Meilenstein</strong> ist ein Zeitpunkt ohne Dauer (Dauer = 0) mit prüfbarem Ergebnis/Entscheidungspunkt (Quality Gate), z. B. „M2: Genehmigung erteilt“."
+        },
+        {
+          id: 19,
+          cat: "Selbstreflexion",
+          q: "Du merkst, dass du selbst gerade einen Fehler in der Kalkulation oder im PSP gemacht hast, und jemand weist dich darauf hin. Wie reagierst du?",
+          a: "Offen, ruhig und ohne Rechtfertigung: „Stimmt, das habe ich übersehen – danke für den Hinweis! Ich korrigiere das sofort, damit die Zahlen stimmen.“ Zeigt Persönliche Integrität und Selbstreflexion."
+        },
+        {
+          id: 20,
+          cat: "Präsentation & Zeit",
+          q: "Während der Abschlusspräsentation merkt euer Team nach 6 von 10 Minuten, dass erst 2 von 5 Themen vorgestellt wurden. Was tust du, wenn du gleich dran bist?",
+          a: "Ich straffe meinen Teil souverän auf die 2–3 Kernbotschaften („Mit Blick auf die Zeit fokussiere ich mich auf unsere drei wichtigsten Risiken und Maßnahmen …“) und übergebe rechtzeitig, damit das Team pünktlich abschließt."
+        },
+        {
+          id: 21,
+          cat: "Methoden: Nicht-Ziele",
+          q: "Warum sind explizite Nicht-Ziele in jeder Fallstudie so wichtig – und wo nutzt du sie wieder?",
+          a: "Nicht-Ziele schützen das Projekt vor Scope Creep und klären Erwartungen mit dem Auftraggeber. Sie tauchen später direkt wieder in den <strong>Leistungsausschlüssen und Annahmen des Angebots</strong> auf (z. B. kein Grundstückserwerb, keine Kampfmittelräumung)."
+        },
+        {
+          id: 22,
+          cat: "Rollenwechsel",
+          q: "In Workshop-Teil 1 hast du eher in einer Teilgruppe fachlich zugearbeitet (z. B. Risikoanalyse). Was solltest du in Teil 2 bewusst anders machen?",
+          a: "Ich übernehme in Teil 2 eine noch sichtbarere Führungs-/Koordinationsrolle (z. B. Gesamt- oder Teilgruppen-Moderation, Zeitwächter, Konsistenzcheck oder Präsentations-Einstieg mit Big Picture), um möglichst viele ICB4-Indikatoren zu zeigen."
+        },
+        {
+          id: 23,
+          cat: "Methoden: Marketing",
+          q: "Was unterscheidet ein Projektmarketingkonzept von einer reinen internen Projektkommunikation?",
+          a: "Interne Kommunikation steuert den sachlichen Informationsfluss im Projekt (Statusberichte, Meetings). <strong>Projektmarketing</strong> zielt zusätzlich gezielt auf Akzeptanz, Vertrauen und positive Wahrnehmung bei Betroffenen und Öffentlichkeit (z. B. Leitbotschaft, Bürgerdialog, Transparenzportal, Multiplikatoren)."
+        },
+        {
+          id: 24,
+          cat: "Methoden: Lessons Learned",
+          q: "Ein Teilnehmer sagt am Ende der Planung: „Lessons Learned machen wir ganz zum Schluss, wenn Zeit übrig ist.“ Wie ergänzt du das nach GPM/ICB4?",
+          a: "„Lessons Learned sollten wir nicht nur am Projektende, sondern bereits nach wichtigen Meilensteinen (phasenbegleitend) kurz durchführen – sachlich ohne Schuldzuweisungen, mit klaren Ursachen, konkreten Empfehlungen und Übergabe an das PMO bzw. die Organisation.“"
+        },
+        {
+          id: 25,
+          cat: "Assessment-Mindset",
+          q: "Am Ende von Teil 1 bist du unsicher, ob ein Detail am Whiteboard perfekt war. Wie gehst du mental in Teil 2?",
+          a: "Nicht an kleinen Unperfektheiten festhalten! Im Assessment zählt nicht Perfektion, sondern beobachtbare Kompetenz (bestanden wird orientierend ab ca. 40 % der Indikatoren). Kurz reflektieren, 1–2 konkrete Verbesserungen für Teil 2 vornehmen (z. B. früher synchronisieren), tief durchatmen und präsent starten."
+        }
+      ];
+
+      /* ========================
+         STATE & ROUTING
+         ======================== */
+      const ROUTES = ["home", "ueberblick", "fahrplan", "methoden", "fallstudien", "verhalten", "checkliste", "selbsttest"];
+      let currentRoute = "home";
+      let roadmapMode = 150;
+      let activeCaseId = CASE_STUDIES[0].id;
+      let quizFilter = "all";
+      let checklistState = lsGet("checklist", {});
+      let quizState = lsGet("quiz", {});
+
+      // Timer state
+      let timerSeconds = 600;
+      let timerDefault = 600;
+      let timerInterval = null;
+
+      /* ========================
+         COUNTDOWN TO 24.11.2026
+         ======================== */
+      function updateCountdown() {
+        const target = new Date(2026, 10, 24, 9, 0, 0); // 24.11.2026
+        const now = new Date();
+        const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const startOfTarget = new Date(target.getFullYear(), target.getMonth(), target.getDate());
+        const diffDays = Math.round((startOfTarget - startOfToday) / (1000 * 60 * 60 * 24));
+
+        let label = "24./25.11.2026";
+        if (diffDays > 1) label = `Noch ${diffDays} Tage · 24./25.11.2026`;
+        else if (diffDays === 1) label = "Morgen! · 24./25.11.2026";
+        else if (diffDays === 0 || diffDays === -1) label = "Workshop-Tag! Viel Erfolg!";
+        else label = "Termin: 24./25.11.2026";
+
+        const pill = document.getElementById("countdown-pill");
+        const homePill = document.getElementById("home-countdown");
+        if (pill) pill.textContent = label;
+        if (homePill) homePill.textContent = label;
+      }
+
+      /* ========================
+         THEME TOGGLE (Auto / Hell / Dunkel)
+         ======================== */
+      const THEME_MODES = ["auto", "light", "dark"];
+      const THEME_LABELS = { auto: "Design: Auto", light: "Design: Hell", dark: "Design: Dunkel" };
+      let themeMode = lsGet("theme", "auto");
+
+      function applyTheme() {
+        const root = document.documentElement;
+        if (themeMode === "auto") {
+          root.removeAttribute("data-theme");
+        } else {
+          root.setAttribute("data-theme", themeMode);
+        }
+        const btn = document.getElementById("theme-btn");
+        if (btn) btn.textContent = THEME_LABELS[themeMode] || "Design: Auto";
+      }
+
+      document.getElementById("theme-btn").addEventListener("click", function () {
+        const idx = (THEME_MODES.indexOf(themeMode) + 1) % THEME_MODES.length;
+        themeMode = THEME_MODES[idx];
+        lsSet("theme", themeMode);
+        applyTheme();
+      });
+
+      /* ========================
+         NAVIGATION / HASH ROUTER
+         ======================== */
+      function navigate(route, focusId) {
+        if (!ROUTES.includes(route)) route = "home";
+        currentRoute = route;
+        if (window.location.hash !== "#" + route) {
+          try {
+            window.history.replaceState(null, "", "#" + route);
+          } catch (e) {
+            window.location.hash = "#" + route;
+          }
+        }
+
+        document.querySelectorAll(".view").forEach(function (v) {
+          v.classList.toggle("active", v.id === "view-" + route);
+        });
+        document.querySelectorAll(".nav-tab").forEach(function (t) {
+          t.classList.toggle("active", t.dataset.route === route);
+        });
+
+        if (focusId) {
+          setTimeout(function () {
+            const el = document.getElementById(focusId);
+            if (el) {
+              if (el.tagName === "DETAILS") el.open = true;
+              el.scrollIntoView({ behavior: "smooth", block: "start" });
+            }
+          }, 40);
+        } else {
+          window.scrollTo({ top: 0, behavior: "instant" });
+        }
+      }
+
+      document.getElementById("nav-tabs").addEventListener("click", function (e) {
+        const btn = e.target.closest(".nav-tab");
+        if (btn && btn.dataset.route) navigate(btn.dataset.route);
+      });
+
+      document.addEventListener("click", function (e) {
+        const tile = e.target.closest("[data-go]");
+        if (tile) navigate(tile.dataset.go);
+      });
+
+      window.addEventListener("hashchange", function () {
+        const hash = window.location.hash.replace("#", "");
+        if (ROUTES.includes(hash) && hash !== currentRoute) {
+          navigate(hash);
+        }
+      });
+
+      /* ========================
+         RENDER: FAHRPLAN & TIMER
+         ======================== */
+      function formatMMSS(secs) {
+        const m = Math.floor(secs / 60);
+        const s = secs % 60;
+        return String(m).padStart(2, "0") + ":" + String(s).padStart(2, "0");
+      }
+
+      function updateTimerUI() {
+        document.getElementById("timer-display").textContent = formatMMSS(timerSeconds);
+      }
+
+      function stopTimer() {
+        if (timerInterval) {
+          clearInterval(timerInterval);
+          timerInterval = null;
+        }
+      }
+
+      function setTimerForStep(stepTitle, mins) {
+        stopTimer();
+        timerDefault = mins * 60;
+        timerSeconds = timerDefault;
+        document.getElementById("timer-label").textContent = `Timer: ${stepTitle} (${mins} Min)`;
+        updateTimerUI();
+      }
+
+      function renderRoadmap() {
+        const container = document.getElementById("roadmap-list");
+        let cum = 0;
+        container.innerHTML = ROADMAP_STEPS.map(function (s) {
+          const mins = roadmapMode === 150 ? s.min150 : s.min180;
+          const startMin = cum;
+          cum += mins;
+          return `
+            <article class="roadmap-step">
+              <div class="step-time">
+                <span class="step-num">Schritt ${s.step}</span>
+                <span class="step-mins">${mins} Min</span>
+                <span class="step-cum">Min. ${startMin}–${cum}</span>
+                <button class="btn btn-sm" type="button" data-timer-mins="${mins}" data-timer-title="Schritt ${s.step}" style="margin-top:0.25rem;">In Timer</button>
+              </div>
+              <div>
+                <h3 style="margin-top:0;">${s.title}</h3>
+                <p style="margin-bottom:0.5rem;"><strong>Ziel:</strong> ${s.goal}</p>
+                <ul style="margin-bottom:0.6rem;">
+                  ${s.actions.map(function (a) { return `<li>${a}</li>`; }).join("")}
+                </ul>
+                <div style="font-size:0.88rem;background:var(--accent-soft);padding:0.55rem 0.75rem;border-radius:var(--radius-sm);">
+                  <strong>Level-C-Hebel:</strong> ${s.levelCTip}
+                </div>
+              </div>
+            </article>
+          `;
+        }).join("");
+      }
+
+      document.getElementById("mode-150").addEventListener("click", function () {
+        roadmapMode = 150;
+        this.classList.add("active-toggle");
+        document.getElementById("mode-180").classList.remove("active-toggle");
+        renderRoadmap();
+      });
+
+      document.getElementById("mode-180").addEventListener("click", function () {
+        roadmapMode = 180;
+        this.classList.add("active-toggle");
+        document.getElementById("mode-150").classList.remove("active-toggle");
+        renderRoadmap();
+      });
+
+      document.getElementById("roadmap-list").addEventListener("click", function (e) {
+        const btn = e.target.closest("[data-timer-mins]");
+        if (btn) {
+          setTimerForStep(btn.dataset.timerTitle, parseInt(btn.dataset.timerMins, 10));
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+      });
+
+      document.getElementById("timer-start").addEventListener("click", function () {
+        if (timerInterval) return;
+        if (timerSeconds <= 0) timerSeconds = timerDefault;
+        timerInterval = setInterval(function () {
+          timerSeconds--;
+          updateTimerUI();
+          if (timerSeconds <= 0) {
+            stopTimer();
+            document.getElementById("timer-label").textContent = "Zeit abgelaufen! Nächster Schritt!";
+          }
+        }, 1000);
+      });
+
+      document.getElementById("timer-pause").addEventListener("click", function () {
+        stopTimer();
+      });
+
+      document.getElementById("timer-reset").addEventListener("click", function () {
+        stopTimer();
+        timerSeconds = timerDefault;
+        updateTimerUI();
+      });
+
+      /* ========================
+         RENDER: METHODEN
+         ======================== */
+      function renderMethods() {
+        const container = document.getElementById("methods-container");
+        container.innerHTML = METHODS.map(function (m, idx) {
+          return `
+            <details id="${m.id}" ${idx === 0 ? "open" : ""}>
+              <summary>
+                <span>${m.title}</span>
+                <span class="pill neutral" style="margin-left:auto;margin-right:0.5rem;">${m.icb}</span>
+              </summary>
+              <div class="details-body">
+                <h3 style="margin-top:0;">Kurzanleitung</h3>
+                <ul>
+                  ${m.guide.map(function (g) { return `<li>${g}</li>`; }).join("")}
+                </ul>
+                <h3>Whiteboard-Vorlage</h3>
+                <pre class="tree-box">${m.template}</pre>
+                <div class="callout success" style="margin-bottom:0;">
+                  ${m.example}
+                </div>
+              </div>
+            </details>
+          `;
+        }).join("");
+      }
+
+      document.getElementById("methods-expand-all").addEventListener("click", function () {
+        document.querySelectorAll("#methods-container details").forEach(function (d) { d.open = true; });
+      });
+      document.getElementById("methods-collapse-all").addEventListener("click", function () {
+        document.querySelectorAll("#methods-container details").forEach(function (d) { d.open = false; });
+      });
+
+      /* ========================
+         RENDER: FALLSTUDIEN
+         ======================== */
+      function renderCaseStudies() {
+        const switcher = document.getElementById("case-switcher");
+        switcher.innerHTML = CASE_STUDIES.map(function (c) {
+          return `
+            <button class="case-tab ${c.id === activeCaseId ? "active" : ""}" data-case-id="${c.id}" type="button">
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:0.4rem;margin-bottom:0.2rem;">
+                <strong>${c.shortTitle}</strong>
+                <span class="pill ${c.id === "case-deponie" ? "warn" : "neutral"}">${c.badge}</span>
+              </div>
+              <span>${c.subtitle}</span>
+            </button>
+          `;
+        }).join("");
+
+        const cs = CASE_STUDIES.find(function (c) { return c.id === activeCaseId; }) || CASE_STUDIES[0];
+        const detail = document.getElementById("case-detail");
+        detail.innerHTML = `
+          <div class="card">
+            <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:0.5rem;">
+              <h2 style="margin:0;">${cs.shortTitle}</h2>
+              <span class="pill">${cs.subtitle}</span>
+            </div>
+            <h3 style="margin-top:0.9rem;">Aufgabenstellung</h3>
+            ${cs.context}
+            <h3>Typische Level-C-Teilaufgaben im Workshop</h3>
+            <ul>
+              ${cs.levelCTasks.map(function (t) { return `<li>${t}</li>`; }).join("")}
+            </ul>
+            <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:0.85rem;">
+              <button class="btn btn-primary btn-sm" id="case-open-all" type="button">Alle Musterlösungen aufklappen</button>
+              <button class="btn btn-sm" id="case-close-all" type="button">Alle zuklappen (Übungsmodus)</button>
+            </div>
+          </div>
+
+          <h3>Aufklappbare Musterlösung</h3>
+          <div id="case-solutions">
+            <details>
+              <summary>1. Projektziele (SMART), Nicht-Ziele, KPIs &amp; Zielbeziehungen</summary>
+              <div class="details-body">${cs.solution.ziele}</div>
+            </details>
+            <details>
+              <summary>2. Stakeholdertabelle (Einfluss, Einstellung, Widerstände &amp; Maßnahmen)</summary>
+              <div class="details-body">${cs.solution.stakeholder}</div>
+            </details>
+            <details>
+              <summary>3. Projektstrukturplan (PSP) als eingerückter Baum (100-%-Regel)</summary>
+              <div class="details-body">${cs.solution.psp}</div>
+            </details>
+            <details>
+              <summary>4. Phasenplan, Meilensteine &amp; Kritischer Pfad</summary>
+              <div class="details-body">${cs.solution.phasen}</div>
+            </details>
+            <details>
+              <summary>5. Projektorganigramm &amp; Rollen (inkl. Lenkungskreis)</summary>
+              <div class="details-body">${cs.solution.orga}</div>
+            </details>
+            <details>
+              <summary>6. Top-Risiken (Bewertung &amp; Gegenmaßnahmen)</summary>
+              <div class="details-body">${cs.solution.risiken}</div>
+            </details>
+            <details>
+              <summary>7. Angebot (Termin, Preis, Leistung), Annahmen &amp; Marketingkonzept</summary>
+              <div class="details-body">${cs.solution.angebot}</div>
+            </details>
+            <details>
+              <summary>8. Präsentationsgliederung (12-Minuten-Teamauftritt)</summary>
+              <div class="details-body">${cs.solution.praesentation}</div>
+            </details>
+          </div>
+        `;
+
+        document.getElementById("case-open-all").addEventListener("click", function () {
+          document.querySelectorAll("#case-solutions details").forEach(function (d) { d.open = true; });
+        });
+        document.getElementById("case-close-all").addEventListener("click", function () {
+          document.querySelectorAll("#case-solutions details").forEach(function (d) { d.open = false; });
+        });
+      }
+
+      document.getElementById("case-switcher").addEventListener("click", function (e) {
+        const btn = e.target.closest("[data-case-id]");
+        if (btn) {
+          activeCaseId = btn.dataset.caseId;
+          renderCaseStudies();
+        }
+      });
+
+      /* ========================
+         RENDER: VERHALTENS-TIPPS
+         ======================== */
+      function renderPhrases() {
+        const container = document.getElementById("phrases-container");
+        container.innerHTML = PHRASE_GROUPS.map(function (g, i) {
+          return `
+            <div class="card" id="phrase-g-${i}">
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:0.4rem;flex-wrap:wrap;">
+                <h3 style="margin:0;">${g.title}</h3>
+                <span class="pill neutral">${g.icb}</span>
+              </div>
+              <div class="quote-list">
+                ${g.quotes.map(function (q) {
+                  return `<div class="quote-item">${q.text}<small>${q.note}</small></div>`;
+                }).join("")}
+              </div>
+            </div>
+          `;
+        }).join("");
+      }
+
+      /* ========================
+         RENDER: CHECKLISTE
+         ======================== */
+      function getAllCheckItems() {
+        return CHECKLIST_GROUPS.reduce(function (acc, g) { return acc.concat(g.items); }, []);
+      }
+
+      function updateChecklistStats() {
+        const all = getAllCheckItems();
+        const done = all.filter(function (item) { return Boolean(checklistState[item.id]); }).length;
+        const pct = all.length ? Math.round((done / all.length) * 100) : 0;
+
+        document.getElementById("check-progress-text").textContent = `${done} von ${all.length} Punkten erledigt`;
+        document.getElementById("check-progress-pct").textContent = `${pct} %`;
+        document.getElementById("check-progress-bar").style.width = `${pct}%`;
+
+        const homeStat = document.getElementById("home-check-stat");
+        const tileBadge = document.getElementById("tile-check-badge");
+        if (homeStat) homeStat.textContent = `Checkliste: ${done} / ${all.length} erledigt`;
+        if (tileBadge) tileBadge.textContent = `${done} / ${all.length}`;
+      }
+
+      function renderChecklist() {
+        const container = document.getElementById("checklist-container");
+        container.innerHTML = CHECKLIST_GROUPS.map(function (g) {
+          return `
+            <div class="card">
+              <h2 style="margin-top:0;">${g.group}</h2>
+              ${g.items.map(function (item) {
+                const checked = Boolean(checklistState[item.id]);
+                return `
+                  <label class="check-item ${checked ? "checked" : ""}" data-cid="${item.id}">
+                    <input type="checkbox" ${checked ? "checked" : ""} data-check-id="${item.id}" />
+                    <span>
+                      <span class="check-title">${item.title}</span>
+                      <span class="check-note">${item.note}</span>
+                    </span>
+                  </label>
+                `;
+              }).join("")}
+            </div>
+          `;
+        }).join("");
+        updateChecklistStats();
+      }
+
+      document.getElementById("checklist-container").addEventListener("change", function (e) {
+        const cb = e.target.closest("input[data-check-id]");
+        if (!cb) return;
+        const id = cb.dataset.checkId;
+        checklistState[id] = cb.checked;
+        lsSet("checklist", checklistState);
+        const label = cb.closest(".check-item");
+        if (label) label.classList.toggle("checked", cb.checked);
+        updateChecklistStats();
+      });
+
+      document.getElementById("check-reset").addEventListener("click", function () {
+        checklistState = {};
+        lsSet("checklist", checklistState);
+        renderChecklist();
+      });
+
+      /* ========================
+         RENDER: SELBSTTEST (25)
+         ======================== */
+      function updateQuizStats() {
+        const total = QUIZ_QUESTIONS.length;
+        const okCount = QUIZ_QUESTIONS.filter(function (q) { return quizState[q.id] === "ok"; }).length;
+        const todoCount = QUIZ_QUESTIONS.filter(function (q) { return quizState[q.id] === "todo"; }).length;
+        const pct = Math.round((okCount / total) * 100);
+
+        document.getElementById("quiz-progress-text").textContent = `${okCount} von ${total} sicher („Kann ich“) · ${todoCount} offen zum Wiederholen`;
+        document.getElementById("quiz-progress-pct").textContent = `${pct} %`;
+        document.getElementById("quiz-progress-bar").style.width = `${pct}%`;
+
+        const homeStat = document.getElementById("home-quiz-stat");
+        const tileBadge = document.getElementById("tile-quiz-badge");
+        if (homeStat) homeStat.textContent = `Selbsttest: ${okCount} / ${total} sicher`;
+        if (tileBadge) tileBadge.textContent = `${okCount} / ${total}`;
+      }
+
+      function renderQuiz() {
+        const container = document.getElementById("quiz-container");
+        const filtered = QUIZ_QUESTIONS.filter(function (q) {
+          const st = quizState[q.id] || "open";
+          if (quizFilter === "all") return true;
+          return st === quizFilter;
+        });
+
+        if (filtered.length === 0) {
+          container.innerHTML = `<div class="card"><p style="margin:0;color:var(--text-muted);">Keine Fragen in diesem Filter. Wähle „Alle (25)“, um wieder alle Szenarien zu sehen.</p></div>`;
+          updateQuizStats();
+          return;
+        }
+
+        container.innerHTML = filtered.map(function (q) {
+          const st = quizState[q.id] || "open";
+          const statusBadge = st === "ok"
+            ? `<span class="pill success">Kann ich</span>`
+            : st === "todo"
+              ? `<span class="pill warn">Noch nicht</span>`
+              : `<span class="pill neutral">Offen</span>`;
+
+          return `
+            <article class="quiz-card ${st === "ok" ? "status-ok" : st === "todo" ? "status-todo" : ""}" id="quiz-q-${q.id}">
+              <div class="quiz-head">
+                <span class="pill neutral">Frage ${q.id} / 25 · ${q.cat}</span>
+                ${statusBadge}
+              </div>
+              <div class="quiz-q">${q.q}</div>
+              <details>
+                <summary>Musterantwort anzeigen</summary>
+                <div class="details-body">${q.a}</div>
+              </details>
+              <div class="quiz-actions">
+                <button class="btn btn-sm ${st === "ok" ? "btn-success" : ""}" type="button" data-qid="${q.id}" data-qstatus="ok">✓ Kann ich</button>
+                <button class="btn btn-sm ${st === "todo" ? "btn-danger" : ""}" type="button" data-qid="${q.id}" data-qstatus="todo">↻ Noch nicht</button>
+              </div>
+            </article>
+          `;
+        }).join("");
+
+        updateQuizStats();
+      }
+
+      document.getElementById("quiz-container").addEventListener("click", function (e) {
+        const btn = e.target.closest("[data-qid]");
+        if (!btn) return;
+        const qid = parseInt(btn.dataset.qid, 10);
+        const status = btn.dataset.qstatus;
+        quizState[qid] = quizState[qid] === status ? "open" : status;
+        lsSet("quiz", quizState);
+        renderQuiz();
+      });
+
+      document.querySelectorAll("[data-qfilter]").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          quizFilter = btn.dataset.qfilter;
+          document.querySelectorAll("[data-qfilter]").forEach(function (b) {
+            b.classList.toggle("active-toggle", b.dataset.qfilter === quizFilter);
+          });
+          renderQuiz();
+        });
+      });
+
+      document.getElementById("quiz-reset").addEventListener("click", function () {
+        quizState = {};
+        lsSet("quiz", quizState);
+        renderQuiz();
+      });
+
+      /* ========================
+         GLOBAL SEARCH
+         ======================== */
+      function buildSearchIndex() {
+        const items = [];
+        METHODS.forEach(function (m) {
+          items.push({
+            title: m.title,
+            area: "Methoden",
+            route: "methoden",
+            focusId: m.id,
+            text: (m.title + " " + m.icb + " " + m.guide.join(" ") + " " + m.template + " " + m.example).toLowerCase()
+          });
+        });
+        CASE_STUDIES.forEach(function (c) {
+          items.push({
+            title: c.shortTitle + " (" + c.subtitle + ")",
+            area: "Fallstudien",
+            route: "fallstudien",
+            caseId: c.id,
+            text: (c.shortTitle + " " + c.subtitle + " " + c.context + " " + c.levelCTasks.join(" ") + " " + Object.values(c.solution).join(" ")).toLowerCase()
+          });
+        });
+        PHRASE_GROUPS.forEach(function (g, i) {
+          items.push({
+            title: g.title,
+            area: "Verhalten",
+            route: "verhalten",
+            focusId: "phrase-g-" + i,
+            text: (g.title + " " + g.icb + " " + g.quotes.map(function (q) { return q.text + " " + q.note; }).join(" ")).toLowerCase()
+          });
+        });
+        QUIZ_QUESTIONS.forEach(function (q) {
+          items.push({
+            title: "Selbsttest #" + q.id + ": " + q.q,
+            area: "Selbsttest",
+            route: "selbsttest",
+            focusId: "quiz-q-" + q.id,
+            text: (q.cat + " " + q.q + " " + q.a).toLowerCase()
+          });
+        });
+        ROADMAP_STEPS.forEach(function (s) {
+          items.push({
+            title: "Fahrplan Schritt " + s.step + ": " + s.title,
+            area: "Fahrplan",
+            route: "fahrplan",
+            text: (s.title + " " + s.goal + " " + s.actions.join(" ") + " " + s.levelCTip).toLowerCase()
+          });
+        });
+        return items;
+      }
+
+      const SEARCH_INDEX = buildSearchIndex();
+      const searchInput = document.getElementById("global-search");
+      const searchPanel = document.getElementById("search-results");
+
+      function runSearch(query) {
+        const q = query.trim().toLowerCase();
+        if (q.length < 2) {
+          searchPanel.classList.remove("visible");
+          searchPanel.innerHTML = "";
+          return;
+        }
+        const hits = SEARCH_INDEX.filter(function (item) {
+          return item.text.indexOf(q) !== -1;
+        }).slice(0, 10);
+
+        if (hits.length === 0) {
+          searchPanel.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center;"><span>Keine Treffer für „${query.replace(/</g, "&lt;")}“</span><button class="btn btn-sm" id="close-search" type="button">Schließen</button></div>`;
+        } else {
+          searchPanel.innerHTML = `
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
+              <strong>Suchtreffer (${hits.length}${hits.length === 10 ? "+" : ""})</strong>
+              <button class="btn btn-sm" id="close-search" type="button">Schließen</button>
+            </div>
+            ${hits.map(function (h, idx) {
+              return `
+                <div class="search-hit" data-hit-idx="${idx}">
+                  <span>${h.title}</span>
+                  <span class="pill neutral">${h.area}</span>
+                </div>
+              `;
+            }).join("")}
+          `;
+          searchPanel.querySelectorAll(".search-hit").forEach(function (el) {
+            el.addEventListener("click", function () {
+              const hit = hits[parseInt(el.dataset.hitIdx, 10)];
+              searchPanel.classList.remove("visible");
+              searchInput.value = "";
+              if (hit.caseId) {
+                activeCaseId = hit.caseId;
+                renderCaseStudies();
+              }
+              if (hit.route === "selbsttest" && quizFilter !== "all") {
+                quizFilter = "all";
+                document.querySelectorAll("[data-qfilter]").forEach(function (b) {
+                  b.classList.toggle("active-toggle", b.dataset.qfilter === "all");
+                });
+                renderQuiz();
+              }
+              navigate(hit.route, hit.focusId);
+            });
+          });
+        }
+        searchPanel.classList.add("visible");
+        const closeBtn = document.getElementById("close-search");
+        if (closeBtn) {
+          closeBtn.addEventListener("click", function () {
+            searchPanel.classList.remove("visible");
+            searchInput.value = "";
+          });
+        }
+      }
+
+      searchInput.addEventListener("input", function () {
+        runSearch(searchInput.value);
+      });
+
+      /* ========================
+         INIT
+         ======================== */
+      applyTheme();
+      updateCountdown();
+      renderRoadmap();
+      renderMethods();
+      renderCaseStudies();
+      renderPhrases();
+      renderChecklist();
+      renderQuiz();
+
+      const initialHash = window.location.hash.replace("#", "");
+      navigate(ROUTES.includes(initialHash) ? initialHash : "home");
+    })();
+  </script>
+</body>
+</html>
